@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "aeza-public-vps-catalog-v1",
+  "observedAt": "2026-10-24",
+  "sourceUrl": "https://aeza.net/ru/virtual-servers",
+  "observationMethod": "Public rendered page: Warsaw/Frankfurt, Shared/Dedicated selectors; no ordering or login",
+  "currency": "EUR",
+  "moneyUnit": "minor_unit",
+  "productFamily": "virtual_server",
+  "historicalValidity": "unknown; not evidence of historical prices",
+  "allocationSemantics": {"shared": "Processor time distributed between VMs", "dedicated": "Higher CPU-time priority; NOT a physical dedicated server"},
+  "tariffs": [
+    {"code":"WAWs-1","location":"Warsaw","country":"PL","allocationClass":"shared","vCpu":1,"ramGb":2,"diskGb":30,"diskType":"NVMe","hourPriceMinor":4,"monthPriceMinor":593,"publicProductId":441},
+    {"code":"WAWs-2","location":"Warsaw","country":"PL","allocationClass":"shared","vCpu":2,"ramGb":4,"diskGb":60,"diskType":"NVMe","hourPriceMinor":7,"monthPriceMinor":1187,"publicProductId":442},
+    {"code":"WAWs-3","location":"Warsaw","country":"PL","allocationClass":"shared","vCpu":4,"ramGb":8,"diskGb":120,"diskType":"NVMe","hourPriceMinor":14,"monthPriceMinor":2373,"publicProductId":443},
+    {"code":"WAWs-4","location":"Warsaw","country":"PL","allocationClass":"shared","vCpu":8,"ramGb":16,"diskGb":240,"diskType":"NVMe","hourPriceMinor":27,"monthPriceMinor":4745,"publicProductId":444},
+    {"code":"WAWs-5","location":"Warsaw","country":"PL","allocationClass":"shared","vCpu":16,"ramGb":32,"diskGb":480,"diskType":"NVMe","hourPriceMinor":53,"monthPriceMinor":9489,"publicProductId":445},
+    {"code":"WAW-1","location":"Warsaw","country":"PL","allocationClass":"dedicated","vCpu":1,"ramGb":2,"diskGb":30,"diskType":"NVMe","hourPriceMinor":5,"monthPriceMinor":849,"publicProductId":436},
+    {"code":"WAW-2","location":"Warsaw","country":"PL","allocationClass":"dedicated","vCpu":2,"ramGb":4,"diskGb":60,"diskType":"NVMe","hourPriceMinor":10,"monthPriceMinor":1698,"publicProductId":437},
+    {"code":"WAW-3","location":"Warsaw","country":"PL","allocationClass":"dedicated","vCpu":4,"ramGb":8,"diskGb":120,"diskType":"NVMe","hourPriceMinor":19,"monthPriceMinor":3394,"publicProductId":438},
+    {"code":"WAW-4","location":"Warsaw","country":"PL","allocationClass":"dedicated","vCpu":8,"ramGb":16,"diskGb":240,"diskType":"NVMe","hourPriceMinor":38,"monthPriceMinor":6786,"publicProductId":439},
+    {"code":"WAW-5","location":"Warsaw","country":"PL","allocationClass":"dedicated","vCpu":16,"ramGb":32,"diskGb":480,"diskType":"NVMe","hourPriceMinor":76,"monthPriceMinor":13572,"publicProductId":440},
+    {"code":"DEs-1","location":"Frankfurt","country":"DE","allocationClass":"shared","vCpu":1,"ramGb":2,"diskGb":30,"diskType":"NVMe","hourPriceMinor":4,"monthPriceMinor":593,"publicProductId":375},
+    {"code":"DEs-2","location":"Frankfurt","country":"DE","allocationClass":"shared","vCpu":2,"ramGb":4,"diskGb":60,"diskType":"NVMe","hourPriceMinor":7,"monthPriceMinor":1187,"publicProductId":376},
+    {"code":"DEs-3","location":"Frankfurt","country":"DE","allocationClass":"shared","vCpu":4,"ramGb":8,"diskGb":120,"diskType":"NVMe","hourPriceMinor":14,"monthPriceMinor":2373,"publicProductId":377},
+    {"code":"DEs-4","location":"Frankfurt","country":"DE","allocationClass":"shared","vCpu":8,"ramGb":16,"diskGb":240,"diskType":"NVMe","hourPriceMinor":27,"monthPriceMinor":4745,"publicProductId":378},
+    {"code":"DEs-5","location":"Frankfurt","country":"DE","allocationClass":"shared","vCpu":16,"ramGb":32,"diskGb":480,"diskType":"NVMe","hourPriceMinor":53,"monthPriceMinor":9489,"publicProductId":379},
+    {"code":"DE-1","location":"Frankfurt","country":"DE","allocationClass":"dedicated","vCpu":1,"ramGb":2,"diskGb":30,"diskType":"NVMe","hourPriceMinor":5,"monthPriceMinor":849,"publicProductId":370},
+    {"code":"DE-2","location":"Frankfurt","country":"DE","allocationClass":"dedicated","vCpu":2,"ramGb":4,"diskGb":60,"diskType":"NVMe","hourPriceMinor":10,"monthPriceMinor":1698,"publicProductId":371},
+    {"code":"DE-3","location":"Frankfurt","country":"DE","allocationClass":"dedicated","vCpu":4,"ramGb":8,"diskGb":120,"diskType":"NVMe","hourPriceMinor":19,"monthPriceMinor":3394,"publicProductId":372},
+    {"code":"DE-4","location":"Frankfurt","country":"DE","allocationClass":"dedicated","vCpu":8,"ramGb":16,"diskGb":240,"diskType":"NVMe","hourPriceMinor":38,"monthPriceMinor":6786,"publicProductId":373},
+    {"code":"DE-5","location":"Frankfurt","country":"DE","allocationClass":"dedicated","vCpu":16,"ramGb":32,"diskGb":480,"diskType":"NVMe","hourPriceMinor":76,"monthPriceMinor":13572,"publicProductId":374}
+  ]
+}

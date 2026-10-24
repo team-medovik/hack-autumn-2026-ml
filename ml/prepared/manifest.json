@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "vps-preexpiry-features-v1",
+  "targetVersion": "unrenewed-within-grace-excluding-confirmed-replacement-v1",
+  "historySha256": "879b246854c05b0da94fdf51cbb21d4a328e2b9ff2d47b1ae303de9f7d468ac6",
+  "sourceCaseSha256": "6e0e224671a4cd22059431b01fb6fed21e075100bb21b1545d94e746e666292e",
+  "historyAsOf": "2026-10-19T15:00:00Z",
+  "sampling": "daily 15:00 UTC; 0 < dueAt - predictionAt <= 7 days",
+  "validationStart": "2026-08-01T15:00:00Z",
+  "testStart": "2026-09-01T15:00:00Z",
+  "rows": 8589,
+  "splits": {
+    "train": {
+      "rows": 4011,
+      "cycles": 573,
+      "accounts": 155,
+      "cycleLabels": {
+        "0": 515,
+        "1": 58
+      },
+      "labels": {
+        "0": 3605,
+        "1": 406
+      },
+      "paymentTerms": {
+        "month": 4011
+      }
+    },
+    "validation": {
+      "rows": 1406,
+      "cycles": 235,
+      "accounts": 137,
+      "cycleLabels": {
+        "0": 203,
+        "1": 32
+      },
+      "labels": {
+        "0": 1213,
+        "1": 193
+      },
+      "paymentTerms": {
+        "month": 1406
+      }
+    },
+    "test": {
+      "rows": 2118,
+      "cycles": 332,
+      "accounts": 126,
+      "cycleLabels": {
+        "0": 319,
+        "1": 13
+      },
+      "labels": {
+        "0": 2047,
+        "1": 71
+      },
+      "paymentTerms": {
+        "month": 2118
+      }
+    },
+    "purged": {
+      "rows": 578,
+      "cycles": 157,
+      "accounts": 67,
+      "cycleLabels": {
+        "0": 139,
+        "1": 18
+      },
+      "labels": {
+        "0": 499,
+        "1": 79
+      },
+      "paymentTerms": {
+        "month": 578
+      }
+    },
+    "pending": {
+      "rows": 476,
+      "cycles": 84,
+      "accounts": 68,
+      "cycleLabels": {
+        "None": 84
+      },
+      "labels": {
+        "None": 476
+      },
+      "paymentTerms": {
+        "month": 461,
+        "hour": 15
+      }
+    }
+  },
+  "categoricalFeatures": [
+    "status",
+    "payment_term",
+    "tariff_code"
+  ],
+  "numericFeatures": [
+    "days_to_expiry",
+    "service_age_days",
+    "account_age_days",
+    "observed_history_days",
+    "price_minor",
+    "monthly_revenue_minor",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "contract_changes_90d",
+    "has_renewal_history",
+    "history_30d_complete",
+    "history_90d_complete",
+    "live_vps_count",
+    "portfolio_monthly_revenue_minor",
+    "portfolio_change_30d_minor"
+  ],
+  "nullableNumericPolicy": "null = unknown/no prior cycles, never silently zero; convert to NaN at model adapter",
+  "excluded": [
+    "final balances",
+    "final contracts/statuses",
+    "autoProlong without event history",
+    "generator scenarios and reasons",
+    "IDs and label evidence",
+    "future observed catalog specifications"
+  ],
+  "replacementPolicy": "explicit same-owner link occurring by labelDeadline, not proximity of purchases",
+  "cycleWeight": "1 / number of daily rows of this cycle in this split; not a class or revenue weight",
+  "limitations": [
+    "synthetic behavior and prices; not proof of real predictive quality",
+    "catalog observed after history: no historical CPU/RAM/location join",
+    "no historical balances; not reconstructed from final snapshot",
+    "asOf assumed complete event watermark; delayed delivery beyond it needs real watermark handling",
+    "policy blocks/planned endings can be positives under current mechanical target: review before training",
+    "daily sampling can miss short hourly cycles; do not extrapolate monthly training to hourly services"
+  ],
+  "trainingStarted": false
+}
