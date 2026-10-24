@@ -35,7 +35,8 @@ def validate(data):
     business = unique(data["accountBusiness"], "accountId")
     contracts = unique(data["currentContracts"], "serviceId")
     assert set(business) == set(accounts) and set(contracts) == set(services)
-    assert len(accounts) == 160 and snapshot["transactions"] == []
+    assert type(data["accountCount"]) is int and data["accountCount"] > 0
+    assert len(accounts) == data["accountCount"] and snapshot["transactions"] == []
     assert not set(accounts).intersection(a["id"] for a in original["accounts"])
     assert not set(services).intersection(s["id"] for s in original["services"])
     source_services = {s["id"]: s for s in original["services"]}

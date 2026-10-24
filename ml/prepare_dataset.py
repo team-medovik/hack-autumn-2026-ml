@@ -350,6 +350,7 @@ def main():
                         "paymentTerms": dict(Counter(r["features"]["payment_term"] for r in subset))}
     manifest = {
         "schemaVersion": SCHEMA, "targetVersion": TARGET, "historySha256": hashlib.sha256(raw).hexdigest(),
+        "generatorVersion": data.get("generatorVersion", "v1"),
         "sourceCaseSha256": data["sourceSnapshot"]["sha256"],
         "historyAsOf": data["asOf"], "sampling": "daily 15:00 UTC; 0 < dueAt - predictionAt <= 7 days",
         "validationStart": iso(validation_start), "testStart": iso(test_start), "rows": len(rows), "splits": stats,

@@ -12,6 +12,8 @@ ROOT = HERE.parents[2]
 SOURCE = ROOT / "src/test/resources/risk/data.json"
 SOURCE_SHA256 = "6e0e224671a4cd22059431b01fb6fed21e075100bb21b1545d94e746e666292e"
 SEED = 20261024
+GENERATOR_VERSION = "v2"
+DEFAULT_ACCOUNTS = 800
 AS_OF = datetime(2026, 10, 19, 15, tzinfo=timezone.utc)
 
 
@@ -28,13 +30,15 @@ def period_end(value, term):
                          day=min(value.day, calendar.monthrange(year, month)[1]))
 
 
-def build():
+def build(seed=SEED, account_count=DEFAULT_ACCOUNTS):
+    if type(account_count) is not int or account_count <= 0:
+        raise ValueError("account_count must be a positive integer")
     source_bytes = SOURCE.read_bytes()
     assert hashlib.sha256(source_bytes).hexdigest() == SOURCE_SHA256
     original = json.loads(source_bytes)
     catalog = json.loads((HERE / "catalog.json").read_text())
     tariffs = catalog["tariffs"]
-    rng = random.Random(SEED)
+    rng = random.Random(seed)
     accounts, services, business_accounts, contracts, scenarios, events = [], [], [], [], [], []
 
     def event(when, kind, account_id, service_id, **payload):
@@ -51,7 +55,7 @@ def build():
         status = None
         expires = period_end(start, term)
         service = {"id": service_id, "ownerId": account_id, "name": f"synthetic-vps-{service_id}",
-                   "paymentTerm": term, "autoProlong": scenario not in {"planned_end", "short_lived"},
+                   "paymentTerm": term, "autoProlong": rng.random() < 0.85,
                    "createdAt": iso(start), "expiresAt": iso(expires), "status": "active", "price": price}
         services.append(service)
         scenarios.append({"serviceId": service_id, "generatorScenario": scenario,
@@ -90,49 +94,68 @@ def build():
             event(start, "replacement_linked", account_id, service_id,
                   replacesServiceId=replacement_of, reason="synthetic_customer_migration")
 
-        cycle = 0
-        stop_after = rng.randint(2, 4) if term == "month" else rng.randint(6, 24)
+        # Hidden continuous propensities overlap for all services. They are neither
+        # features nor target labels and do not depend on tariff, start date or age.
+        # New independent draws each cycle allow a loss at any renewal, including
+        # the first, and both retention and loss after an earlier recovery.
+        failure_probability = rng.uniform(0.04, 0.22) if term == "month" else rng.uniform(0.002, 0.008)
+        cancellation_probability = rng.uniform(0.005, 0.035) if term == "month" else rng.uniform(0.01, 0.06)
+        never_pay_probability = rng.uniform(0.12, 0.32)
+        late_recovery_probability = rng.uniform(0.12, 0.30)
+        promotion_cycles_remaining = 0
         while expires <= AS_OF:
             due = expires
-            cycle += 1
-            if scenario in {"planned_end", "short_lived", "replacement", "full_exit", "partial_exit"} and cycle >= stop_after:
+            if rng.random() < cancellation_probability:
+                replace = term == "month" and rng.random() < 0.30
                 event(due, "service_terminated", account_id, service_id,
-                      reason="customer_migration" if scenario == "replacement" else "customer_cancellation",
-                      intentionalShortTerm=(scenario == "short_lived"))
+                      reason="customer_migration" if replace else "customer_cancellation",
+                      intentionalShortTerm=(term == "hour"))
                 change_status(due, "deleted", "customer_cancellation")
-                if scenario == "replacement" and due + timedelta(hours=1) <= AS_OF:
-                    make_service(account_id, due + timedelta(hours=1), "healthy", rng.randrange(len(tariffs)),
+                if replace and due + timedelta(hours=1) <= AS_OF:
+                    make_service(account_id, due + timedelta(hours=1), "mixed_monthly", rng.randrange(len(tariffs)),
                                  replacement_of=service_id)
                 break
-            if scenario == "blocked" and cycle == 2:
+            if term == "month" and rng.random() < 0.004:
                 change_status(due, "blocked", "synthetic_policy_review_not_payment_failure")
                 break
-            if cycle == 2 and scenario in {"upgrade", "downgrade"}:
-                group = (tariff_index // 5) * 5
-                tier = tariff_index % 5
-                tier = min(4, tier + 1) if scenario == "upgrade" else max(0, tier - 1)
-                tariff = tariffs[group + tier]
-                price = tariff["monthPriceMinor"]
-                change_contract(due, scenario)
-            if scenario == "promotion" and cycle in {2, 4}:
-                price = (tariff["monthPriceMinor"] * 90 // 100 if cycle == 2 else tariff["monthPriceMinor"])
-                change_contract(due, "synthetic_discount_started" if cycle == 2 else "synthetic_discount_expired")
+            if term == "month":
+                if promotion_cycles_remaining:
+                    promotion_cycles_remaining -= 1
+                    if not promotion_cycles_remaining:
+                        price = tariff["monthPriceMinor"]
+                        change_contract(due, "synthetic_discount_expired")
+                elif rng.random() < 0.05:
+                    price = tariff["monthPriceMinor"] * 90 // 100
+                    promotion_cycles_remaining = rng.randint(1, 4)
+                    change_contract(due, "synthetic_discount_started")
+                elif rng.random() < 0.06:
+                    group, old_tier = (tariff_index // 5) * 5, tariff_index % 5
+                    tier = rng.choice([value for value in range(5) if value != old_tier])
+                    tariff_index = group + tier
+                    tariff = tariffs[tariff_index]
+                    price = tariff["monthPriceMinor"]
+                    change_contract(due, "upgrade" if tier > old_tier else "downgrade")
 
-            failure = (scenario in {"recovery", "unpaid"} and cycle == 2) or rng.random() < 0.025
-            if failure:
+            if rng.random() < failure_probability:
                 payment(due, False, rng.choice(["insufficient_funds", "payment_provider_decline"]), due)
                 change_status(due, "prolong_wait", "payment_failed")
                 suspended_at = due + timedelta(hours=6)
                 if suspended_at <= AS_OF:
                     change_status(suspended_at, "suspended", "synthetic_grace_elapsed")
-                if scenario == "unpaid":
-                    deleted_at = due + timedelta(days=5)
+                outcome = rng.random()
+                if outcome < never_pay_probability:
+                    deleted_at = due + timedelta(days=rng.randint(5, 12))
                     if deleted_at <= AS_OF:
                         event(deleted_at, "service_terminated", account_id, service_id,
                               reason="unpaid_after_synthetic_grace", intentionalShortTerm=False)
                         change_status(deleted_at, "deleted", "unpaid_after_synthetic_grace")
                     break
-                recovered_at = due + timedelta(hours=rng.randint(8, 96))
+                # A successful payment after day 5 still restores service, but
+                # cannot retroactively change that earlier renewal window's label.
+                delay_hours = (rng.randint(121, 240)
+                               if outcome < never_pay_probability + late_recovery_probability
+                               else rng.randint(8, 120))
+                recovered_at = due + timedelta(hours=delay_hours)
                 if recovered_at > AS_OF:
                     break
                 payment(recovered_at, True, "retry_after_failure", due)
@@ -148,30 +171,23 @@ def build():
                           "priceMinor": price, "currency": "EUR", "source": "synthetic",
                           "catalogObservedAt": catalog["observedAt"]})
 
-    scenario_names = ["healthy", "recovery", "unpaid", "upgrade", "downgrade", "promotion",
-                      "planned_end", "replacement", "blocked", "healthy"]
-    for number in range(160):
+    earliest_start = datetime(2025, 1, 1, tzinfo=timezone.utc)
+    latest_start = AS_OF - timedelta(days=1)
+    for number in range(account_count):
         account_id = 10001 + number
-        created = datetime(2026, rng.randint(1, 3), rng.randint(1, 25), 12, tzinfo=timezone.utc)
+        created = datetime(2024, rng.randint(1, 12), rng.randint(1, 25), 12, tzinfo=timezone.utc)
         business_accounts.append({"accountId": account_id, "createdAt": iso(created),
                                   "source": "synthetic", "currency": "EUR"})
         for position in range(1 + number % 3):
-            scenario = rng.choice(scenario_names)
-            if number % 16 == 0:
-                scenario = "full_exit"
-            elif number % 16 == 1:
-                scenario = "partial_exit" if position == 0 else "healthy"
+            # The age distribution is selected before the independent behavioral
+            # profile. New cohorts continue to arrive near validation/test dates.
+            start = earliest_start + timedelta(hours=rng.randrange(int((latest_start - earliest_start).total_seconds() // 3600)))
             tariff_index = rng.randrange(len(tariffs))
-            # Avoid no-op boundary upgrades/downgrades while retaining random tariff families.
-            if scenario == "upgrade" and tariff_index % 5 == 4:
-                tariff_index -= 1
-            if scenario == "downgrade" and tariff_index % 5 == 0:
-                tariff_index += 1
-            start = datetime(2026, rng.randint(4, 6), rng.randint(1, 20), rng.randint(0, 23), tzinfo=timezone.utc)
             term = "month"
+            scenario = "mixed_monthly"
             if number % 10 == 2 and position == 0:
                 term = "hour"
-                scenario = "short_lived" if number % 20 == 2 else "healthy"
+                scenario = "mixed_hourly"
                 start = AS_OF - timedelta(hours=rng.randint(36, 72))
             make_service(account_id, start, scenario, tariff_index, term)
 
@@ -195,7 +211,8 @@ def build():
                                    "sourcePaymentTerm": service["paymentTerm"], "publicPriceForSameTermMinor": quoted,
                                    "overwriteSourcePrice": False})
     return {
-        "schemaVersion": "aeza-vps-business-demo-v1", "seed": SEED, "asOf": iso(AS_OF),
+        "schemaVersion": "aeza-vps-business-demo-v1", "generatorVersion": GENERATOR_VERSION,
+        "seed": seed, "accountCount": account_count, "asOf": iso(AS_OF),
         "provenance": {"behavior": "entirely_synthetic", "catalog": "catalog.json",
                        "catalogObservedAt": catalog["observedAt"], "historicalCatalogUse": "demonstration_only_not_point_in_time",
                        "labels": "not_defined", "accountBalances": "synthetic_final_observation_not_a_reconciled_ledger",

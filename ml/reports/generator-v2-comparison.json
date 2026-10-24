@@ -1,0 +1,1857 @@
+{
+  "testEvaluated": false,
+  "oldOriginalValidation": {
+    "catboost": {
+      "logloss": 0.33086766064002254,
+      "brier": 0.09503491059880088,
+      "meanProbability": 0.10337746600280102,
+      "lossRate": 0.1057268722466977
+    },
+    "constantTrainPrevalence": {
+      "logloss": 0.35003178346667807,
+      "brier": 0.09632031164670476,
+      "meanProbability": 0.06363636363636363,
+      "lossRate": 0.1057268722466977
+    }
+  },
+  "subgroupAssignment": "whole cycles grouped by snapshot closest to 3 days before expiry; all daily predictions retain their original cycle weights",
+  "newValidation": {
+    "all": {
+      "rows": 5010,
+      "cycles": 797,
+      "lossCycles": 43,
+      "metrics": {
+        "oldModel": {
+          "logloss": 0.2413608164629771,
+          "brier": 0.05609149905204036,
+          "meanProbability": 0.07828166355354772,
+          "lossRate": 0.05395232120451832
+        },
+        "newModel": {
+          "logloss": 0.2087340759209487,
+          "brier": 0.05106963358604683,
+          "meanProbability": 0.06572381279278187,
+          "lossRate": 0.05395232120451832
+        },
+        "newTrainConstant": {
+          "logloss": 0.21098992236839098,
+          "brier": 0.05115572278215165,
+          "meanProbability": 0.06464131278412243,
+          "lossRate": 0.05395232120451832
+        }
+      }
+    },
+    "no_previous_renewals": {
+      "rows": 415,
+      "cycles": 68,
+      "lossCycles": 5,
+      "metrics": {
+        "oldModel": {
+          "logloss": 0.32602817273115636,
+          "brier": 0.07141399522969213,
+          "meanProbability": 0.010615811034410217,
+          "lossRate": 0.07352941176469896
+        },
+        "newModel": {
+          "logloss": 0.24823364621248267,
+          "brier": 0.06641004788411697,
+          "meanProbability": 0.06150000331884907,
+          "lossRate": 0.07352941176469896
+        },
+        "newTrainConstant": {
+          "logloss": 0.2633014031588019,
+          "brier": 0.06820183567372484,
+          "meanProbability": 0.06464131278412243,
+          "lossRate": 0.07352941176469896
+        }
+      }
+    },
+    "previous_recovery_90d": {
+      "rows": 985,
+      "cycles": 153,
+      "lossCycles": 7,
+      "metrics": {
+        "oldModel": {
+          "logloss": 0.2109495258598602,
+          "brier": 0.04710692510917861,
+          "meanProbability": 0.05413672591736176,
+          "lossRate": 0.045751633986940494
+        },
+        "newModel": {
+          "logloss": 0.19489905786849715,
+          "brier": 0.045260795219628724,
+          "meanProbability": 0.06933497472130619,
+          "lossRate": 0.045751633986940494
+        },
+        "newTrainConstant": {
+          "logloss": 0.18907705995751534,
+          "brier": 0.04401524193952623,
+          "meanProbability": 0.06464131278412243,
+          "lossRate": 0.045751633986940494
+        }
+      }
+    }
+  },
+  "oldHistorySha256": "879b246854c05b0da94fdf51cbb21d4a328e2b9ff2d47b1ae303de9f7d468ac6",
+  "newHistorySha256": "8c3cb0943b616de959d291425f8675c42a76c1e0cda46b65f6c6e62110417ab7",
+  "newRowsSha256": "f432b716b7920ecca9722deccbd850b8c38c08bf2c92d6dba9efd9c8f6b87976",
+  "oldModelSha256": "b4908f696e3a512249c3e944e880da399eecaaa70f8fa31392b05f10fd373f3f",
+  "newModelSha256": "c5612b1465e59a2b0d3ce64958f54a293b9126dec66f7f6f30c9208422f01761",
+  "sameExplicitTrainingParameters": true,
+  "caution": "Changed synthetic data, not an independent real-world test; new validation selects new model stopping point. Old/new IDs belong to separate regenerated worlds.",
+  "explanation": {
+    "sampling": "one snapshot per validation cycle closest to 3 days before expiry",
+    "selection": "contrasting outcome-aware examples, NOT a representative quality estimate",
+    "cycles": 797,
+    "riskMin": 0.00833516234567208,
+    "riskMax": 0.30497503460847136,
+    "shapAdditivityChecked": true,
+    "examples": [
+      {
+        "case": "higher_risk_actual_loss",
+        "risk": 0.30497503460847136,
+        "row": {
+          "sampleId": "20686@2026-08-06T15:00:00Z",
+          "cycleId": "20686@2026-08-09T21:00:00Z",
+          "serviceId": 20686,
+          "accountId": 10330,
+          "predictionAt": "2026-08-06T15:00:00Z",
+          "dueAt": "2026-08-09T21:00:00Z",
+          "labelDeadline": "2026-08-14T21:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DE-5",
+            "days_to_expiry": 3.25,
+            "service_age_days": 574.583333,
+            "account_age_days": 932.125,
+            "observed_history_days": 574.583333,
+            "price_minor": 13572,
+            "monthly_revenue_minor": 13572,
+            "renewal_cycles_90d": 3,
+            "successful_renewals_90d": 3,
+            "failed_cycle_share_90d": 0.0,
+            "late_cycle_share_90d": 0.0,
+            "mean_paid_delay_hours_90d": 0.0,
+            "max_paid_delay_hours_90d": 0.0,
+            "days_since_successful_renewal": 27.75,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 2,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 14165,
+            "portfolio_change_30d_minor": 11874
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-21T14:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-21T14:00:00Z",
+            "contractEventId": "event-020063"
+          },
+          "label": {
+            "value": 1,
+            "reason": "no_renewal_by_grace",
+            "availableAt": "2026-08-14T21:00:00Z",
+            "evidenceEventIds": []
+          },
+          "split": "validation",
+          "cycleWeight": 0.142857142857
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 932.125,
+            "rawLogOdds": 0.5475751871093991
+          },
+          {
+            "feature": "price_minor",
+            "value": 13572,
+            "rawLogOdds": 0.5046848779751811
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 13572,
+            "rawLogOdds": 0.28278886535137243
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DE-5",
+            "rawLogOdds": 0.20718772968054772
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 14165,
+            "rawLogOdds": 0.1417477044587555
+          },
+          {
+            "feature": "service_age_days",
+            "value": 574.583333,
+            "rawLogOdds": 0.062439025245911495
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 3,
+            "rawLogOdds": 0.03385861804904753
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 574.583333,
+            "rawLogOdds": 0.02601012204471878
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 11874,
+            "rawLogOdds": 0.019559494005459133
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.018906515815152253
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 3,
+            "rawLogOdds": 0.018171008889232135
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": 0.014031264476822593
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 2,
+            "rawLogOdds": 0.011944228590980266
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.01047777662485421
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 27.75,
+            "rawLogOdds": 0.008489540965951274
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.004117484549060204
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.0030573178126550903
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0024347087324339363
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.002019025494968827
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.0007939677117534941
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002538827806409105
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 3.25,
+            "rawLogOdds": -0.00012405555845975915
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-09T21:00:00Z",
+            "recordedAt": "2026-08-09T21:00:00Z",
+            "type": "payment_failed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "amountMinor": 13572,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 4,
+            "dueAt": "2026-08-09T21:00:00Z",
+            "reason": "payment_provider_decline",
+            "paidThrough": null,
+            "id": "event-021910"
+          },
+          {
+            "occurredAt": "2026-08-09T21:00:00Z",
+            "recordedAt": "2026-08-09T21:00:00Z",
+            "type": "status_changed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "fromStatus": "active",
+            "toStatus": "prolong_wait",
+            "reason": "payment_failed",
+            "id": "event-021911"
+          },
+          {
+            "occurredAt": "2026-08-10T03:00:00Z",
+            "recordedAt": "2026-08-10T03:00:00Z",
+            "type": "status_changed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "fromStatus": "prolong_wait",
+            "toStatus": "suspended",
+            "reason": "synthetic_grace_elapsed",
+            "id": "event-021936"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-17T07:00:00Z",
+            "recordedAt": "2026-08-17T07:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "amountMinor": 13572,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 4,
+            "dueAt": "2026-08-09T21:00:00Z",
+            "reason": "retry_after_failure",
+            "paidThrough": "2026-09-17T07:00:00Z",
+            "id": "event-022393"
+          }
+        ],
+        "oldModelRiskOnSameSnapshot": 0.082482545020707
+      },
+      {
+        "case": "lower_risk_actual_renewal",
+        "risk": 0.00833516234567208,
+        "row": {
+          "sampleId": "20371@2026-08-04T15:00:00Z",
+          "cycleId": "20371@2026-08-08T02:00:00Z",
+          "serviceId": 20371,
+          "accountId": 10180,
+          "predictionAt": "2026-08-04T15:00:00Z",
+          "dueAt": "2026-08-08T02:00:00Z",
+          "labelDeadline": "2026-08-13T02:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "WAWs-1",
+            "days_to_expiry": 3.458333,
+            "service_age_days": 57.541667,
+            "account_age_days": 934.125,
+            "observed_history_days": 57.541667,
+            "price_minor": 593,
+            "monthly_revenue_minor": 593,
+            "renewal_cycles_90d": 1,
+            "successful_renewals_90d": 1,
+            "failed_cycle_share_90d": 0.0,
+            "late_cycle_share_90d": 0.0,
+            "mean_paid_delay_hours_90d": 0.0,
+            "max_paid_delay_hours_90d": 0.0,
+            "days_since_successful_renewal": 27.541667,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 0,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 3987,
+            "portfolio_change_30d_minor": 0
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-30T08:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-30T08:00:00Z",
+            "contractEventId": "event-018260"
+          },
+          "label": {
+            "value": 0,
+            "reason": "renewed_in_grace",
+            "availableAt": "2026-08-13T02:00:00Z",
+            "evidenceEventIds": [
+              "event-021808"
+            ]
+          },
+          "split": "validation",
+          "cycleWeight": 0.142857142857
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 934.125,
+            "rawLogOdds": -1.2817778299369313
+          },
+          {
+            "feature": "service_age_days",
+            "value": 57.541667,
+            "rawLogOdds": -0.18338962638302572
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": -0.1735961524372716
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 3987,
+            "rawLogOdds": -0.10136408063854109
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 1,
+            "rawLogOdds": -0.08712676104143373
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 593,
+            "rawLogOdds": -0.061556283528575804
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 1,
+            "rawLogOdds": -0.05914883189615128
+          },
+          {
+            "feature": "tariff_code",
+            "value": "WAWs-1",
+            "rawLogOdds": -0.0570996627174874
+          },
+          {
+            "feature": "price_minor",
+            "value": 593,
+            "rawLogOdds": -0.050105961727779376
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 57.541667,
+            "rawLogOdds": -0.031249735006906337
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.011803125843782628
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.009155686182275911
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 0,
+            "rawLogOdds": 0.008086283243285457
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 27.541667,
+            "rawLogOdds": 0.006439210275163014
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 0,
+            "rawLogOdds": -0.005530235583531471
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0054812184291271725
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.003975138358116706
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.002264338152494617
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0022116475574030766
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": -0.0005773148268732936
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002616165953684653
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 3.458333,
+            "rawLogOdds": 0.00017890302683115438
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-08T02:00:00Z",
+            "recordedAt": "2026-08-08T02:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10180,
+            "serviceId": 20371,
+            "source": "synthetic",
+            "amountMinor": 593,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 1,
+            "dueAt": "2026-08-08T02:00:00Z",
+            "reason": "renewal",
+            "paidThrough": "2026-09-08T02:00:00Z",
+            "id": "event-021808"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [],
+        "oldModelRiskOnSameSnapshot": 0.09276134121146337
+      },
+      {
+        "case": "higher_risk_but_renewed",
+        "risk": 0.29776349484921605,
+        "row": {
+          "sampleId": "20111@2026-08-01T15:00:00Z",
+          "cycleId": "20111@2026-08-02T10:00:00Z",
+          "serviceId": 20111,
+          "accountId": 10056,
+          "predictionAt": "2026-08-01T15:00:00Z",
+          "dueAt": "2026-08-02T10:00:00Z",
+          "labelDeadline": "2026-08-07T10:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DE-5",
+            "days_to_expiry": 0.791667,
+            "service_age_days": 333.75,
+            "account_age_days": 925.125,
+            "observed_history_days": 333.75,
+            "price_minor": 13572,
+            "monthly_revenue_minor": 13572,
+            "renewal_cycles_90d": 2,
+            "successful_renewals_90d": 2,
+            "failed_cycle_share_90d": 0.0,
+            "late_cycle_share_90d": 0.0,
+            "mean_paid_delay_hours_90d": 0.0,
+            "max_paid_delay_hours_90d": 0.0,
+            "days_since_successful_renewal": 30.208333,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 18317,
+            "portfolio_change_30d_minor": 0
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-27T22:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-27T22:00:00Z",
+            "contractEventId": "event-007397"
+          },
+          "label": {
+            "value": 0,
+            "reason": "renewed_in_grace",
+            "availableAt": "2026-08-07T10:00:00Z",
+            "evidenceEventIds": [
+              "event-021505"
+            ]
+          },
+          "split": "validation",
+          "cycleWeight": 1.0
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 925.125,
+            "rawLogOdds": 0.5326278423816925
+          },
+          {
+            "feature": "price_minor",
+            "value": 13572,
+            "rawLogOdds": 0.5015934265300003
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 13572,
+            "rawLogOdds": 0.2917559371381868
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DE-5",
+            "rawLogOdds": 0.18645139515844716
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 18317,
+            "rawLogOdds": 0.11163993063157698
+          },
+          {
+            "feature": "service_age_days",
+            "value": 333.75,
+            "rawLogOdds": 0.0750646531859735
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 2,
+            "rawLogOdds": 0.04796998707751484
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 2,
+            "rawLogOdds": 0.03047777784155674
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 333.75,
+            "rawLogOdds": 0.020739334652455643
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.018354010384699998
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 30.208333,
+            "rawLogOdds": 0.01614150470945061
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.014819389777105828
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.010004697476099816
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": 0.008993460571278762
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 0,
+            "rawLogOdds": 0.005285415219361616
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.004117484549060204
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0031456188484519938
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": -0.0031438184692583566
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.0030573178126550903
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0007492034123492831
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 0.791667,
+            "rawLogOdds": -0.000633384346250313
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002785289913779202
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-02T10:00:00Z",
+            "recordedAt": "2026-08-02T10:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10056,
+            "serviceId": 20111,
+            "source": "synthetic",
+            "amountMinor": 13572,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 3,
+            "dueAt": "2026-08-02T10:00:00Z",
+            "reason": "renewal",
+            "paidThrough": "2026-09-02T10:00:00Z",
+            "id": "event-021505"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [],
+        "oldModelRiskOnSameSnapshot": 0.09897956432197035
+      },
+      {
+        "case": "lower_risk_but_lost",
+        "risk": 0.03444592597846792,
+        "row": {
+          "sampleId": "21136@2026-08-03T15:00:00Z",
+          "cycleId": "21136@2026-08-06T13:00:00Z",
+          "serviceId": 21136,
+          "accountId": 10545,
+          "predictionAt": "2026-08-03T15:00:00Z",
+          "dueAt": "2026-08-06T13:00:00Z",
+          "labelDeadline": "2026-08-11T13:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DEs-2",
+            "days_to_expiry": 2.916667,
+            "service_age_days": 439.625,
+            "account_age_days": 942.125,
+            "observed_history_days": 439.625,
+            "price_minor": 1187,
+            "monthly_revenue_minor": 1187,
+            "renewal_cycles_90d": 2,
+            "successful_renewals_90d": 2,
+            "failed_cycle_share_90d": 0.5,
+            "late_cycle_share_90d": 0.5,
+            "mean_paid_delay_hours_90d": 47.5,
+            "max_paid_delay_hours_90d": 95.0,
+            "days_since_successful_renewal": 28.083333,
+            "recoveries_90d": 1,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 10676,
+            "portfolio_change_30d_minor": 0
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-06T13:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-06T13:00:00Z",
+            "contractEventId": "event-008180"
+          },
+          "label": {
+            "value": 1,
+            "reason": "no_renewal_by_grace",
+            "availableAt": "2026-08-11T13:00:00Z",
+            "evidenceEventIds": []
+          },
+          "split": "validation",
+          "cycleWeight": 0.2
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 942.125,
+            "rawLogOdds": -0.5158776862273527
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": -0.1732399930704074
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.5,
+            "rawLogOdds": -0.056402326401397654
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 1,
+            "rawLogOdds": 0.056286584339722875
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DEs-2",
+            "rawLogOdds": -0.04216300907371589
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 95.0,
+            "rawLogOdds": 0.04145347431342701
+          },
+          {
+            "feature": "service_age_days",
+            "value": 439.625,
+            "rawLogOdds": 0.04068180779526512
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 2,
+            "rawLogOdds": 0.027626861537625415
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 1187,
+            "rawLogOdds": -0.02720539704553139
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 2,
+            "rawLogOdds": 0.026739106037723597
+          },
+          {
+            "feature": "price_minor",
+            "value": 1187,
+            "rawLogOdds": -0.014937053543362848
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 28.083333,
+            "rawLogOdds": 0.01084836710083293
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 47.5,
+            "rawLogOdds": -0.007973440076997948
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 0,
+            "rawLogOdds": -0.006670298397972103
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.005196224134056154
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.003702127067958534
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 439.625,
+            "rawLogOdds": 0.0036462643691419555
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": -0.0023708447509774664
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 10676,
+            "rawLogOdds": 0.0016127343571516648
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.5,
+            "rawLogOdds": -0.001056945192400528
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 2.916667,
+            "rawLogOdds": 0.0006522115095912885
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002176921094798893
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-06T13:00:00Z",
+            "recordedAt": "2026-08-06T13:00:00Z",
+            "type": "payment_failed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "amountMinor": 1187,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 2,
+            "dueAt": "2026-08-06T13:00:00Z",
+            "reason": "insufficient_funds",
+            "paidThrough": null,
+            "id": "event-021705"
+          },
+          {
+            "occurredAt": "2026-08-06T13:00:00Z",
+            "recordedAt": "2026-08-06T13:00:00Z",
+            "type": "status_changed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "fromStatus": "active",
+            "toStatus": "prolong_wait",
+            "reason": "payment_failed",
+            "id": "event-021706"
+          },
+          {
+            "occurredAt": "2026-08-06T19:00:00Z",
+            "recordedAt": "2026-08-06T19:00:00Z",
+            "type": "status_changed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "fromStatus": "prolong_wait",
+            "toStatus": "suspended",
+            "reason": "synthetic_grace_elapsed",
+            "id": "event-021726"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-14T02:00:00Z",
+            "recordedAt": "2026-08-14T02:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "amountMinor": 1187,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 2,
+            "dueAt": "2026-08-06T13:00:00Z",
+            "reason": "retry_after_failure",
+            "paidThrough": "2026-09-14T02:00:00Z",
+            "id": "event-022199"
+          }
+        ],
+        "oldModelRiskOnSameSnapshot": 0.02587831712440122
+      },
+      {
+        "case": "first_renewal_loss",
+        "risk": 0.11445743884334632,
+        "row": {
+          "sampleId": "21163@2026-08-08T15:00:00Z",
+          "cycleId": "21163@2026-08-11T12:00:00Z",
+          "serviceId": 21163,
+          "accountId": 10557,
+          "predictionAt": "2026-08-08T15:00:00Z",
+          "dueAt": "2026-08-11T12:00:00Z",
+          "labelDeadline": "2026-08-16T12:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DE-3",
+            "days_to_expiry": 2.875,
+            "service_age_days": 28.125,
+            "account_age_days": 621.125,
+            "observed_history_days": 28.125,
+            "price_minor": 3394,
+            "monthly_revenue_minor": 3394,
+            "renewal_cycles_90d": 0,
+            "successful_renewals_90d": 0,
+            "failed_cycle_share_90d": null,
+            "late_cycle_share_90d": null,
+            "mean_paid_delay_hours_90d": null,
+            "max_paid_delay_hours_90d": null,
+            "days_since_successful_renewal": null,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 0,
+            "history_30d_complete": 1,
+            "history_90d_complete": 0,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 4581,
+            "portfolio_change_30d_minor": -7281
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-08-07T08:00:00Z",
+            "maxFeatureRecordedAt": "2026-08-07T08:00:00Z",
+            "contractEventId": "event-020168"
+          },
+          "label": {
+            "value": 1,
+            "reason": "no_renewal_by_grace",
+            "availableAt": "2026-08-16T12:00:00Z",
+            "evidenceEventIds": []
+          },
+          "split": "validation",
+          "cycleWeight": 0.142857142857
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": -7281,
+            "rawLogOdds": 0.3001436275144122
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 28.125,
+            "rawLogOdds": 0.09706941690608437
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 4581,
+            "rawLogOdds": -0.07859679941716557
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 3394,
+            "rawLogOdds": 0.06651861951602199
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 0,
+            "rawLogOdds": 0.05166754564637776
+          },
+          {
+            "feature": "price_minor",
+            "value": 3394,
+            "rawLogOdds": 0.04896527703443185
+          },
+          {
+            "feature": "account_age_days",
+            "value": 621.125,
+            "rawLogOdds": 0.03986381280367419
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": null,
+            "rawLogOdds": 0.032337707412735374
+          },
+          {
+            "feature": "service_age_days",
+            "value": 28.125,
+            "rawLogOdds": 0.031760425022825674
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 0,
+            "rawLogOdds": 0.027136867898215615
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 0,
+            "rawLogOdds": 0.01747772527945298
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 0,
+            "rawLogOdds": 0.01375161307570616
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": null,
+            "rawLogOdds": 0.008541372578257976
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": 0.007817502588998253
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": null,
+            "rawLogOdds": -0.007788794090622847
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.005723658262596809
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": -0.0051502692117449764
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": null,
+            "rawLogOdds": -0.002958873843353046
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": null,
+            "rawLogOdds": -0.0026131181327377173
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 2.875,
+            "rawLogOdds": 0.0008129635898976856
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0006987269241843089
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DE-3",
+            "rawLogOdds": -0.0004859675567726343
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-11T12:00:00Z",
+            "recordedAt": "2026-08-11T12:00:00Z",
+            "type": "service_terminated",
+            "accountId": 10557,
+            "serviceId": 21163,
+            "source": "synthetic",
+            "reason": "customer_cancellation",
+            "intentionalShortTerm": false,
+            "id": "event-022020"
+          },
+          {
+            "occurredAt": "2026-08-11T12:00:00Z",
+            "recordedAt": "2026-08-11T12:00:00Z",
+            "type": "status_changed",
+            "accountId": 10557,
+            "serviceId": 21163,
+            "source": "synthetic",
+            "fromStatus": "active",
+            "toStatus": "deleted",
+            "reason": "customer_cancellation",
+            "id": "event-022021"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [],
+        "oldModelRiskOnSameSnapshot": 0.00901748708474349
+      },
+      {
+        "case": "loss_after_previous_recovery",
+        "risk": 0.03444592597846792,
+        "row": {
+          "sampleId": "21136@2026-08-03T15:00:00Z",
+          "cycleId": "21136@2026-08-06T13:00:00Z",
+          "serviceId": 21136,
+          "accountId": 10545,
+          "predictionAt": "2026-08-03T15:00:00Z",
+          "dueAt": "2026-08-06T13:00:00Z",
+          "labelDeadline": "2026-08-11T13:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DEs-2",
+            "days_to_expiry": 2.916667,
+            "service_age_days": 439.625,
+            "account_age_days": 942.125,
+            "observed_history_days": 439.625,
+            "price_minor": 1187,
+            "monthly_revenue_minor": 1187,
+            "renewal_cycles_90d": 2,
+            "successful_renewals_90d": 2,
+            "failed_cycle_share_90d": 0.5,
+            "late_cycle_share_90d": 0.5,
+            "mean_paid_delay_hours_90d": 47.5,
+            "max_paid_delay_hours_90d": 95.0,
+            "days_since_successful_renewal": 28.083333,
+            "recoveries_90d": 1,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 10676,
+            "portfolio_change_30d_minor": 0
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-06T13:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-06T13:00:00Z",
+            "contractEventId": "event-008180"
+          },
+          "label": {
+            "value": 1,
+            "reason": "no_renewal_by_grace",
+            "availableAt": "2026-08-11T13:00:00Z",
+            "evidenceEventIds": []
+          },
+          "split": "validation",
+          "cycleWeight": 0.2
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 942.125,
+            "rawLogOdds": -0.5158776862273527
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": -0.1732399930704074
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.5,
+            "rawLogOdds": -0.056402326401397654
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 1,
+            "rawLogOdds": 0.056286584339722875
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DEs-2",
+            "rawLogOdds": -0.04216300907371589
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 95.0,
+            "rawLogOdds": 0.04145347431342701
+          },
+          {
+            "feature": "service_age_days",
+            "value": 439.625,
+            "rawLogOdds": 0.04068180779526512
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 2,
+            "rawLogOdds": 0.027626861537625415
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 1187,
+            "rawLogOdds": -0.02720539704553139
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 2,
+            "rawLogOdds": 0.026739106037723597
+          },
+          {
+            "feature": "price_minor",
+            "value": 1187,
+            "rawLogOdds": -0.014937053543362848
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 28.083333,
+            "rawLogOdds": 0.01084836710083293
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 47.5,
+            "rawLogOdds": -0.007973440076997948
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 0,
+            "rawLogOdds": -0.006670298397972103
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.005196224134056154
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.003702127067958534
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 439.625,
+            "rawLogOdds": 0.0036462643691419555
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": -0.0023708447509774664
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 10676,
+            "rawLogOdds": 0.0016127343571516648
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.5,
+            "rawLogOdds": -0.001056945192400528
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 2.916667,
+            "rawLogOdds": 0.0006522115095912885
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002176921094798893
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-06T13:00:00Z",
+            "recordedAt": "2026-08-06T13:00:00Z",
+            "type": "payment_failed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "amountMinor": 1187,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 2,
+            "dueAt": "2026-08-06T13:00:00Z",
+            "reason": "insufficient_funds",
+            "paidThrough": null,
+            "id": "event-021705"
+          },
+          {
+            "occurredAt": "2026-08-06T13:00:00Z",
+            "recordedAt": "2026-08-06T13:00:00Z",
+            "type": "status_changed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "fromStatus": "active",
+            "toStatus": "prolong_wait",
+            "reason": "payment_failed",
+            "id": "event-021706"
+          },
+          {
+            "occurredAt": "2026-08-06T19:00:00Z",
+            "recordedAt": "2026-08-06T19:00:00Z",
+            "type": "status_changed",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "fromStatus": "prolong_wait",
+            "toStatus": "suspended",
+            "reason": "synthetic_grace_elapsed",
+            "id": "event-021726"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-14T02:00:00Z",
+            "recordedAt": "2026-08-14T02:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10545,
+            "serviceId": 21136,
+            "source": "synthetic",
+            "amountMinor": 1187,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 2,
+            "dueAt": "2026-08-06T13:00:00Z",
+            "reason": "retry_after_failure",
+            "paidThrough": "2026-09-14T02:00:00Z",
+            "id": "event-022199"
+          }
+        ],
+        "oldModelRiskOnSameSnapshot": 0.02587831712440122
+      },
+      {
+        "case": "paid_after_grace_not_permanent_loss",
+        "risk": 0.30497503460847136,
+        "row": {
+          "sampleId": "20686@2026-08-06T15:00:00Z",
+          "cycleId": "20686@2026-08-09T21:00:00Z",
+          "serviceId": 20686,
+          "accountId": 10330,
+          "predictionAt": "2026-08-06T15:00:00Z",
+          "dueAt": "2026-08-09T21:00:00Z",
+          "labelDeadline": "2026-08-14T21:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "DE-5",
+            "days_to_expiry": 3.25,
+            "service_age_days": 574.583333,
+            "account_age_days": 932.125,
+            "observed_history_days": 574.583333,
+            "price_minor": 13572,
+            "monthly_revenue_minor": 13572,
+            "renewal_cycles_90d": 3,
+            "successful_renewals_90d": 3,
+            "failed_cycle_share_90d": 0.0,
+            "late_cycle_share_90d": 0.0,
+            "mean_paid_delay_hours_90d": 0.0,
+            "max_paid_delay_hours_90d": 0.0,
+            "days_since_successful_renewal": 27.75,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 2,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 14165,
+            "portfolio_change_30d_minor": 11874
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-07-21T14:00:00Z",
+            "maxFeatureRecordedAt": "2026-07-21T14:00:00Z",
+            "contractEventId": "event-020063"
+          },
+          "label": {
+            "value": 1,
+            "reason": "no_renewal_by_grace",
+            "availableAt": "2026-08-14T21:00:00Z",
+            "evidenceEventIds": []
+          },
+          "split": "validation",
+          "cycleWeight": 0.142857142857
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 932.125,
+            "rawLogOdds": 0.5475751871093991
+          },
+          {
+            "feature": "price_minor",
+            "value": 13572,
+            "rawLogOdds": 0.5046848779751811
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 13572,
+            "rawLogOdds": 0.28278886535137243
+          },
+          {
+            "feature": "tariff_code",
+            "value": "DE-5",
+            "rawLogOdds": 0.20718772968054772
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 14165,
+            "rawLogOdds": 0.1417477044587555
+          },
+          {
+            "feature": "service_age_days",
+            "value": 574.583333,
+            "rawLogOdds": 0.062439025245911495
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 3,
+            "rawLogOdds": 0.03385861804904753
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 574.583333,
+            "rawLogOdds": 0.02601012204471878
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": 11874,
+            "rawLogOdds": 0.019559494005459133
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.018906515815152253
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 3,
+            "rawLogOdds": 0.018171008889232135
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": 0.014031264476822593
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 2,
+            "rawLogOdds": 0.011944228590980266
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.01047777662485421
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 27.75,
+            "rawLogOdds": 0.008489540965951274
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.004117484549060204
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.0030573178126550903
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.0024347087324339363
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.002019025494968827
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.0007939677117534941
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002538827806409105
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 3.25,
+            "rawLogOdds": -0.00012405555845975915
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-09T21:00:00Z",
+            "recordedAt": "2026-08-09T21:00:00Z",
+            "type": "payment_failed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "amountMinor": 13572,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 4,
+            "dueAt": "2026-08-09T21:00:00Z",
+            "reason": "payment_provider_decline",
+            "paidThrough": null,
+            "id": "event-021910"
+          },
+          {
+            "occurredAt": "2026-08-09T21:00:00Z",
+            "recordedAt": "2026-08-09T21:00:00Z",
+            "type": "status_changed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "fromStatus": "active",
+            "toStatus": "prolong_wait",
+            "reason": "payment_failed",
+            "id": "event-021911"
+          },
+          {
+            "occurredAt": "2026-08-10T03:00:00Z",
+            "recordedAt": "2026-08-10T03:00:00Z",
+            "type": "status_changed",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "fromStatus": "prolong_wait",
+            "toStatus": "suspended",
+            "reason": "synthetic_grace_elapsed",
+            "id": "event-021936"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-17T07:00:00Z",
+            "recordedAt": "2026-08-17T07:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10330,
+            "serviceId": 20686,
+            "source": "synthetic",
+            "amountMinor": 13572,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 4,
+            "dueAt": "2026-08-09T21:00:00Z",
+            "reason": "retry_after_failure",
+            "paidThrough": "2026-09-17T07:00:00Z",
+            "id": "event-022393"
+          }
+        ],
+        "oldModelRiskOnSameSnapshot": 0.082482545020707
+      },
+      {
+        "case": "long_stable_renewed",
+        "risk": 0.021571697260834334,
+        "row": {
+          "sampleId": "21275@2026-08-22T15:00:00Z",
+          "cycleId": "21275@2026-08-25T08:00:00Z",
+          "serviceId": 21275,
+          "accountId": 10611,
+          "predictionAt": "2026-08-22T15:00:00Z",
+          "dueAt": "2026-08-25T08:00:00Z",
+          "labelDeadline": "2026-08-30T08:00:00Z",
+          "currency": "EUR",
+          "features": {
+            "status": "active",
+            "payment_term": "month",
+            "tariff_code": "WAWs-1",
+            "days_to_expiry": 2.708333,
+            "service_age_days": 515.291667,
+            "account_age_days": 943.125,
+            "observed_history_days": 515.291667,
+            "price_minor": 593,
+            "monthly_revenue_minor": 593,
+            "renewal_cycles_90d": 3,
+            "successful_renewals_90d": 3,
+            "failed_cycle_share_90d": 0.0,
+            "late_cycle_share_90d": 0.0,
+            "mean_paid_delay_hours_90d": 0.0,
+            "max_paid_delay_hours_90d": 0.0,
+            "days_since_successful_renewal": 28.291667,
+            "recoveries_90d": 0,
+            "contract_changes_90d": 0,
+            "has_renewal_history": 1,
+            "history_30d_complete": 1,
+            "history_90d_complete": 1,
+            "live_vps_count": 2,
+            "portfolio_monthly_revenue_minor": 2121,
+            "portfolio_change_30d_minor": -170
+          },
+          "audit": {
+            "maxFeatureOccurredAt": "2026-08-18T15:00:00Z",
+            "maxFeatureRecordedAt": "2026-08-18T15:00:00Z",
+            "contractEventId": "event-005981"
+          },
+          "label": {
+            "value": 0,
+            "reason": "renewed_in_grace",
+            "availableAt": "2026-08-30T08:00:00Z",
+            "evidenceEventIds": [
+              "event-022906"
+            ]
+          },
+          "split": "validation",
+          "cycleWeight": 0.142857142857
+        },
+        "baseRawLogOdds": -2.6858457493097743,
+        "contributions": [
+          {
+            "feature": "account_age_days",
+            "value": 943.125,
+            "rawLogOdds": -0.7012193257110431
+          },
+          {
+            "feature": "live_vps_count",
+            "value": 2,
+            "rawLogOdds": -0.17222530127490054
+          },
+          {
+            "feature": "portfolio_monthly_revenue_minor",
+            "value": 2121,
+            "rawLogOdds": -0.10014391379724566
+          },
+          {
+            "feature": "tariff_code",
+            "value": "WAWs-1",
+            "rawLogOdds": -0.08992634237770135
+          },
+          {
+            "feature": "service_age_days",
+            "value": 515.291667,
+            "rawLogOdds": 0.08432925530832824
+          },
+          {
+            "feature": "portfolio_change_30d_minor",
+            "value": -170,
+            "rawLogOdds": -0.058198091209510236
+          },
+          {
+            "feature": "monthly_revenue_minor",
+            "value": 593,
+            "rawLogOdds": -0.05514203952650603
+          },
+          {
+            "feature": "price_minor",
+            "value": 593,
+            "rawLogOdds": -0.036897817590107435
+          },
+          {
+            "feature": "observed_history_days",
+            "value": 515.291667,
+            "rawLogOdds": -0.017768820589187044
+          },
+          {
+            "feature": "successful_renewals_90d",
+            "value": 3,
+            "rawLogOdds": 0.0136688142856525
+          },
+          {
+            "feature": "recoveries_90d",
+            "value": 0,
+            "rawLogOdds": -0.01193384301341938
+          },
+          {
+            "feature": "renewal_cycles_90d",
+            "value": 3,
+            "rawLogOdds": 0.009856666630384191
+          },
+          {
+            "feature": "late_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.009755113739095286
+          },
+          {
+            "feature": "days_since_successful_renewal",
+            "value": 28.291667,
+            "rawLogOdds": 0.009523731142694636
+          },
+          {
+            "feature": "max_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.006119425065142907
+          },
+          {
+            "feature": "mean_paid_delay_hours_90d",
+            "value": 0.0,
+            "rawLogOdds": 0.005168400220955046
+          },
+          {
+            "feature": "has_renewal_history",
+            "value": 1,
+            "rawLogOdds": -0.004254877137568344
+          },
+          {
+            "feature": "history_90d_complete",
+            "value": 1,
+            "rawLogOdds": -0.00391238538289074
+          },
+          {
+            "feature": "contract_changes_90d",
+            "value": 0,
+            "rawLogOdds": -0.002614904872977385
+          },
+          {
+            "feature": "failed_cycle_share_90d",
+            "value": 0.0,
+            "rawLogOdds": -0.000678515650144431
+          },
+          {
+            "feature": "days_to_expiry",
+            "value": 2.708333,
+            "rawLogOdds": 0.00025630441156595336
+          },
+          {
+            "feature": "history_30d_complete",
+            "value": 1,
+            "rawLogOdds": -0.0002423012775996821
+          },
+          {
+            "feature": "status",
+            "value": "active",
+            "rawLogOdds": 0.0
+          },
+          {
+            "feature": "payment_term",
+            "value": "month",
+            "rawLogOdds": 0.0
+          }
+        ],
+        "eventsWithinOutcomeWindow": [
+          {
+            "occurredAt": "2026-08-25T08:00:00Z",
+            "recordedAt": "2026-08-25T08:00:00Z",
+            "type": "payment_succeeded",
+            "accountId": 10611,
+            "serviceId": 21275,
+            "source": "synthetic",
+            "amountMinor": 593,
+            "currency": "EUR",
+            "paymentTerm": "month",
+            "contractVersion": 2,
+            "dueAt": "2026-08-25T08:00:00Z",
+            "reason": "renewal",
+            "paidThrough": "2026-09-25T08:00:00Z",
+            "id": "event-022906"
+          }
+        ],
+        "paymentAfterOutcomeWindow": [],
+        "oldModelRiskOnSameSnapshot": 0.05775675732003772
+      }
+    ]
+  }
+}

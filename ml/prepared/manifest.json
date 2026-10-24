@@ -1,105 +1,106 @@
 {
   "schemaVersion": "vps-preexpiry-features-v1",
   "targetVersion": "unrenewed-within-grace-excluding-replacement-and-policy-block-v2",
-  "historySha256": "879b246854c05b0da94fdf51cbb21d4a328e2b9ff2d47b1ae303de9f7d468ac6",
+  "historySha256": "8c3cb0943b616de959d291425f8675c42a76c1e0cda46b65f6c6e62110417ab7",
+  "generatorVersion": "v2",
   "sourceCaseSha256": "6e0e224671a4cd22059431b01fb6fed21e075100bb21b1545d94e746e666292e",
   "historyAsOf": "2026-10-19T15:00:00Z",
   "sampling": "daily 15:00 UTC; 0 < dueAt - predictionAt <= 7 days",
   "validationStart": "2026-08-01T15:00:00Z",
   "testStart": "2026-09-01T15:00:00Z",
-  "rows": 8589,
+  "rows": 82432,
   "splits": {
     "train": {
-      "rows": 3850,
-      "cycles": 550,
-      "accounts": 155,
+      "rows": 63133,
+      "cycles": 9019,
+      "accounts": 707,
       "cycleLabels": {
-        "0": 515,
-        "1": 35
+        "1": 583,
+        "0": 8436
       },
       "labels": {
-        "0": 3605,
-        "1": 245
+        "1": 4081,
+        "0": 59052
       },
       "paymentTerms": {
-        "month": 3850
+        "month": 63133
       }
     },
     "validation": {
-      "rows": 1361,
-      "cycles": 227,
-      "accounts": 134,
+      "rows": 5010,
+      "cycles": 797,
+      "accounts": 562,
       "cycleLabels": {
-        "0": 203,
-        "1": 24
+        "0": 754,
+        "1": 43
       },
       "labels": {
-        "0": 1213,
-        "1": 148
+        "0": 4742,
+        "1": 268
       },
       "paymentTerms": {
-        "month": 1361
+        "month": 5010
       }
     },
     "test": {
-      "rows": 2118,
-      "cycles": 332,
-      "accounts": 126,
+      "rows": 9049,
+      "cycles": 1374,
+      "accounts": 643,
       "cycleLabels": {
-        "0": 319,
-        "1": 13
+        "0": 1287,
+        "1": 87
       },
       "labels": {
-        "0": 2047,
-        "1": 71
+        "0": 8468,
+        "1": 581
       },
       "paymentTerms": {
-        "month": 2118
+        "month": 9049
       }
     },
     "purged": {
-      "rows": 567,
-      "cycles": 155,
-      "accounts": 65,
+      "rows": 2776,
+      "cycles": 575,
+      "accounts": 281,
       "cycleLabels": {
-        "0": 139,
-        "1": 16
+        "0": 537,
+        "1": 38
       },
       "labels": {
-        "0": 499,
-        "1": 68
+        "0": 2596,
+        "1": 180
       },
       "paymentTerms": {
-        "month": 567
+        "month": 2776
       }
     },
     "pending": {
-      "rows": 476,
-      "cycles": 84,
-      "accounts": 68,
+      "rows": 2135,
+      "cycles": 467,
+      "accounts": 356,
       "cycleLabels": {
-        "None": 84
+        "None": 467
       },
       "labels": {
-        "None": 476
+        "None": 2135
       },
       "paymentTerms": {
-        "month": 461,
-        "hour": 15
+        "month": 2059,
+        "hour": 76
       }
     },
     "excluded": {
-      "rows": 217,
-      "cycles": 31,
-      "accounts": 28,
+      "rows": 329,
+      "cycles": 47,
+      "accounts": 46,
       "cycleLabels": {
-        "None": 31
+        "None": 47
       },
       "labels": {
-        "None": 217
+        "None": 329
       },
       "paymentTerms": {
-        "month": 217
+        "month": 329
       }
     }
   },
@@ -152,5 +153,5 @@
     "daily sampling can miss short hourly cycles; do not extrapolate monthly training to hourly services"
   ],
   "trainingStarted": false,
-  "rowsSha256": "7fbb903a27fdad1a52835fdabb99c5e68ec1ceb4215e25523e525d0417897e1d"
+  "rowsSha256": "f432b716b7920ecca9722deccbd850b8c38c08bf2c92d6dba9efd9c8f6b87976"
 }
