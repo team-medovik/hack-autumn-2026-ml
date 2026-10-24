@@ -246,10 +246,123 @@ class SplitBoundaryTests(unittest.TestCase):
                 ("2026-02-01T15:00:00Z", "2026-03-01T15:00:00Z", "purged"),
                 ("2026-03-01T15:00:00Z", "2026-03-05T15:00:00Z", "test")):
             with self.subTest(at=at, available=available):
-                row = {"predictionAt": at, "label": {"value": 1, "availableAt": available}}
+                row = {"predictionAt": at, "label": {"value": 1, "availableAt": available,
+                                                     "reason": "no_renewal_by_grace"}}
                 self.assertEqual(assign_split(row, validation, test), expected)
-        pending = {"predictionAt": PREDICTION, "label": {"value": None, "availableAt": None}}
+        pending = {"predictionAt": PREDICTION, "label": {"value": None, "availableAt": None,
+                                                         "reason": "observation_incomplete"}}
         self.assertEqual(assign_split(pending, validation, test), "pending")
+
+
+class NonfinancialBlockExclusionTests(unittest.TestCase):
+    REASON = "synthetic_policy_review_not_payment_failure"
+
+    def block(self, fixture, occurred="2026-02-01T15:00:00Z", **overrides):
+        details = {"toStatus": "blocked", "reason": self.REASON, **overrides}
+        return fixture.event("status_changed", occurred, **details)
+
+    def test_confirmed_nonfinancial_block_is_excluded_without_feature_leakage(self):
+        fixture = ExampleHistory()
+        original = fixture.rows()
+        block = self.block(fixture)
+        self.assertEqual(fixture.rows(), original)
+        label = fixture.label()
+        self.assertIsNone(label["value"])
+        self.assertEqual(label["reason"], "excluded_nonfinancial_block")
+        self.assertEqual(label["evidenceEventIds"], [block["id"]])
+        row = {**original[0], "label": label}
+        # Explicit exclusion wins regardless of where the time split falls.
+        for validation, test in (("2026-02-10T15:00:00Z", "2026-03-01T15:00:00Z"),
+                                 ("2026-01-20T15:00:00Z", "2026-02-10T15:00:00Z"),
+                                 ("2026-01-10T15:00:00Z", "2026-01-20T15:00:00Z")):
+            with self.subTest(validation=validation, test=test):
+                self.assertEqual(assign_split(row, timestamp(validation), timestamp(test)), "excluded")
+
+    def test_exclusion_waits_for_full_outcome_window(self):
+        fixture = ExampleHistory(as_of="2026-02-04T15:00:00Z")
+        self.block(fixture)
+        fixture.payment("2026-02-02T15:00:00Z")
+        label = fixture.label()
+        self.assertIsNone(label["value"])
+        self.assertEqual(label["reason"], "observation_incomplete")
+        row = {**fixture.rows()[0], "label": label}
+        self.assertEqual(assign_split(row, timestamp("2026-02-10T15:00:00Z"),
+                                      timestamp("2026-03-01T15:00:00Z")), "pending")
+
+    def test_nonfinancial_block_exclusion_takes_precedence_over_successful_renewal(self):
+        fixture = ExampleHistory()
+        fixture.payment(DUE)
+        block = self.block(fixture)
+        label = fixture.label()
+        self.assertIsNone(label["value"])
+        self.assertEqual(label["reason"], "excluded_nonfinancial_block")
+        self.assertEqual(label["evidenceEventIds"], [block["id"]])
+
+    def test_delayed_block_recording_affects_availability_not_past_features(self):
+        fixture = ExampleHistory()
+        original = fixture.rows()
+        block = self.block(fixture, recorded="2026-02-10T15:00:00Z")
+        self.assertEqual(fixture.rows(), original)
+        label = fixture.label()
+        self.assertEqual(label["reason"], "excluded_nonfinancial_block")
+        self.assertIsNone(label["value"])
+        self.assertGreaterEqual(timestamp(label["availableAt"]), timestamp(block["recordedAt"]))
+        # The same event cannot exclude a row in an earlier extract that has not received it.
+        fixture.data["asOf"] = "2026-02-06T15:00:00Z"
+        self.assertEqual(fixture.label()["value"], 1)
+
+    def test_exclusion_window_includes_active_block_before_prediction_and_deadline(self):
+        for occurred, excluded in (("2026-01-27T14:59:59Z", True), (PREDICTION, True),
+                                   (DEADLINE, True), ("2026-02-05T15:00:01Z", False)):
+            with self.subTest(occurred=occurred):
+                fixture = ExampleHistory()
+                self.block(fixture, occurred, recorded="2026-02-10T15:00:00Z")
+                label = fixture.label()
+                if excluded:
+                    self.assertIsNone(label["value"])
+                    self.assertEqual(label["reason"], "excluded_nonfinancial_block")
+                else:
+                    self.assertEqual(label["value"], 1)
+
+    def test_late_recorded_block_already_active_at_prediction_excludes_label(self):
+        fixture = ExampleHistory()
+        original = fixture.rows()
+        block = self.block(fixture, "2026-01-26T15:00:00Z", recorded="2026-02-10T15:00:00Z")
+        self.assertEqual(fixture.rows(), original)
+        label = fixture.label()
+        self.assertIsNone(label["value"])
+        self.assertEqual(label["reason"], "excluded_nonfinancial_block")
+        self.assertIn(block["id"], label["evidenceEventIds"])
+        self.assertGreaterEqual(timestamp(label["availableAt"]), timestamp(block["recordedAt"]))
+        self.assertEqual(assign_split({**original[0], "label": label},
+                                      timestamp("2026-02-08T15:00:00Z"),
+                                      timestamp("2026-03-01T15:00:00Z")), "excluded")
+
+    def test_old_block_restored_before_prediction_does_not_exclude_label(self):
+        fixture = ExampleHistory()
+        fixture.event("status_changed", "2026-01-26T15:00:00Z", toStatus="active")
+        original = fixture.rows()
+        self.block(fixture, "2026-01-25T15:00:00Z", recorded="2026-02-10T15:00:00Z")
+        self.assertEqual(fixture.rows(), original)
+        label = fixture.label()
+        self.assertEqual(label["value"], 1)
+        self.assertEqual(label["reason"], "no_renewal_by_grace")
+
+    def test_unconfirmed_financial_or_missing_reason_does_not_exclude(self):
+        for reason in (None, "insufficient_funds", "payment_failed", "unknown_policy"):
+            with self.subTest(reason=reason):
+                fixture = ExampleHistory()
+                block = self.block(fixture, reason=reason)
+                if reason is None:
+                    del block["reason"]
+                self.assertEqual(fixture.label()["value"], 1)
+
+    def test_other_owner_service_or_status_does_not_exclude(self):
+        for overrides in ({"owner": 2}, {"sid": 2}, {"toStatus": "suspended"}):
+            with self.subTest(overrides=overrides):
+                fixture = ExampleHistory()
+                self.block(fixture, **overrides)
+                self.assertEqual(fixture.label()["value"], 1)
 
 
 class EnrichedDatasetIntegrationTests(unittest.TestCase):
@@ -290,6 +403,27 @@ class EnrichedDatasetIntegrationTests(unittest.TestCase):
         self.assertTrue({"train", "validation", "test", "pending", "purged"}
                         <= {row["split"] for row in self.rows})
         self.assertTrue({0, 1, None} <= {row["label"]["value"] for row in self.rows})
+
+    def test_confirmed_nonfinancial_blocks_never_enter_training_or_evaluation(self):
+        excluded = [row for row in self.rows if row["label"]["reason"] == "excluded_nonfinancial_block"]
+        self.assertGreater(len(excluded), 0)
+        events = {event["id"]: event for event in self.data["events"]}
+        for row in excluded:
+            self.assertEqual(row["split"], "excluded")
+            self.assertIsNone(row["label"]["value"])
+            self.assertGreater(len(row["label"]["evidenceEventIds"]), 0)
+            for event_id in row["label"]["evidenceEventIds"]:
+                event = events[event_id]
+                self.assertEqual(event["type"], "status_changed")
+                self.assertEqual(event["toStatus"], "blocked")
+                self.assertEqual(event["reason"], NonfinancialBlockExclusionTests.REASON)
+                self.assertEqual(event["accountId"], row["accountId"])
+                self.assertEqual(event["serviceId"], row["serviceId"])
+                self.assertLessEqual(timestamp(row["predictionAt"]), timestamp(event["occurredAt"]))
+                self.assertLessEqual(timestamp(event["occurredAt"]), timestamp(row["labelDeadline"]))
+        for row in self.rows:
+            if row["split"] in {"train", "validation", "test"}:
+                self.assertNotEqual(row["label"]["reason"], "excluded_nonfinancial_block")
 
     def test_final_snapshot_contracts_scenarios_and_catalog_are_not_features(self):
         modified = copy.deepcopy(self.data)

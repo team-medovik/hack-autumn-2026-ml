@@ -1,6 +1,6 @@
 {
   "schemaVersion": "vps-preexpiry-features-v1",
-  "targetVersion": "unrenewed-within-grace-excluding-confirmed-replacement-v1",
+  "targetVersion": "unrenewed-within-grace-excluding-replacement-and-policy-block-v2",
   "historySha256": "879b246854c05b0da94fdf51cbb21d4a328e2b9ff2d47b1ae303de9f7d468ac6",
   "sourceCaseSha256": "6e0e224671a4cd22059431b01fb6fed21e075100bb21b1545d94e746e666292e",
   "historyAsOf": "2026-10-19T15:00:00Z",
@@ -10,35 +10,35 @@
   "rows": 8589,
   "splits": {
     "train": {
-      "rows": 4011,
-      "cycles": 573,
+      "rows": 3850,
+      "cycles": 550,
       "accounts": 155,
       "cycleLabels": {
         "0": 515,
-        "1": 58
+        "1": 35
       },
       "labels": {
         "0": 3605,
-        "1": 406
+        "1": 245
       },
       "paymentTerms": {
-        "month": 4011
+        "month": 3850
       }
     },
     "validation": {
-      "rows": 1406,
-      "cycles": 235,
-      "accounts": 137,
+      "rows": 1361,
+      "cycles": 227,
+      "accounts": 134,
       "cycleLabels": {
         "0": 203,
-        "1": 32
+        "1": 24
       },
       "labels": {
         "0": 1213,
-        "1": 193
+        "1": 148
       },
       "paymentTerms": {
-        "month": 1406
+        "month": 1361
       }
     },
     "test": {
@@ -58,19 +58,19 @@
       }
     },
     "purged": {
-      "rows": 578,
-      "cycles": 157,
-      "accounts": 67,
+      "rows": 567,
+      "cycles": 155,
+      "accounts": 65,
       "cycleLabels": {
         "0": 139,
-        "1": 18
+        "1": 16
       },
       "labels": {
         "0": 499,
-        "1": 79
+        "1": 68
       },
       "paymentTerms": {
-        "month": 578
+        "month": 567
       }
     },
     "pending": {
@@ -86,6 +86,20 @@
       "paymentTerms": {
         "month": 461,
         "hour": 15
+      }
+    },
+    "excluded": {
+      "rows": 217,
+      "cycles": 31,
+      "accounts": 28,
+      "cycleLabels": {
+        "None": 31
+      },
+      "labels": {
+        "None": 217
+      },
+      "paymentTerms": {
+        "month": 217
       }
     }
   },
@@ -127,14 +141,16 @@
     "future observed catalog specifications"
   ],
   "replacementPolicy": "explicit same-owner link occurring by labelDeadline, not proximity of purchases",
+  "nonfinancialBlockPolicy": "exclude confirmed policy blocks active at predictionAt or occurring through labelDeadline; require mature window; unknown/financial reasons are not excluded",
   "cycleWeight": "1 / number of daily rows of this cycle in this split; not a class or revenue weight",
   "limitations": [
     "synthetic behavior and prices; not proof of real predictive quality",
     "catalog observed after history: no historical CPU/RAM/location join",
     "no historical balances; not reconstructed from final snapshot",
     "asOf assumed complete event watermark; delayed delivery beyond it needs real watermark handling",
-    "policy blocks/planned endings can be positives under current mechanical target: review before training",
+    "policy-block cause uses explicit synthetic reason allowlist; production needs authoritative reason mapping",
     "daily sampling can miss short hourly cycles; do not extrapolate monthly training to hourly services"
   ],
-  "trainingStarted": false
+  "trainingStarted": false,
+  "rowsSha256": "7fbb903a27fdad1a52835fdabb99c5e68ec1ceb4215e25523e525d0417897e1d"
 }

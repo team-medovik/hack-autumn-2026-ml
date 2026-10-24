@@ -207,7 +207,7 @@
     "cycleWeight": 0.142857142857
   },
   {
-    "case": "policy_block_needs_business_review",
+    "case": "policy_block_excluded",
     "sampleId": "20051@2026-05-27T15:00:00Z",
     "cycleId": "20051@2026-06-02T20:00:00Z",
     "serviceId": 20051,
@@ -248,12 +248,14 @@
       "contractEventId": "event-000046"
     },
     "label": {
-      "value": 1,
-      "reason": "no_renewal_by_grace",
+      "value": null,
+      "reason": "excluded_nonfinancial_block",
       "availableAt": "2026-06-07T20:00:00Z",
-      "evidenceEventIds": []
+      "evidenceEventIds": [
+        "event-000986"
+      ]
     },
-    "split": "train",
+    "split": "excluded",
     "cycleWeight": 0.142857142857
   },
   {

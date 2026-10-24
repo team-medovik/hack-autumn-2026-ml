@@ -17,7 +17,8 @@ GRACE = timedelta(days=5)
 LIVE = {"active", "suspended", "prolong_wait"}
 ELIGIBLE = {"active", "suspended"}
 SCHEMA = "vps-preexpiry-features-v1"
-TARGET = "unrenewed-within-grace-excluding-confirmed-replacement-v1"
+TARGET = "unrenewed-within-grace-excluding-replacement-and-policy-block-v2"
+NON_FINANCIAL_BLOCK_REASONS = {"synthetic_policy_review_not_payment_failure"}
 CATEGORICAL = ("status", "payment_term", "tariff_code")
 NUMERIC = (
     "days_to_expiry", "service_age_days", "account_age_days", "observed_history_days",
@@ -194,6 +195,27 @@ class History:
         due, deadline = map(timestamp, (row["dueAt"], row["labelDeadline"]))
         if deadline > self.as_of:
             return {"value": None, "reason": "observation_incomplete", "availableAt": None, "evidenceEventIds": []}
+        # A provider policy decision is not customer non-renewal. Exclude, never relabel as 0.
+        # Do not infer cause from the blocked status alone or remove all past cycles.
+        prediction = timestamp(row["predictionAt"])
+        statuses = [e for e in self.by_service[row["serviceId"]]
+                    if e["type"] == "status_changed" and e["accountId"] == row["accountId"]
+                    and self.known(e, self.as_of)]
+        blocks = [e for e in statuses if e.get("toStatus") == "blocked"
+                  and e.get("reason") in NON_FINANCIAL_BLOCK_REASONS
+                  and prediction <= timestamp(e["occurredAt"]) <= deadline]
+        # A delayed record may reveal that a policy block already applied at prediction.
+        # Only the last actual status at T matters; an older, lifted block is not exclusion.
+        prior_status = next((e for e in reversed(statuses)
+                             if timestamp(e["occurredAt"]) <= prediction), None)
+        if (prior_status and prior_status.get("toStatus") == "blocked"
+                and prior_status.get("reason") in NON_FINANCIAL_BLOCK_REASONS):
+            blocks.append(prior_status)
+        blocks = list({e["id"]: e for e in blocks}.values())
+        if blocks:
+            return {"value": None, "reason": "excluded_nonfinancial_block",
+                    "availableAt": iso(max([deadline] + [timestamp(e["recordedAt"]) for e in blocks])),
+                    "evidenceEventIds": [e["id"] for e in blocks]}
         # An early renewal or replacement may have been recorded AFTER prediction.
         # It cannot enter features, but still proves that this cycle was not lost.
         renewals = [e for e in self.by_service[row["serviceId"]] if e["type"] == "payment_succeeded"
@@ -228,6 +250,8 @@ def portfolio(states):
 
 
 def assign_split(row, validation_start, test_start):
+    if row["label"]["reason"] == "excluded_nonfinancial_block":
+        return "excluded"
     if row["label"]["value"] is None:
         return "pending"
     at, available = timestamp(row["predictionAt"]), timestamp(row["label"]["availableAt"])
@@ -276,7 +300,7 @@ def validate_rows(rows, validation_start, test_start):
             assert row["label"]["value"] in (0, 1)
             cycle_splits[row["cycleId"]].add(row["split"])
         else:
-            assert row["split"] in {"purged", "pending"}
+            assert row["split"] in {"purged", "pending", "excluded"}
     assert all(len(splits) == 1 for splits in cycle_splits.values()), "Same renewal outcome crossed data splits"
 
 
@@ -284,7 +308,7 @@ def review_examples(rows, data):
     events = {e["id"]: e for e in data["events"]}
     chosen = {}
     for row in rows:
-        if row["split"] not in {"train", "pending"}:
+        if row["split"] not in {"train", "pending", "excluded"}:
             continue  # Do not browse held-out outcomes while designing the model.
         label, f = row["label"], row["features"]
         if label["reason"] == "confirmed_replacement":
@@ -297,12 +321,10 @@ def review_examples(rows, data):
                 chosen.setdefault("late_payment_not_loss", row)
             elif f["has_renewal_history"] == 0:
                 chosen.setdefault("new_service_paid_on_time", row)
-        if label["value"] is None and f["payment_term"] == "hour":
+        if label["reason"] == "observation_incomplete" and f["payment_term"] == "hour":
             chosen.setdefault("hourly_outcome_not_observed_yet", row)
-        if label["value"] == 1 and any(e["type"] == "status_changed" and e.get("toStatus") == "blocked"
-                and e["serviceId"] == row["serviceId"] and row["predictionAt"] < e["occurredAt"] <= row["labelDeadline"]
-                for e in data["events"]):
-            chosen.setdefault("policy_block_needs_business_review", row)
+        if label["reason"] == "excluded_nonfinancial_block":
+            chosen.setdefault("policy_block_excluded", row)
     return [{"case": name, **row} for name, row in chosen.items()]
 
 
@@ -318,7 +340,7 @@ def main():
     validation_start, test_start = timestamp(args.validation_start), timestamp(args.test_start)
     rows = build_dataset(data, validation_start, test_start)
     stats = {}
-    for split in ("train", "validation", "test", "purged", "pending"):
+    for split in ("train", "validation", "test", "purged", "pending", "excluded"):
         subset = [r for r in rows if r["split"] == split]
         cycles = {r["cycleId"]: r["label"]["value"] for r in subset}
         stats[split] = {"rows": len(subset), "cycles": len({r["cycleId"] for r in subset}),
@@ -336,12 +358,13 @@ def main():
         "excluded": ["final balances", "final contracts/statuses", "autoProlong without event history",
                      "generator scenarios and reasons", "IDs and label evidence", "future observed catalog specifications"],
         "replacementPolicy": "explicit same-owner link occurring by labelDeadline, not proximity of purchases",
+        "nonfinancialBlockPolicy": "exclude confirmed policy blocks active at predictionAt or occurring through labelDeadline; require mature window; unknown/financial reasons are not excluded",
         "cycleWeight": "1 / number of daily rows of this cycle in this split; not a class or revenue weight",
         "limitations": ["synthetic behavior and prices; not proof of real predictive quality",
                         "catalog observed after history: no historical CPU/RAM/location join",
                         "no historical balances; not reconstructed from final snapshot",
                         "asOf assumed complete event watermark; delayed delivery beyond it needs real watermark handling",
-                        "policy blocks/planned endings can be positives under current mechanical target: review before training",
+                        "policy-block cause uses explicit synthetic reason allowlist; production needs authoritative reason mapping",
                         "daily sampling can miss short hourly cycles; do not extrapolate monthly training to hourly services"],
         "trainingStarted": False,
     }
@@ -349,6 +372,7 @@ def main():
     with (args.output / "rows.jsonl").open("w") as stream:
         for row in rows:
             stream.write(json.dumps(row, ensure_ascii=False, allow_nan=False) + "\n")
+    manifest["rowsSha256"] = hashlib.sha256((args.output / "rows.jsonl").read_bytes()).hexdigest()
     (args.output / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n")
     (args.output / "review-examples.json").write_text(json.dumps(review_examples(rows, data), ensure_ascii=False, indent=2) + "\n")
     print(json.dumps({"rows": len(rows), "splits": stats, "trainingStarted": False}, ensure_ascii=False, indent=2))

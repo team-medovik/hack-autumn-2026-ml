@@ -1,2 +1,4 @@
 __pycache__/
 prepared/rows.jsonl
+.venv/
+runs/
