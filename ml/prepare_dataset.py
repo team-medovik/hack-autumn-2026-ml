@@ -50,7 +50,7 @@ def monthly_revenue(contract):
     if contract["currency"] != "EUR":
         raise ValueError("Only EUR contracts supported; do not silently mix currencies")
     numerator, denominator = {
-        "hour": (720, 1), "week": (30, 7), "month": (1, 1),
+        "hour": (720, 1), "day": (30, 1), "week": (30, 7), "month": (1, 1),
         "quarter_year": (1, 3), "half_year": (1, 6), "year": (1, 12),
     }[contract["paymentTerm"]]
     price = contract["priceMinor"]
@@ -113,7 +113,7 @@ class History:
                 old["replaced"] = True
         return states
 
-    def features_at(self, at):
+    def features_at(self, at, service_ids=None):
         states = self.replay(at)
         # Late-recorded older creations must not retrospectively extend observed coverage.
         known_history_start = min((s["createdAt"] for s in states.values()), default=at)
@@ -121,6 +121,8 @@ class History:
         portfolios, past_portfolios = portfolio(states), portfolio(past)
         rows = []
         for sid, state in sorted(states.items()):
+            if service_ids is not None and sid not in service_ids:
+                continue  # Still replay every service for point-in-time portfolio features.
             due = state["dueAt"]
             if (state["status"] not in ELIGIBLE or state["replaced"] or not state["contract"]
                     or due is None or not at < due <= at + HORIZON):

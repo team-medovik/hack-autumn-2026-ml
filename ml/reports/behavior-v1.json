@@ -1,0 +1,173 @@
+{
+  "profile": "payment-behavior-monotone-v1",
+  "schemaVersion": "vps-preexpiry-features-v1",
+  "targetVersion": "unrenewed-within-grace-excluding-replacement-and-policy-block-v2",
+  "historySha256": "8c3cb0943b616de959d291425f8675c42a76c1e0cda46b65f6c6e62110417ab7",
+  "rowsSha256": "f432b716b7920ecca9722deccbd850b8c38c08bf2c92d6dba9efd9c8f6b87976",
+  "previousModelSha256": "c5612b1465e59a2b0d3ce64958f54a293b9126dec66f7f6f30c9208422f01761",
+  "modelSha256": "ece49b9b42bec52b5eaa56b880d65b4ffdcd922550064dbf9c5ccf3b9019d439",
+  "catboostVersion": "1.2.10",
+  "featureNames": [
+    "days_to_expiry",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "has_renewal_history",
+    "history_90d_complete",
+    "verified_on_time_share_90d"
+  ],
+  "parameters": {
+    "loss_function": "Logloss",
+    "eval_metric": "Logloss",
+    "iterations": 300,
+    "depth": 4,
+    "learning_rate": 0.05,
+    "random_seed": 20261024,
+    "thread_count": 2,
+    "early_stopping_rounds": 30,
+    "use_best_model": true,
+    "allow_writing_files": false,
+    "monotone_constraints": {
+      "failed_cycle_share_90d": 1,
+      "late_cycle_share_90d": 1,
+      "mean_paid_delay_hours_90d": 1,
+      "max_paid_delay_hours_90d": 1,
+      "verified_on_time_share_90d": -1
+    }
+  },
+  "effectiveParameters": {
+    "nan_mode": "Min",
+    "eval_metric": "Logloss",
+    "iterations": 300,
+    "sampling_frequency": "PerTree",
+    "leaf_estimation_method": "Newton",
+    "od_pval": 0,
+    "random_score_type": "NormalWithModelSizeDecrease",
+    "grow_policy": "SymmetricTree",
+    "penalties_coefficient": 1,
+    "boosting_type": "Plain",
+    "model_shrink_mode": "Constant",
+    "feature_border_type": "GreedyLogSum",
+    "bayesian_matrix_reg": 0.10000000149011612,
+    "eval_fraction": 0,
+    "force_unit_auto_pair_weights": false,
+    "l2_leaf_reg": 3,
+    "random_strength": 1,
+    "od_type": "Iter",
+    "rsm": 1,
+    "boost_from_average": false,
+    "model_size_reg": 0.5,
+    "pool_metainfo_options": {
+      "tags": {}
+    },
+    "subsample": 0.800000011920929,
+    "monotone_constraints": {
+      "3": 1,
+      "11": -1,
+      "6": 1,
+      "4": 1,
+      "5": 1
+    },
+    "use_best_model": true,
+    "od_wait": 30,
+    "class_names": [
+      0,
+      1
+    ],
+    "random_seed": 20261024,
+    "depth": 4,
+    "posterior_sampling": false,
+    "border_count": 254,
+    "classes_count": 0,
+    "auto_class_weights": "None",
+    "sparse_features_conflict_fraction": 0,
+    "leaf_estimation_backtracking": "AnyImprovement",
+    "best_model_min_trees": 1,
+    "model_shrink_rate": 0.009999999776482582,
+    "min_data_in_leaf": 1,
+    "loss_function": "Logloss",
+    "learning_rate": 0.05000000074505806,
+    "score_function": "Cosine",
+    "task_type": "CPU",
+    "leaf_estimation_iterations": 10,
+    "bootstrap_type": "MVS",
+    "max_leaves": 16
+  },
+  "trees": 97,
+  "bestIterationZeroBased": 96,
+  "validation": {
+    "previousGeneratorV2Model": {
+      "logloss": 0.2087340759209487,
+      "brier": 0.05106963358604683,
+      "meanProbability": 0.06572381279278187,
+      "lossRate": 0.05395232120451832
+    },
+    "behaviorModel": {
+      "logloss": 0.21312023857826629,
+      "brier": 0.05188183865270871,
+      "meanProbability": 0.06751241287035399,
+      "lossRate": 0.05395232120451832
+    },
+    "constantTrainRate": {
+      "logloss": 0.21098992236839098,
+      "brier": 0.05115572278215165,
+      "meanProbability": 0.06464131278412243,
+      "lossRate": 0.05395232120451832
+    }
+  },
+  "trainRows": 63133,
+  "validationRows": 5010,
+  "trainRate": 0.06464131278412243,
+  "counterfactualChecks": {
+    "rowsChecked": 5010,
+    "excludedAttributesMaximumProbabilityDifference": 0.0,
+    "minimumRiskChangeWhenWorseningOneKnownCoordinate": {
+      "failed_cycle_share_90d": 0.0,
+      "late_cycle_share_90d": 0.0,
+      "mean_paid_delay_hours_90d": 0.0,
+      "max_paid_delay_hours_90d": 0.0,
+      "verified_on_time_share_90d": 0.0
+    },
+    "unknownVersusKnownOrderingGuaranteed": false
+  },
+  "requestedExamples": [
+    {
+      "sampleId": "20111@2026-08-01T15:00:00Z",
+      "label": 0,
+      "behaviorFeatures": {
+        "days_to_expiry": 0.791667,
+        "renewal_cycles_90d": 2,
+        "successful_renewals_90d": 2,
+        "failed_cycle_share_90d": 0.0,
+        "late_cycle_share_90d": 0.0,
+        "mean_paid_delay_hours_90d": 0.0,
+        "max_paid_delay_hours_90d": 0.0,
+        "days_since_successful_renewal": 30.208333,
+        "recoveries_90d": 0,
+        "has_renewal_history": 1,
+        "history_90d_complete": 1,
+        "verified_on_time_share_90d": 1.0
+      },
+      "oldRisk": 0.29776349484921605,
+      "behaviorRisk": 0.06651148313524888,
+      "monthlyRevenueMinorNotModelInput": 13572
+    }
+  ],
+  "testEvaluated": false,
+  "syntheticOnly": true,
+  "saveLoadPredictionCheckPassed": true,
+  "limitations": [
+    "One fixed experiment; no tuning until a desired probability is reached",
+    "Validation chooses stopping; not an independent quality estimate",
+    "Known-coordinate monotonicity permits equality; no promised probability increase",
+    "Changing several unconstrained inputs or unknownness can change ordering",
+    "Synthetic monthly behavior, not validated real-client probabilities",
+    "Risk excludes money; future financial priority is probability times monthly revenue",
+    "Feature independence from tariff/price does not prove causal fairness"
+  ]
+}

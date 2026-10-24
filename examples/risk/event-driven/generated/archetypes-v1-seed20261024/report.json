@@ -1,0 +1,3497 @@
+{
+  "seed": 20261024,
+  "days": 120,
+  "generatorVersion": "behavior-v1",
+  "populationSource": "seeded_generation",
+  "syntheticOnly": true,
+  "trainedModel": false,
+  "archetypeProbabilities": {
+    "planner": 0.2,
+    "controller": 0.2,
+    "reactive": 0.2,
+    "irregular": 0.2,
+    "project": 0.2
+  },
+  "actualArchetypes": {
+    "project": 12,
+    "reactive": 12,
+    "controller": 13,
+    "planner": 6,
+    "irregular": 7
+  },
+  "accounts": 50,
+  "services": 105,
+  "events": 1413,
+  "eventTypes": {
+    "account_created": 50,
+    "wallet_topped_up": 248,
+    "service_created": 105,
+    "payment_succeeded": 383,
+    "renewal_due": 250,
+    "status_changed": 250,
+    "payment_failed": 111,
+    "auto_prolong_changed": 16
+  },
+  "cycleLabels": {
+    "0": 228,
+    "None": 100,
+    "1": 55
+  },
+  "cycles": [
+    {
+      "accountId": 300001,
+      "serviceId": 3000010,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000010,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T02:20:36.194331Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000010,
+      "dueAt": "2026-04-01T02:20:36.194331Z",
+      "deadline": "2026-04-06T02:20:36.194331Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T02:20:36.194331Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000010,
+      "dueAt": "2026-05-01T02:20:36.194331Z",
+      "deadline": "2026-05-06T02:20:36.194331Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000011,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000011,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-01T16:17:47.446105Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000011,
+      "dueAt": "2026-05-01T16:17:47.446105Z",
+      "deadline": "2026-05-06T16:17:47.446105Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000012,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T02:41:46.113824Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000012,
+      "dueAt": "2026-03-01T02:41:46.113824Z",
+      "deadline": "2026-03-06T02:41:46.113824Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T02:41:46.113824Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000012,
+      "dueAt": "2026-04-01T02:41:46.113824Z",
+      "deadline": "2026-04-06T02:41:46.113824Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T06:17:35.425535Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300001,
+      "serviceId": 3000012,
+      "dueAt": "2026-05-01T06:17:35.425535Z",
+      "deadline": "2026-05-06T06:17:35.425535Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000020,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T05:26:17.335062Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000020,
+      "dueAt": "2026-03-01T05:26:17.335062Z",
+      "deadline": "2026-03-06T05:26:17.335062Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T09:02:02.536766Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000020,
+      "dueAt": "2026-04-01T09:02:02.536766Z",
+      "deadline": "2026-04-06T09:02:02.536766Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-05T03:02:59.745480Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000020,
+      "dueAt": "2026-05-05T03:02:59.745480Z",
+      "deadline": "2026-05-10T03:02:59.745480Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000021,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000021,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000021,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000021,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000021,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000022,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000022,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000022,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000022,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300002,
+      "serviceId": 3000022,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000030,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T22:57:09.876222Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000030,
+      "dueAt": "2026-03-02T22:57:09.876222Z",
+      "deadline": "2026-03-07T22:57:09.876222Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T22:57:09.876222Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000030,
+      "dueAt": "2026-04-02T22:57:09.876222Z",
+      "deadline": "2026-04-07T22:57:09.876222Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T22:57:09.876222Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000030,
+      "dueAt": "2026-05-02T22:57:09.876222Z",
+      "deadline": "2026-05-07T22:57:09.876222Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000031,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T23:57:27.655995Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000031,
+      "dueAt": "2026-03-02T23:57:27.655995Z",
+      "deadline": "2026-03-07T23:57:27.655995Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-04T06:06:55.370097Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300003,
+      "serviceId": 3000031,
+      "dueAt": "2026-04-04T06:06:55.370097Z",
+      "deadline": "2026-04-09T06:06:55.370097Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000040,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-02T18:03:47.007551Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000040,
+      "dueAt": "2026-04-02T18:03:47.007551Z",
+      "deadline": "2026-04-07T18:03:47.007551Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T15:01:55.808432Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000040,
+      "dueAt": "2026-05-03T15:01:55.808432Z",
+      "deadline": "2026-05-08T15:01:55.808432Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000041,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T21:28:59.559584Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000041,
+      "dueAt": "2026-03-01T21:28:59.559584Z",
+      "deadline": "2026-03-06T21:28:59.559584Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T18:16:21.700570Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300004,
+      "serviceId": 3000041,
+      "dueAt": "2026-04-02T18:16:21.700570Z",
+      "deadline": "2026-04-07T18:16:21.700570Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000050,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T09:47:09.974578Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000050,
+      "dueAt": "2026-03-01T09:47:09.974578Z",
+      "deadline": "2026-03-06T09:47:09.974578Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T00:30:05.188929Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000050,
+      "dueAt": "2026-04-02T00:30:05.188929Z",
+      "deadline": "2026-04-07T00:30:05.188929Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T08:24:20.650015Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000050,
+      "dueAt": "2026-05-02T08:24:20.650015Z",
+      "deadline": "2026-05-07T08:24:20.650015Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000051,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T14:09:04.999502Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000051,
+      "dueAt": "2026-03-01T14:09:04.999502Z",
+      "deadline": "2026-03-06T14:09:04.999502Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-07T11:39:32.656669Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000051,
+      "dueAt": "2026-04-07T11:39:32.656669Z",
+      "deadline": "2026-04-12T11:39:32.656669Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000052,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-03T16:19:45.240612Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000052,
+      "dueAt": "2026-03-03T16:19:45.240612Z",
+      "deadline": "2026-03-08T16:19:45.240612Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T16:19:45.240612Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000052,
+      "dueAt": "2026-04-03T16:19:45.240612Z",
+      "deadline": "2026-04-08T16:19:45.240612Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T16:19:45.240612Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300005,
+      "serviceId": 3000052,
+      "dueAt": "2026-05-03T16:19:45.240612Z",
+      "deadline": "2026-05-08T16:19:45.240612Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300006,
+      "serviceId": 3000060,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T03:19:28.191499Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300006,
+      "serviceId": 3000060,
+      "dueAt": "2026-03-01T03:19:28.191499Z",
+      "deadline": "2026-03-06T03:19:28.191499Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-03T06:24:22.453104Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300006,
+      "serviceId": 3000060,
+      "dueAt": "2026-05-03T06:24:22.453104Z",
+      "deadline": "2026-05-08T06:24:22.453104Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000070,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000070,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T03:10:28.899222Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000070,
+      "dueAt": "2026-04-01T03:10:28.899222Z",
+      "deadline": "2026-04-06T03:10:28.899222Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T06:39:10.640620Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000070,
+      "dueAt": "2026-05-01T06:39:10.640620Z",
+      "deadline": "2026-05-06T06:39:10.640620Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000071,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T05:44:22.886450Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300007,
+      "serviceId": 3000071,
+      "dueAt": "2026-03-01T05:44:22.886450Z",
+      "deadline": "2026-03-06T05:44:22.886450Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300008,
+      "serviceId": 3000080,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-05T06:16:26.805192Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300008,
+      "serviceId": 3000080,
+      "dueAt": "2026-03-05T06:16:26.805192Z",
+      "deadline": "2026-03-10T06:16:26.805192Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-05T10:42:33.407054Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300008,
+      "serviceId": 3000080,
+      "dueAt": "2026-04-05T10:42:33.407054Z",
+      "deadline": "2026-04-10T10:42:33.407054Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000090,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-03T12:54:54.571809Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000090,
+      "dueAt": "2026-03-03T12:54:54.571809Z",
+      "deadline": "2026-03-08T12:54:54.571809Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T12:54:54.571809Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000090,
+      "dueAt": "2026-04-03T12:54:54.571809Z",
+      "deadline": "2026-04-08T12:54:54.571809Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T12:54:54.571809Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000090,
+      "dueAt": "2026-05-03T12:54:54.571809Z",
+      "deadline": "2026-05-08T12:54:54.571809Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000091,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T03:33:12.844063Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000091,
+      "dueAt": "2026-03-02T03:33:12.844063Z",
+      "deadline": "2026-03-07T03:33:12.844063Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T21:40:59.898436Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000091,
+      "dueAt": "2026-04-02T21:40:59.898436Z",
+      "deadline": "2026-04-07T21:40:59.898436Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-04T00:33:21.122617Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000091,
+      "dueAt": "2026-05-04T00:33:21.122617Z",
+      "deadline": "2026-05-09T00:33:21.122617Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000092,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T23:57:55.051733Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000092,
+      "dueAt": "2026-03-01T23:57:55.051733Z",
+      "deadline": "2026-03-06T23:57:55.051733Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T17:35:27.451259Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000092,
+      "dueAt": "2026-04-02T17:35:27.451259Z",
+      "deadline": "2026-04-07T17:35:27.451259Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T08:51:55.933566Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300009,
+      "serviceId": 3000092,
+      "dueAt": "2026-05-03T08:51:55.933566Z",
+      "deadline": "2026-05-08T08:51:55.933566Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000100,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T08:34:39.134866Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000100,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T06:50:59.971268Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000100,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-27T21:53:39.268779Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000100,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-26T23:45:25.728570Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000100,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000101,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:13:30.283131Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000101,
+      "dueAt": "2026-03-01T00:13:30.283131Z",
+      "deadline": "2026-03-06T00:13:30.283131Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T16:58:05.823388Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000101,
+      "dueAt": "2026-04-01T00:13:30.283131Z",
+      "deadline": "2026-04-06T00:13:30.283131Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-27T23:14:29.500602Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000101,
+      "dueAt": "2026-05-01T00:13:30.283131Z",
+      "deadline": "2026-05-06T00:13:30.283131Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000102,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T08:40:53.683455Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000102,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T06:46:36.161422Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000102,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-27T21:59:24.301680Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000102,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-27T00:08:13.444442Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300010,
+      "serviceId": 3000102,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300011,
+      "serviceId": 3000110,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:11:48.288546Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300011,
+      "serviceId": 3000110,
+      "dueAt": "2026-03-01T00:11:48.288546Z",
+      "deadline": "2026-03-06T00:11:48.288546Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-01T12:26:51.333574Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300011,
+      "serviceId": 3000110,
+      "dueAt": "2026-05-01T12:26:51.333574Z",
+      "deadline": "2026-05-06T12:26:51.333574Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300012,
+      "serviceId": 3000120,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:19:34.795663Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300012,
+      "serviceId": 3000120,
+      "dueAt": "2026-03-01T00:19:34.795663Z",
+      "deadline": "2026-03-06T00:19:34.795663Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:57:22.775950Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300012,
+      "serviceId": 3000120,
+      "dueAt": "2026-04-01T00:57:22.775950Z",
+      "deadline": "2026-04-06T00:57:22.775950Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000130,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T17:22:23.158204Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000130,
+      "dueAt": "2026-03-01T17:22:23.158204Z",
+      "deadline": "2026-03-06T17:22:23.158204Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T13:40:26.403379Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000130,
+      "dueAt": "2026-04-02T13:40:26.403379Z",
+      "deadline": "2026-04-07T13:40:26.403379Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-07T08:10:31.361090Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000130,
+      "dueAt": "2026-05-07T08:10:31.361090Z",
+      "deadline": "2026-05-12T08:10:31.361090Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000131,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T18:33:49.532457Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000131,
+      "dueAt": "2026-03-01T18:33:49.532457Z",
+      "deadline": "2026-03-06T18:33:49.532457Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T12:27:46.114301Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000131,
+      "dueAt": "2026-04-02T12:27:46.114301Z",
+      "deadline": "2026-04-07T12:27:46.114301Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T03:35:20.770827Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300013,
+      "serviceId": 3000131,
+      "dueAt": "2026-05-03T03:35:20.770827Z",
+      "deadline": "2026-05-08T03:35:20.770827Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000140,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T11:49:22.058400Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000140,
+      "dueAt": "2026-03-01T11:49:22.058400Z",
+      "deadline": "2026-03-06T11:49:22.058400Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T19:16:52.255318Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000140,
+      "dueAt": "2026-04-01T19:16:52.255318Z",
+      "deadline": "2026-04-06T19:16:52.255318Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T05:05:59.573297Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000140,
+      "dueAt": "2026-05-02T05:05:59.573297Z",
+      "deadline": "2026-05-07T05:05:59.573297Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-26T22:15:54.602908Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000140,
+      "dueAt": "2026-06-02T05:05:59.573297Z",
+      "deadline": "2026-06-07T05:05:59.573297Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000141,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T20:46:31.452233Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000141,
+      "dueAt": "2026-03-02T20:46:31.452233Z",
+      "deadline": "2026-03-07T20:46:31.452233Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T04:29:41.125974Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000141,
+      "dueAt": "2026-04-03T04:29:41.125974Z",
+      "deadline": "2026-04-08T04:29:41.125974Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T11:45:00.885515Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300014,
+      "serviceId": 3000141,
+      "dueAt": "2026-05-03T11:45:00.885515Z",
+      "deadline": "2026-05-08T11:45:00.885515Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000150,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T08:36:40.556327Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000150,
+      "dueAt": "2026-03-02T08:36:40.556327Z",
+      "deadline": "2026-03-07T08:36:40.556327Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T05:05:05.356406Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000150,
+      "dueAt": "2026-04-03T05:05:05.356406Z",
+      "deadline": "2026-04-08T05:05:05.356406Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-04T23:08:45.937865Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000150,
+      "dueAt": "2026-05-04T23:08:45.937865Z",
+      "deadline": "2026-05-09T23:08:45.937865Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000151,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-03T21:49:14.813503Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000151,
+      "dueAt": "2026-04-03T21:49:14.813503Z",
+      "deadline": "2026-04-08T21:49:14.813503Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-05T00:47:16.686663Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300015,
+      "serviceId": 3000151,
+      "dueAt": "2026-05-05T00:47:16.686663Z",
+      "deadline": "2026-05-10T00:47:16.686663Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000160,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T02:59:23.551803Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000160,
+      "dueAt": "2026-03-02T02:59:23.551803Z",
+      "deadline": "2026-03-07T02:59:23.551803Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T08:17:38.783955Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000160,
+      "dueAt": "2026-04-03T08:17:38.783955Z",
+      "deadline": "2026-04-08T08:17:38.783955Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-04T08:13:17.191812Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000160,
+      "dueAt": "2026-05-04T08:13:17.191812Z",
+      "deadline": "2026-05-09T08:13:17.191812Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000161,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T15:52:07.348581Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000161,
+      "dueAt": "2026-03-01T15:52:07.348581Z",
+      "deadline": "2026-03-06T15:52:07.348581Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T23:03:29.578683Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000161,
+      "dueAt": "2026-04-02T23:03:29.578683Z",
+      "deadline": "2026-04-07T23:03:29.578683Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-04T05:17:59.536815Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300016,
+      "serviceId": 3000161,
+      "dueAt": "2026-05-04T05:17:59.536815Z",
+      "deadline": "2026-05-09T05:17:59.536815Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000170,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-30T08:45:15.629773Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000170,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:05:18.529823Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000170,
+      "dueAt": "2026-04-01T00:05:18.529823Z",
+      "deadline": "2026-04-06T00:05:18.529823Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T08:50:01.678114Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000170,
+      "dueAt": "2026-05-01T00:05:18.529823Z",
+      "deadline": "2026-05-06T00:05:18.529823Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000171,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-30T08:50:44.815821Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000171,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-27T10:27:11.255962Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000171,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T06:44:32.859473Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300017,
+      "serviceId": 3000171,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000180,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000180,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000180,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000180,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000180,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000181,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000181,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000181,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000181,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000181,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000182,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:29:06.987600Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000182,
+      "dueAt": "2026-03-01T00:29:06.987600Z",
+      "deadline": "2026-03-06T00:29:06.987600Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:44:31.358938Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300018,
+      "serviceId": 3000182,
+      "dueAt": "2026-04-01T00:44:31.358938Z",
+      "deadline": "2026-04-06T00:44:31.358938Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000190,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T22:12:42.735831Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000190,
+      "dueAt": "2026-03-01T22:12:42.735831Z",
+      "deadline": "2026-03-06T22:12:42.735831Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T22:12:42.735831Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000190,
+      "dueAt": "2026-04-01T22:12:42.735831Z",
+      "deadline": "2026-04-06T22:12:42.735831Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T15:07:46.832659Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000190,
+      "dueAt": "2026-05-02T15:07:46.832659Z",
+      "deadline": "2026-05-07T15:07:46.832659Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000191,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-01T16:21:40.972597Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000191,
+      "dueAt": "2026-04-01T16:21:40.972597Z",
+      "deadline": "2026-04-06T16:21:40.972597Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000192,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T12:17:56.002267Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000192,
+      "dueAt": "2026-03-02T12:17:56.002267Z",
+      "deadline": "2026-03-07T12:17:56.002267Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T12:17:56.002267Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000192,
+      "dueAt": "2026-04-02T12:17:56.002267Z",
+      "deadline": "2026-04-07T12:17:56.002267Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T12:17:56.002267Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300019,
+      "serviceId": 3000192,
+      "dueAt": "2026-05-02T12:17:56.002267Z",
+      "deadline": "2026-05-07T12:17:56.002267Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000200,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T04:50:50.722485Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000200,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-01T13:05:53.799100Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000200,
+      "dueAt": "2026-05-01T13:05:53.799100Z",
+      "deadline": "2026-05-06T13:05:53.799100Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000201,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T02:31:57.973710Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000201,
+      "dueAt": "2026-03-01T02:31:57.973710Z",
+      "deadline": "2026-03-06T02:31:57.973710Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T02:31:57.973710Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000201,
+      "dueAt": "2026-04-01T02:31:57.973710Z",
+      "deadline": "2026-04-06T02:31:57.973710Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T02:31:57.973710Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300020,
+      "serviceId": 3000201,
+      "dueAt": "2026-05-01T02:31:57.973710Z",
+      "deadline": "2026-05-06T02:31:57.973710Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000210,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T17:05:25.696179Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000210,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T16:27:40.192376Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000210,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-28T08:27:50.561677Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000210,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-27T10:23:14.194596Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000210,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000211,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:09:52.594576Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000211,
+      "dueAt": "2026-03-01T00:09:52.594576Z",
+      "deadline": "2026-03-06T00:09:52.594576Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-26T01:03:29.064873Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000211,
+      "dueAt": "2026-04-01T00:09:52.594576Z",
+      "deadline": "2026-04-06T00:09:52.594576Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000212,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T17:00:25.109785Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000212,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:17:47.840892Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000212,
+      "dueAt": "2026-04-01T00:17:47.840892Z",
+      "deadline": "2026-04-06T00:17:47.840892Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T13:00:45.495123Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000212,
+      "dueAt": "2026-05-02T13:00:45.495123Z",
+      "deadline": "2026-05-07T13:00:45.495123Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-29T08:34:19.684456Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300021,
+      "serviceId": 3000212,
+      "dueAt": "2026-06-02T13:00:45.495123Z",
+      "deadline": "2026-06-07T13:00:45.495123Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300022,
+      "serviceId": 3000220,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-29T10:04:12.484421Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300022,
+      "serviceId": 3000220,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:18:26.269975Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300022,
+      "serviceId": 3000220,
+      "dueAt": "2026-04-01T00:18:26.269975Z",
+      "deadline": "2026-04-06T00:18:26.269975Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300023,
+      "serviceId": 3000230,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-06T11:40:44.076988Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300023,
+      "serviceId": 3000230,
+      "dueAt": "2026-05-06T11:40:44.076988Z",
+      "deadline": "2026-05-11T11:40:44.076988Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300023,
+      "serviceId": 3000231,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-01T09:26:46.603249Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300023,
+      "serviceId": 3000231,
+      "dueAt": "2026-04-01T09:26:46.603249Z",
+      "deadline": "2026-04-06T09:26:46.603249Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T09:26:46.603249Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300023,
+      "serviceId": 3000231,
+      "dueAt": "2026-05-01T09:26:46.603249Z",
+      "deadline": "2026-05-06T09:26:46.603249Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000240,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000240,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000240,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000240,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000241,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-30T07:22:09.119096Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000241,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:05:07.546768Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000241,
+      "dueAt": "2026-04-01T00:05:07.546768Z",
+      "deadline": "2026-04-06T00:05:07.546768Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T07:27:17.968064Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300024,
+      "serviceId": 3000241,
+      "dueAt": "2026-05-01T00:05:07.546768Z",
+      "deadline": "2026-05-06T00:05:07.546768Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000250,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:23:10.882340Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000250,
+      "dueAt": "2026-03-01T00:23:10.882340Z",
+      "deadline": "2026-03-06T00:23:10.882340Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:39:19.728906Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000250,
+      "dueAt": "2026-04-01T00:39:19.728906Z",
+      "deadline": "2026-04-06T00:39:19.728906Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T21:44:13.057140Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000250,
+      "dueAt": "2026-05-01T00:39:19.728906Z",
+      "deadline": "2026-05-06T00:39:19.728906Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-29T21:43:11.326034Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000250,
+      "dueAt": "2026-06-01T00:39:19.728906Z",
+      "deadline": "2026-06-06T00:39:19.728906Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000251,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-30T21:12:47.196777Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000251,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-27T23:00:12.941510Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000251,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T20:21:56.004202Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000251,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-29T21:08:02.393543Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000251,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000252,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:18:27.286377Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000252,
+      "dueAt": "2026-03-01T00:18:27.286377Z",
+      "deadline": "2026-03-06T00:18:27.286377Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-28T00:18:14.915623Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000252,
+      "dueAt": "2026-04-01T00:18:27.286377Z",
+      "deadline": "2026-04-06T00:18:27.286377Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-30T20:31:37.571588Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000252,
+      "dueAt": "2026-05-01T00:18:27.286377Z",
+      "deadline": "2026-05-06T00:18:27.286377Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-29T21:27:33.868459Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300025,
+      "serviceId": 3000252,
+      "dueAt": "2026-06-01T00:18:27.286377Z",
+      "deadline": "2026-06-06T00:18:27.286377Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000260,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000260,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T09:09:52.210829Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000260,
+      "dueAt": "2026-04-01T09:09:52.210829Z",
+      "deadline": "2026-04-06T09:09:52.210829Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000261,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T05:27:05.458103Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000261,
+      "dueAt": "2026-03-01T05:27:05.458103Z",
+      "deadline": "2026-03-06T05:27:05.458103Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-01T12:02:43.487125Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000261,
+      "dueAt": "2026-05-01T12:02:43.487125Z",
+      "deadline": "2026-05-06T12:02:43.487125Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000262,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T05:12:51.040761Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000262,
+      "dueAt": "2026-03-01T05:12:51.040761Z",
+      "deadline": "2026-03-06T05:12:51.040761Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T09:49:04.890078Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000262,
+      "dueAt": "2026-04-01T09:49:04.890078Z",
+      "deadline": "2026-04-06T09:49:04.890078Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T14:21:32.405581Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300026,
+      "serviceId": 3000262,
+      "dueAt": "2026-05-01T14:21:32.405581Z",
+      "deadline": "2026-05-06T14:21:32.405581Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000270,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-03T19:38:56.308065Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000270,
+      "dueAt": "2026-03-03T19:38:56.308065Z",
+      "deadline": "2026-03-08T19:38:56.308065Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T19:38:56.308065Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000270,
+      "dueAt": "2026-04-03T19:38:56.308065Z",
+      "deadline": "2026-04-08T19:38:56.308065Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T19:38:56.308065Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000270,
+      "dueAt": "2026-05-03T19:38:56.308065Z",
+      "deadline": "2026-05-08T19:38:56.308065Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000271,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-05T05:24:34.280003Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000271,
+      "dueAt": "2026-04-05T05:24:34.280003Z",
+      "deadline": "2026-04-10T05:24:34.280003Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-10T03:49:33.803179Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000271,
+      "dueAt": "2026-05-10T03:49:33.803179Z",
+      "deadline": "2026-05-15T03:49:33.803179Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000272,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-05T03:13:34.062532Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000272,
+      "dueAt": "2026-03-05T03:13:34.062532Z",
+      "deadline": "2026-03-10T03:13:34.062532Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-05T03:13:34.062532Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000272,
+      "dueAt": "2026-04-05T03:13:34.062532Z",
+      "deadline": "2026-04-10T03:13:34.062532Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-05T03:13:34.062532Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300027,
+      "serviceId": 3000272,
+      "dueAt": "2026-05-05T03:13:34.062532Z",
+      "deadline": "2026-05-10T03:13:34.062532Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000280,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T14:09:31.845597Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000280,
+      "dueAt": "2026-03-02T14:09:31.845597Z",
+      "deadline": "2026-03-07T14:09:31.845597Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T11:05:42.400254Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000280,
+      "dueAt": "2026-04-03T11:05:42.400254Z",
+      "deadline": "2026-04-08T11:05:42.400254Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-04T15:14:42.041355Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000280,
+      "dueAt": "2026-05-04T15:14:42.041355Z",
+      "deadline": "2026-05-09T15:14:42.041355Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000281,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T08:23:36.687090Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000281,
+      "dueAt": "2026-03-02T08:23:36.687090Z",
+      "deadline": "2026-03-07T08:23:36.687090Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T08:23:36.687090Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000281,
+      "dueAt": "2026-04-02T08:23:36.687090Z",
+      "deadline": "2026-04-07T08:23:36.687090Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-19T02:10:22.500586Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300028,
+      "serviceId": 3000281,
+      "dueAt": "2026-05-19T02:10:22.500586Z",
+      "deadline": "2026-05-24T02:10:22.500586Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300029,
+      "serviceId": 3000290,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300029,
+      "serviceId": 3000290,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300029,
+      "serviceId": 3000290,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300029,
+      "serviceId": 3000290,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000300,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000300,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000300,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000300,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000301,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:14:15.816985Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000301,
+      "dueAt": "2026-03-01T00:14:15.816985Z",
+      "deadline": "2026-03-06T00:14:15.816985Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:22:06.546738Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000301,
+      "dueAt": "2026-04-01T00:22:06.546738Z",
+      "deadline": "2026-04-06T00:22:06.546738Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000302,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:13:33.479803Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000302,
+      "dueAt": "2026-03-01T00:13:33.479803Z",
+      "deadline": "2026-03-06T00:13:33.479803Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:26:00.617609Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000302,
+      "dueAt": "2026-04-01T00:26:00.617609Z",
+      "deadline": "2026-04-06T00:26:00.617609Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:44:39.898320Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300030,
+      "serviceId": 3000302,
+      "dueAt": "2026-05-01T00:44:39.898320Z",
+      "deadline": "2026-05-06T00:44:39.898320Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000310,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000310,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000310,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000310,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000311,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000311,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000311,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000311,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000311,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000312,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T05:25:07.175262Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000312,
+      "dueAt": "2026-03-01T05:25:07.175262Z",
+      "deadline": "2026-03-06T05:25:07.175262Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T14:53:41.553900Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000312,
+      "dueAt": "2026-04-02T14:53:41.553900Z",
+      "deadline": "2026-04-07T14:53:41.553900Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T19:43:25.375921Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300031,
+      "serviceId": 3000312,
+      "dueAt": "2026-05-02T19:43:25.375921Z",
+      "deadline": "2026-05-07T19:43:25.375921Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000320,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-07T22:23:54.895179Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000320,
+      "dueAt": "2026-03-07T22:23:54.895179Z",
+      "deadline": "2026-03-12T22:23:54.895179Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-29T06:00:25.470577Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000320,
+      "dueAt": "2026-04-29T06:00:25.470577Z",
+      "deadline": "2026-05-04T06:00:25.470577Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-29T17:03:25.959073Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000320,
+      "dueAt": "2026-05-29T17:03:25.959073Z",
+      "deadline": "2026-06-03T17:03:25.959073Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000321,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-13T02:37:49.637935Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000321,
+      "dueAt": "2026-03-13T02:37:49.637935Z",
+      "deadline": "2026-03-18T02:37:49.637935Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300032,
+      "serviceId": 3000322,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000330,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-29T10:36:26.697873Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000330,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-26T11:29:40.715481Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000330,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-29T05:43:30.494958Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000330,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-28T07:13:49.652217Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000330,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000331,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-29T10:31:04.312183Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000331,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-26T11:27:07.060800Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000331,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-29T05:42:33.208309Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000331,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-28T07:11:31.849662Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300033,
+      "serviceId": 3000331,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300034,
+      "serviceId": 3000340,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300034,
+      "serviceId": 3000340,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T09:12:43.893536Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300034,
+      "serviceId": 3000340,
+      "dueAt": "2026-04-01T09:12:43.893536Z",
+      "deadline": "2026-04-06T09:12:43.893536Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T14:24:31.518585Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300034,
+      "serviceId": 3000340,
+      "dueAt": "2026-05-01T14:24:31.518585Z",
+      "deadline": "2026-05-06T14:24:31.518585Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300035,
+      "serviceId": 3000350,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-29T18:55:35.252619Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300035,
+      "serviceId": 3000350,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:30:39.316696Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300035,
+      "serviceId": 3000350,
+      "dueAt": "2026-04-01T00:30:39.316696Z",
+      "deadline": "2026-04-06T00:30:39.316696Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000360,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-11T03:33:16.977942Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000360,
+      "dueAt": "2026-03-11T03:33:16.977942Z",
+      "deadline": "2026-03-16T03:33:16.977942Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000361,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-03T16:53:20.408195Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000361,
+      "dueAt": "2026-03-03T16:53:20.408195Z",
+      "deadline": "2026-03-08T16:53:20.408195Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-03T16:53:20.408195Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000361,
+      "dueAt": "2026-04-03T16:53:20.408195Z",
+      "deadline": "2026-04-08T16:53:20.408195Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-03T16:53:20.408195Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000361,
+      "dueAt": "2026-05-03T16:53:20.408195Z",
+      "deadline": "2026-05-08T16:53:20.408195Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000362,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-06T01:11:54.291795Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000362,
+      "dueAt": "2026-03-06T01:11:54.291795Z",
+      "deadline": "2026-03-11T01:11:54.291795Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-06T01:11:54.291795Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000362,
+      "dueAt": "2026-04-06T01:11:54.291795Z",
+      "deadline": "2026-04-11T01:11:54.291795Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-06T01:11:54.291795Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300036,
+      "serviceId": 3000362,
+      "dueAt": "2026-05-06T01:11:54.291795Z",
+      "deadline": "2026-05-11T01:11:54.291795Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000370,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T18:16:11.453279Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000370,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T17:30:45.577316Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000370,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-28T09:52:53.195184Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000370,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-27T11:43:28.516054Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000370,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000371,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T18:00:01.180963Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000371,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T17:11:18.627710Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000371,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000372,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T18:11:33.109909Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000372,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-25T17:30:23.901759Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000372,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-28T09:33:45.580058Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000372,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-27T11:27:29.812302Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300037,
+      "serviceId": 3000372,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300038,
+      "serviceId": 3000380,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-03T01:49:09.026123Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300038,
+      "serviceId": 3000380,
+      "dueAt": "2026-04-03T01:49:09.026123Z",
+      "deadline": "2026-04-08T01:49:09.026123Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300039,
+      "serviceId": 3000390,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-14T20:55:10.342484Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300039,
+      "serviceId": 3000390,
+      "dueAt": "2026-03-14T20:55:10.342484Z",
+      "deadline": "2026-03-19T20:55:10.342484Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-17T21:10:18.556971Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300039,
+      "serviceId": 3000390,
+      "dueAt": "2026-04-17T21:10:18.556971Z",
+      "deadline": "2026-04-22T21:10:18.556971Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-21T01:31:48.975185Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300039,
+      "serviceId": 3000390,
+      "dueAt": "2026-05-21T01:31:48.975185Z",
+      "deadline": "2026-05-26T01:31:48.975185Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300039,
+      "serviceId": 3000391,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300040,
+      "serviceId": 3000400,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:10:14.936964Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300040,
+      "serviceId": 3000400,
+      "dueAt": "2026-03-01T00:10:14.936964Z",
+      "deadline": "2026-03-06T00:10:14.936964Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-06T05:58:45.814808Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300040,
+      "serviceId": 3000400,
+      "dueAt": "2026-05-06T05:58:45.814808Z",
+      "deadline": "2026-05-11T05:58:45.814808Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300041,
+      "serviceId": 3000410,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-02-14T07:59:44.854748Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300041,
+      "serviceId": 3000410,
+      "dueAt": "2026-03-14T07:59:44.854748Z",
+      "deadline": "2026-03-19T07:59:44.854748Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300042,
+      "serviceId": 3000420,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-11T04:11:48.332971Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300042,
+      "serviceId": 3000420,
+      "dueAt": "2026-04-11T04:11:48.332971Z",
+      "deadline": "2026-04-16T04:11:48.332971Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000430,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T17:21:25.527705Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000430,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:34:50.922173Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000430,
+      "dueAt": "2026-04-01T00:34:50.922173Z",
+      "deadline": "2026-04-06T00:34:50.922173Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-28T17:28:27.849401Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000430,
+      "dueAt": "2026-05-01T00:34:50.922173Z",
+      "deadline": "2026-05-06T00:34:50.922173Z",
+      "label": null,
+      "firstPaymentAt": "2026-04-27T11:42:25.275128Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000430,
+      "dueAt": "2026-06-01T00:34:50.922173Z",
+      "deadline": "2026-06-06T00:34:50.922173Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000431,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-01-28T16:54:52.490364Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000431,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:35:35.540331Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000431,
+      "dueAt": "2026-04-01T00:35:35.540331Z",
+      "deadline": "2026-04-06T00:35:35.540331Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T01:22:12.631540Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300043,
+      "serviceId": 3000431,
+      "dueAt": "2026-05-01T01:22:12.631540Z",
+      "deadline": "2026-05-06T01:22:12.631540Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300044,
+      "serviceId": 3000440,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300044,
+      "serviceId": 3000440,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:19:01.828372Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300044,
+      "serviceId": 3000440,
+      "dueAt": "2026-04-01T00:19:01.828372Z",
+      "deadline": "2026-04-06T00:19:01.828372Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:35:11.687740Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300044,
+      "serviceId": 3000440,
+      "dueAt": "2026-05-01T00:35:11.687740Z",
+      "deadline": "2026-05-06T00:35:11.687740Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300045,
+      "serviceId": 3000450,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-03T18:25:56.598672Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300045,
+      "serviceId": 3000450,
+      "dueAt": "2026-04-03T18:25:56.598672Z",
+      "deadline": "2026-04-08T18:25:56.598672Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300046,
+      "serviceId": 3000460,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-03T04:15:00.338186Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300046,
+      "serviceId": 3000460,
+      "dueAt": "2026-05-03T04:15:00.338186Z",
+      "deadline": "2026-05-08T04:15:00.338186Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300046,
+      "serviceId": 3000461,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T02:12:49.688107Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300046,
+      "serviceId": 3000461,
+      "dueAt": "2026-03-01T02:12:49.688107Z",
+      "deadline": "2026-03-06T02:12:49.688107Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T02:12:49.688107Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300046,
+      "serviceId": 3000461,
+      "dueAt": "2026-04-01T02:12:49.688107Z",
+      "deadline": "2026-04-06T02:12:49.688107Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000470,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T10:55:52.498802Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000470,
+      "dueAt": "2026-03-01T10:55:52.498802Z",
+      "deadline": "2026-03-06T10:55:52.498802Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000471,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T09:14:19.518902Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000471,
+      "dueAt": "2026-03-01T09:14:19.518902Z",
+      "deadline": "2026-03-06T09:14:19.518902Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000472,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000472,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T10:21:17.014875Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000472,
+      "dueAt": "2026-04-01T10:21:17.014875Z",
+      "deadline": "2026-04-06T10:21:17.014875Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T10:21:17.014875Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300047,
+      "serviceId": 3000472,
+      "dueAt": "2026-05-01T10:21:17.014875Z",
+      "deadline": "2026-05-06T10:21:17.014875Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000480,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T03:26:55.304352Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000480,
+      "dueAt": "2026-03-02T03:26:55.304352Z",
+      "deadline": "2026-03-07T03:26:55.304352Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T03:26:55.304352Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000480,
+      "dueAt": "2026-04-02T03:26:55.304352Z",
+      "deadline": "2026-04-07T03:26:55.304352Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T03:26:55.304352Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000480,
+      "dueAt": "2026-05-02T03:26:55.304352Z",
+      "deadline": "2026-05-07T03:26:55.304352Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000481,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T17:36:17.899074Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000481,
+      "dueAt": "2026-03-01T17:36:17.899074Z",
+      "deadline": "2026-03-06T17:36:17.899074Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-02T17:58:26.204072Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300048,
+      "serviceId": 3000481,
+      "dueAt": "2026-05-02T17:58:26.204072Z",
+      "deadline": "2026-05-07T17:58:26.204072Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000490,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-02T10:26:27.253812Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000490,
+      "dueAt": "2026-03-02T10:26:27.253812Z",
+      "deadline": "2026-03-07T10:26:27.253812Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-02T10:26:27.253812Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000490,
+      "dueAt": "2026-04-02T10:26:27.253812Z",
+      "deadline": "2026-04-07T10:26:27.253812Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-02T10:26:27.253812Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000490,
+      "dueAt": "2026-05-02T10:26:27.253812Z",
+      "deadline": "2026-05-07T10:26:27.253812Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000491,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": "2026-03-01T13:26:14.954387Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000491,
+      "dueAt": "2026-04-01T13:26:14.954387Z",
+      "deadline": "2026-04-06T13:26:14.954387Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-09T03:46:35.372774Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000491,
+      "dueAt": "2026-05-09T03:46:35.372774Z",
+      "deadline": "2026-05-14T03:46:35.372774Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000492,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T19:39:45.661088Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000492,
+      "dueAt": "2026-03-01T19:39:45.661088Z",
+      "deadline": "2026-03-06T19:39:45.661088Z",
+      "label": 1,
+      "firstPaymentAt": "2026-04-09T11:37:32.198990Z",
+      "reason": "not_renewed_within_5d"
+    },
+    {
+      "accountId": 300049,
+      "serviceId": 3000492,
+      "dueAt": "2026-05-09T11:37:32.198990Z",
+      "deadline": "2026-05-14T11:37:32.198990Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000500,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000500,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000500,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000500,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000500,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000501,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000501,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000501,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-04-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000501,
+      "dueAt": "2026-05-01T00:00:00Z",
+      "deadline": "2026-05-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": "2026-05-01T00:00:00Z",
+      "reason": "pending"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000501,
+      "dueAt": "2026-06-01T00:00:00Z",
+      "deadline": "2026-06-06T00:00:00Z",
+      "label": null,
+      "firstPaymentAt": null,
+      "reason": "pending"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000502,
+      "dueAt": "2026-02-01T00:00:00Z",
+      "deadline": "2026-02-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-02-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000502,
+      "dueAt": "2026-03-01T00:00:00Z",
+      "deadline": "2026-03-06T00:00:00Z",
+      "label": 0,
+      "firstPaymentAt": "2026-03-01T00:00:00Z",
+      "reason": "renewed_within_5d"
+    },
+    {
+      "accountId": 300050,
+      "serviceId": 3000502,
+      "dueAt": "2026-04-01T00:00:00Z",
+      "deadline": "2026-04-06T00:00:00Z",
+      "label": 1,
+      "firstPaymentAt": null,
+      "reason": "not_renewed_within_5d"
+    }
+  ],
+  "limitations": [
+    "Synthetic behavioral hypotheses, not observed Aeza segment frequencies",
+    "No replacement/policy block generator in this block",
+    "Monthly spending allowance is not the hosting wallet; no rollover of unused allowance",
+    "All initial purchases funded explicitly; current cohort starts together",
+    "Public snapshot transaction cap limitation inherited from billing block",
+    "ML adapter and point-in-time financial features not yet integrated"
+  ]
+}

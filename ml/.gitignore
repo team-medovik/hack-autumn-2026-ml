@@ -1,4 +1,6 @@
 __pycache__/
 prepared/rows.jsonl
+prepared-short/rows.jsonl
+prepared-event-driven/**/rows.jsonl
 .venv/
 runs/

@@ -1,0 +1,984 @@
+{
+  "schemaVersion": "vps-billing-demonstrations-v1",
+  "catalogObservedAt": "2026-10-24",
+  "historicalPrices": "demonstration using saved catalogue, not historical Aeza quotes",
+  "trainingDataset": false,
+  "examples": [
+    {
+      "name": "shared_wallet_no_reservation",
+      "checkpoints": [],
+      "schemaVersion": "vps-billing-events-v1",
+      "asOf": "2026-10-01T00:00:00Z",
+      "syntheticOnly": true,
+      "snapshot": {
+        "accounts": [
+          {
+            "id": 1,
+            "email": "billing-1@example.test",
+            "balance": 7,
+            "withdrawBalance": 0,
+            "totalReplenished": 2380,
+            "bonusBalance": 0,
+            "bonusState": "locked"
+          }
+        ],
+        "services": [
+          {
+            "id": 1,
+            "ownerId": 1,
+            "name": "synthetic-vps-1",
+            "paymentTerm": "month",
+            "autoProlong": true,
+            "createdAt": "2026-09-01T00:00:00Z",
+            "expiresAt": "2026-10-01T00:00:00Z",
+            "status": "prolong_wait",
+            "price": 1187
+          },
+          {
+            "id": 2,
+            "ownerId": 1,
+            "name": "synthetic-vps-2",
+            "paymentTerm": "month",
+            "autoProlong": true,
+            "createdAt": "2026-09-01T00:00:00Z",
+            "expiresAt": "2026-11-01T00:00:00Z",
+            "status": "active",
+            "price": 593
+          }
+        ],
+        "transactions": []
+      },
+      "events": [
+        {
+          "id": "billing-0000001",
+          "type": "account_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": null,
+          "email": "billing-1@example.test"
+        },
+        {
+          "id": "billing-0000002",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "initial",
+          "amountMinor": 1780,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 1780
+        },
+        {
+          "id": "billing-0000003",
+          "type": "service_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "name": "synthetic-vps-1",
+          "paymentTerm": "month",
+          "priceMinor": 1187,
+          "tariffCode": "WAWs-2",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000004",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "amountMinor": 1187,
+          "mode": "purchase",
+          "dueAt": "2026-09-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 1780,
+          "paidThrough": "2026-10-01T00:00:00Z",
+          "balanceAfterMinor": 593
+        },
+        {
+          "id": "billing-0000005",
+          "type": "service_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 2,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-2",
+          "name": "synthetic-vps-2",
+          "paymentTerm": "month",
+          "priceMinor": 593,
+          "tariffCode": "WAWs-1",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000006",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 2,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-2",
+          "amountMinor": 593,
+          "mode": "purchase",
+          "dueAt": "2026-09-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 593,
+          "paidThrough": "2026-10-01T00:00:00Z",
+          "balanceAfterMinor": 0
+        },
+        {
+          "id": "billing-0000007",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-30T23:00:00Z",
+          "recordedAt": "2026-09-30T23:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "next-month",
+          "amountMinor": 600,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 600
+        },
+        {
+          "id": "billing-0000008",
+          "type": "renewal_due",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000009",
+          "type": "status_changed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000010",
+          "type": "payment_failed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "amountMinor": 1187,
+          "mode": "auto",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 600,
+          "reason": "insufficient_funds",
+          "balanceAfterMinor": 600,
+          "paidThrough": null
+        },
+        {
+          "id": "billing-0000011",
+          "type": "renewal_due",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 2,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:2:2026-10-01T00:00:00Z",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000012",
+          "type": "status_changed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 2,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:2:2026-10-01T00:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000013",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 2,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:2:2026-10-01T00:00:00Z",
+          "amountMinor": 593,
+          "mode": "auto",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 600,
+          "paidThrough": "2026-11-01T00:00:00Z",
+          "balanceAfterMinor": 7
+        }
+      ],
+      "assumptions": {
+        "simultaneousActions": "client FIFO before expiry; equal expiries by service ID",
+        "renewalAnchor": "max(paymentAt, paidThrough); calendar month with clamping",
+        "day": "synthetic product, not verified Aeza tariff",
+        "recordingDelay": "zero",
+        "unpaidStatus": "case mapping: prolong_wait",
+        "hourlyDeletionBoundary": "auto off, 24h since last manual payment; purchase counts",
+        "otherDeletionPolicies": "not simulated; not a guarantee of recoverability",
+        "bonusesAndWithdrawBalance": "zero; cash wallet only",
+        "snapshotTransactions": "omitted; all payments preserved in events; legacy API amount cap"
+      }
+    },
+    {
+      "name": "late_topup_requires_manual",
+      "checkpoints": [
+        {
+          "name": "failed_auto",
+          "at": "2026-10-01T00:00:00Z",
+          "snapshot": {
+            "accounts": [
+              {
+                "id": 1,
+                "email": "billing-1@example.test",
+                "balance": 0,
+                "withdrawBalance": 0,
+                "totalReplenished": 593,
+                "bonusBalance": 0,
+                "bonusState": "locked"
+              }
+            ],
+            "services": [
+              {
+                "id": 1,
+                "ownerId": 1,
+                "name": "synthetic-vps-1",
+                "paymentTerm": "month",
+                "autoProlong": true,
+                "createdAt": "2026-09-01T00:00:00Z",
+                "expiresAt": "2026-10-01T00:00:00Z",
+                "status": "prolong_wait",
+                "price": 593
+              }
+            ],
+            "transactions": []
+          }
+        },
+        {
+          "name": "topup_only",
+          "at": "2026-10-01T01:00:00Z",
+          "snapshot": {
+            "accounts": [
+              {
+                "id": 1,
+                "email": "billing-1@example.test",
+                "balance": 1000,
+                "withdrawBalance": 0,
+                "totalReplenished": 1593,
+                "bonusBalance": 0,
+                "bonusState": "locked"
+              }
+            ],
+            "services": [
+              {
+                "id": 1,
+                "ownerId": 1,
+                "name": "synthetic-vps-1",
+                "paymentTerm": "month",
+                "autoProlong": true,
+                "createdAt": "2026-09-01T00:00:00Z",
+                "expiresAt": "2026-10-01T00:00:00Z",
+                "status": "prolong_wait",
+                "price": 593
+              }
+            ],
+            "transactions": []
+          }
+        },
+        {
+          "name": "manual_paid",
+          "at": "2026-10-01T02:00:00Z",
+          "snapshot": {
+            "accounts": [
+              {
+                "id": 1,
+                "email": "billing-1@example.test",
+                "balance": 407,
+                "withdrawBalance": 0,
+                "totalReplenished": 1593,
+                "bonusBalance": 0,
+                "bonusState": "locked"
+              }
+            ],
+            "services": [
+              {
+                "id": 1,
+                "ownerId": 1,
+                "name": "synthetic-vps-1",
+                "paymentTerm": "month",
+                "autoProlong": true,
+                "createdAt": "2026-09-01T00:00:00Z",
+                "expiresAt": "2026-11-01T02:00:00Z",
+                "status": "active",
+                "price": 593
+              }
+            ],
+            "transactions": []
+          }
+        }
+      ],
+      "schemaVersion": "vps-billing-events-v1",
+      "asOf": "2026-10-01T02:00:00Z",
+      "syntheticOnly": true,
+      "snapshot": {
+        "accounts": [
+          {
+            "id": 1,
+            "email": "billing-1@example.test",
+            "balance": 407,
+            "withdrawBalance": 0,
+            "totalReplenished": 1593,
+            "bonusBalance": 0,
+            "bonusState": "locked"
+          }
+        ],
+        "services": [
+          {
+            "id": 1,
+            "ownerId": 1,
+            "name": "synthetic-vps-1",
+            "paymentTerm": "month",
+            "autoProlong": true,
+            "createdAt": "2026-09-01T00:00:00Z",
+            "expiresAt": "2026-11-01T02:00:00Z",
+            "status": "active",
+            "price": 593
+          }
+        ],
+        "transactions": []
+      },
+      "events": [
+        {
+          "id": "billing-0000001",
+          "type": "account_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": null,
+          "email": "billing-1@example.test"
+        },
+        {
+          "id": "billing-0000002",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "initial",
+          "amountMinor": 593,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 593
+        },
+        {
+          "id": "billing-0000003",
+          "type": "service_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "name": "synthetic-vps-1",
+          "paymentTerm": "month",
+          "priceMinor": 593,
+          "tariffCode": "WAWs-1",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000004",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "amountMinor": 593,
+          "mode": "purchase",
+          "dueAt": "2026-09-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 593,
+          "paidThrough": "2026-10-01T00:00:00Z",
+          "balanceAfterMinor": 0
+        },
+        {
+          "id": "billing-0000005",
+          "type": "renewal_due",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000006",
+          "type": "status_changed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000007",
+          "type": "payment_failed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "amountMinor": 593,
+          "mode": "auto",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 0,
+          "reason": "insufficient_funds",
+          "balanceAfterMinor": 0,
+          "paidThrough": null
+        },
+        {
+          "id": "billing-0000008",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-10-01T01:00:00Z",
+          "recordedAt": "2026-10-01T01:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "late-topup",
+          "amountMinor": 1000,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 1000
+        },
+        {
+          "id": "billing-0000009",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-10-01T02:00:00Z",
+          "recordedAt": "2026-10-01T02:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "manual",
+          "amountMinor": 593,
+          "mode": "manual",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 1000,
+          "paidThrough": "2026-11-01T02:00:00Z",
+          "balanceAfterMinor": 407
+        }
+      ],
+      "assumptions": {
+        "simultaneousActions": "client FIFO before expiry; equal expiries by service ID",
+        "renewalAnchor": "max(paymentAt, paidThrough); calendar month with clamping",
+        "day": "synthetic product, not verified Aeza tariff",
+        "recordingDelay": "zero",
+        "unpaidStatus": "case mapping: prolong_wait",
+        "hourlyDeletionBoundary": "auto off, 24h since last manual payment; purchase counts",
+        "otherDeletionPolicies": "not simulated; not a guarantee of recoverability",
+        "bonusesAndWithdrawBalance": "zero; cash wallet only",
+        "snapshotTransactions": "omitted; all payments preserved in events; legacy API amount cap"
+      }
+    },
+    {
+      "name": "auto_off_then_manual",
+      "checkpoints": [
+        {
+          "name": "auto_off_money_untouched",
+          "at": "2026-10-01T00:00:00Z",
+          "snapshot": {
+            "accounts": [
+              {
+                "id": 1,
+                "email": "billing-1@example.test",
+                "balance": 593,
+                "withdrawBalance": 0,
+                "totalReplenished": 1186,
+                "bonusBalance": 0,
+                "bonusState": "locked"
+              }
+            ],
+            "services": [
+              {
+                "id": 1,
+                "ownerId": 1,
+                "name": "synthetic-vps-1",
+                "paymentTerm": "month",
+                "autoProlong": false,
+                "createdAt": "2026-09-01T00:00:00Z",
+                "expiresAt": "2026-10-01T00:00:00Z",
+                "status": "prolong_wait",
+                "price": 593
+              }
+            ],
+            "transactions": []
+          }
+        }
+      ],
+      "schemaVersion": "vps-billing-events-v1",
+      "asOf": "2026-10-01T00:30:00Z",
+      "syntheticOnly": true,
+      "snapshot": {
+        "accounts": [
+          {
+            "id": 1,
+            "email": "billing-1@example.test",
+            "balance": 0,
+            "withdrawBalance": 0,
+            "totalReplenished": 1186,
+            "bonusBalance": 0,
+            "bonusState": "locked"
+          }
+        ],
+        "services": [
+          {
+            "id": 1,
+            "ownerId": 1,
+            "name": "synthetic-vps-1",
+            "paymentTerm": "month",
+            "autoProlong": false,
+            "createdAt": "2026-09-01T00:00:00Z",
+            "expiresAt": "2026-11-01T00:30:00Z",
+            "status": "active",
+            "price": 593
+          }
+        ],
+        "transactions": []
+      },
+      "events": [
+        {
+          "id": "billing-0000001",
+          "type": "account_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": null,
+          "email": "billing-1@example.test"
+        },
+        {
+          "id": "billing-0000002",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "initial",
+          "amountMinor": 1186,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 1186
+        },
+        {
+          "id": "billing-0000003",
+          "type": "service_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "name": "synthetic-vps-1",
+          "paymentTerm": "month",
+          "priceMinor": 593,
+          "tariffCode": "WAWs-1",
+          "autoProlong": false
+        },
+        {
+          "id": "billing-0000004",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "amountMinor": 593,
+          "mode": "purchase",
+          "dueAt": "2026-09-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 1186,
+          "paidThrough": "2026-10-01T00:00:00Z",
+          "balanceAfterMinor": 593
+        },
+        {
+          "id": "billing-0000005",
+          "type": "renewal_due",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "autoProlong": false
+        },
+        {
+          "id": "billing-0000006",
+          "type": "status_changed",
+          "occurredAt": "2026-10-01T00:00:00Z",
+          "recordedAt": "2026-10-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-10-01T00:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000007",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-10-01T00:30:00Z",
+          "recordedAt": "2026-10-01T00:30:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "manual",
+          "amountMinor": 593,
+          "mode": "manual",
+          "dueAt": "2026-10-01T00:00:00Z",
+          "paymentTerm": "month",
+          "balanceBeforeMinor": 593,
+          "paidThrough": "2026-11-01T00:30:00Z",
+          "balanceAfterMinor": 0
+        }
+      ],
+      "assumptions": {
+        "simultaneousActions": "client FIFO before expiry; equal expiries by service ID",
+        "renewalAnchor": "max(paymentAt, paidThrough); calendar month with clamping",
+        "day": "synthetic product, not verified Aeza tariff",
+        "recordingDelay": "zero",
+        "unpaidStatus": "case mapping: prolong_wait",
+        "hourlyDeletionBoundary": "auto off, 24h since last manual payment; purchase counts",
+        "otherDeletionPolicies": "not simulated; not a guarantee of recoverability",
+        "bonusesAndWithdrawBalance": "zero; cash wallet only",
+        "snapshotTransactions": "omitted; all payments preserved in events; legacy API amount cap"
+      }
+    },
+    {
+      "name": "hourly_exhaustion_then_manual",
+      "checkpoints": [
+        {
+          "name": "hourly_topup_no_retry",
+          "at": "2026-09-01T03:00:00Z",
+          "snapshot": {
+            "accounts": [
+              {
+                "id": 1,
+                "email": "billing-1@example.test",
+                "balance": 8,
+                "withdrawBalance": 0,
+                "totalReplenished": 16,
+                "bonusBalance": 0,
+                "bonusState": "locked"
+              }
+            ],
+            "services": [
+              {
+                "id": 1,
+                "ownerId": 1,
+                "name": "synthetic-vps-1",
+                "paymentTerm": "hour",
+                "autoProlong": true,
+                "createdAt": "2026-09-01T00:00:00Z",
+                "expiresAt": "2026-09-01T02:00:00Z",
+                "status": "prolong_wait",
+                "price": 4
+              }
+            ],
+            "transactions": []
+          }
+        }
+      ],
+      "schemaVersion": "vps-billing-events-v1",
+      "asOf": "2026-09-01T03:30:00Z",
+      "syntheticOnly": true,
+      "snapshot": {
+        "accounts": [
+          {
+            "id": 1,
+            "email": "billing-1@example.test",
+            "balance": 4,
+            "withdrawBalance": 0,
+            "totalReplenished": 16,
+            "bonusBalance": 0,
+            "bonusState": "locked"
+          }
+        ],
+        "services": [
+          {
+            "id": 1,
+            "ownerId": 1,
+            "name": "synthetic-vps-1",
+            "paymentTerm": "hour",
+            "autoProlong": true,
+            "createdAt": "2026-09-01T00:00:00Z",
+            "expiresAt": "2026-09-01T04:30:00Z",
+            "status": "active",
+            "price": 4
+          }
+        ],
+        "transactions": []
+      },
+      "events": [
+        {
+          "id": "billing-0000001",
+          "type": "account_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": null,
+          "email": "billing-1@example.test"
+        },
+        {
+          "id": "billing-0000002",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "initial",
+          "amountMinor": 8,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 8
+        },
+        {
+          "id": "billing-0000003",
+          "type": "service_created",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "name": "synthetic-vps-1",
+          "paymentTerm": "hour",
+          "priceMinor": 4,
+          "tariffCode": "WAWs-1",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000004",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T00:00:00Z",
+          "recordedAt": "2026-09-01T00:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "buy-1",
+          "amountMinor": 4,
+          "mode": "purchase",
+          "dueAt": "2026-09-01T00:00:00Z",
+          "paymentTerm": "hour",
+          "balanceBeforeMinor": 8,
+          "paidThrough": "2026-09-01T01:00:00Z",
+          "balanceAfterMinor": 4
+        },
+        {
+          "id": "billing-0000005",
+          "type": "renewal_due",
+          "occurredAt": "2026-09-01T01:00:00Z",
+          "recordedAt": "2026-09-01T01:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T01:00:00Z",
+          "dueAt": "2026-09-01T01:00:00Z",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000006",
+          "type": "status_changed",
+          "occurredAt": "2026-09-01T01:00:00Z",
+          "recordedAt": "2026-09-01T01:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T01:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000007",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T01:00:00Z",
+          "recordedAt": "2026-09-01T01:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T01:00:00Z",
+          "amountMinor": 4,
+          "mode": "auto",
+          "dueAt": "2026-09-01T01:00:00Z",
+          "paymentTerm": "hour",
+          "balanceBeforeMinor": 4,
+          "paidThrough": "2026-09-01T02:00:00Z",
+          "balanceAfterMinor": 0
+        },
+        {
+          "id": "billing-0000008",
+          "type": "renewal_due",
+          "occurredAt": "2026-09-01T02:00:00Z",
+          "recordedAt": "2026-09-01T02:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T02:00:00Z",
+          "dueAt": "2026-09-01T02:00:00Z",
+          "autoProlong": true
+        },
+        {
+          "id": "billing-0000009",
+          "type": "status_changed",
+          "occurredAt": "2026-09-01T02:00:00Z",
+          "recordedAt": "2026-09-01T02:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T02:00:00Z",
+          "toStatus": "prolong_wait",
+          "reason": "paid_period_ended"
+        },
+        {
+          "id": "billing-0000010",
+          "type": "payment_failed",
+          "occurredAt": "2026-09-01T02:00:00Z",
+          "recordedAt": "2026-09-01T02:00:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "expiry:1:2026-09-01T02:00:00Z",
+          "amountMinor": 4,
+          "mode": "auto",
+          "dueAt": "2026-09-01T02:00:00Z",
+          "paymentTerm": "hour",
+          "balanceBeforeMinor": 0,
+          "reason": "insufficient_funds",
+          "balanceAfterMinor": 0,
+          "paidThrough": null
+        },
+        {
+          "id": "billing-0000011",
+          "type": "wallet_topped_up",
+          "occurredAt": "2026-09-01T03:00:00Z",
+          "recordedAt": "2026-09-01T03:00:00Z",
+          "accountId": 1,
+          "serviceId": null,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "late-topup",
+          "amountMinor": 8,
+          "balanceBeforeMinor": 0,
+          "balanceAfterMinor": 8
+        },
+        {
+          "id": "billing-0000012",
+          "type": "payment_succeeded",
+          "occurredAt": "2026-09-01T03:30:00Z",
+          "recordedAt": "2026-09-01T03:30:00Z",
+          "accountId": 1,
+          "serviceId": 1,
+          "currency": "EUR",
+          "source": "synthetic",
+          "causationId": "manual",
+          "amountMinor": 4,
+          "mode": "manual",
+          "dueAt": "2026-09-01T02:00:00Z",
+          "paymentTerm": "hour",
+          "balanceBeforeMinor": 8,
+          "paidThrough": "2026-09-01T04:30:00Z",
+          "balanceAfterMinor": 4
+        }
+      ],
+      "assumptions": {
+        "simultaneousActions": "client FIFO before expiry; equal expiries by service ID",
+        "renewalAnchor": "max(paymentAt, paidThrough); calendar month with clamping",
+        "day": "synthetic product, not verified Aeza tariff",
+        "recordingDelay": "zero",
+        "unpaidStatus": "case mapping: prolong_wait",
+        "hourlyDeletionBoundary": "auto off, 24h since last manual payment; purchase counts",
+        "otherDeletionPolicies": "not simulated; not a guarantee of recoverability",
+        "bonusesAndWithdrawBalance": "zero; cash wallet only",
+        "snapshotTransactions": "omitted; all payments preserved in events; legacy API amount cap"
+      }
+    }
+  ]
+}

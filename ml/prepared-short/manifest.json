@@ -1,0 +1,152 @@
+{
+  "schemaVersion": "vps-preexpiry-features-v1",
+  "targetVersion": "unrenewed-within-grace-excluding-replacement-and-policy-block-v2",
+  "samplingVersion": "short-period-each-renewal-v1",
+  "historySha256": "16c4b53f3dedadc46300adf51802b1e8d95eb4e45bc0b3b61213ee8daf79b99c",
+  "rowsSha256": "e0c64f9902e0373f57e896cb684e18dc619d63d4bec7e0794365b1fd01f63164",
+  "generatorVersion": "short-periods-v1",
+  "historyAsOf": "2026-10-19T15:00:00Z",
+  "validationStart": "2026-08-01T15:00:00Z",
+  "testStart": "2026-09-01T15:00:00Z",
+  "categoricalFeatures": [
+    "status",
+    "payment_term",
+    "tariff_code"
+  ],
+  "numericFeatures": [
+    "days_to_expiry",
+    "service_age_days",
+    "account_age_days",
+    "observed_history_days",
+    "price_minor",
+    "monthly_revenue_minor",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "contract_changes_90d",
+    "has_renewal_history",
+    "history_30d_complete",
+    "history_90d_complete",
+    "live_vps_count",
+    "portfolio_monthly_revenue_minor",
+    "portfolio_change_30d_minor"
+  ],
+  "sampling": "every observed upcoming renewal, hour: 30 min before; day: 12 h before",
+  "cycleWeight": "one per observed cycle; NOT period balancing; do not blindly mix hour/day/month",
+  "splits": {
+    "train": {
+      "hour": {
+        "rows": 7088,
+        "services": 24,
+        "labels": {
+          "0": 7065,
+          "1": 23
+        }
+      },
+      "day": {
+        "rows": 335,
+        "services": 24,
+        "labels": {
+          "1": 28,
+          "0": 307
+        }
+      }
+    },
+    "validation": {
+      "hour": {
+        "rows": 3748,
+        "services": 17,
+        "labels": {
+          "0": 3734,
+          "1": 14
+        }
+      },
+      "day": {
+        "rows": 173,
+        "services": 18,
+        "labels": {
+          "0": 158,
+          "1": 15
+        }
+      }
+    },
+    "test": {
+      "hour": {
+        "rows": 6552,
+        "services": 28,
+        "labels": {
+          "0": 6532,
+          "1": 20
+        }
+      },
+      "day": {
+        "rows": 378,
+        "services": 30,
+        "labels": {
+          "0": 354,
+          "1": 24
+        }
+      }
+    },
+    "purged": {
+      "hour": {
+        "rows": 925,
+        "services": 8,
+        "labels": {
+          "0": 923,
+          "1": 2
+        }
+      },
+      "day": {
+        "rows": 51,
+        "services": 14,
+        "labels": {
+          "0": 46,
+          "1": 5
+        }
+      }
+    },
+    "pending": {
+      "hour": {
+        "rows": 1034,
+        "services": 10,
+        "labels": {
+          "None": 1034
+        }
+      },
+      "day": {
+        "rows": 48,
+        "services": 13,
+        "labels": {
+          "None": 48
+        }
+      }
+    },
+    "excluded": {
+      "hour": {
+        "rows": 0,
+        "services": 0,
+        "labels": {}
+      },
+      "day": {
+        "rows": 0,
+        "services": 0,
+        "labels": {}
+      }
+    }
+  },
+  "rows": 20332,
+  "trainingStarted": false,
+  "limitations": [
+    "Synthetic behavior; daily price synthetic, not a verified Aeza daily offer",
+    "Five-day target unchanged for both terms; not a reproduction of provider deletion policy",
+    "Renewal opportunities observed from known successful payments; censored futures remain pending",
+    "Hour cycles are far more numerous; metrics and baselines must be separate per payment term",
+    "Previous monthly models not validated for hour/day; no model trained by this preparation"
+  ]
+}

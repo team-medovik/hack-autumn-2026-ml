@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "event-driven-preexpiry-features-v1",
+  "targetVersion": "event-renewal-5d-paid-replacement-nonfinancial-excluded-v1",
+  "sourceSchemaVersion": "vps-billing-events-v2",
+  "historySha256": "fd58d4e7c0523ac85136514340f74aef775ede9c567094079d1e63d65b9040e2",
+  "historyAsOf": "2028-12-31T00:00:00Z",
+  "trainingStarted": false,
+  "rows": 9268,
+  "splits": {
+    "train": {
+      "rows": 4970,
+      "cycles": 761,
+      "accounts": 50,
+      "labels": {
+        "0": 3843,
+        "1": 1127
+      },
+      "cycleLabels": {
+        "0": 600,
+        "1": 161
+      },
+      "paymentTerms": {
+        "month": 4970
+      },
+      "cyclePaymentTerms": {
+        "month": 761
+      }
+    },
+    "validation": {
+      "rows": 2151,
+      "cycles": 338,
+      "accounts": 34,
+      "labels": {
+        "0": 1810,
+        "1": 341
+      },
+      "cycleLabels": {
+        "0": 287,
+        "1": 51
+      },
+      "paymentTerms": {
+        "month": 2151
+      },
+      "cyclePaymentTerms": {
+        "month": 338
+      }
+    },
+    "test": {
+      "rows": 1802,
+      "cycles": 286,
+      "accounts": 28,
+      "labels": {
+        "0": 1456,
+        "1": 346
+      },
+      "cycleLabels": {
+        "0": 235,
+        "1": 51
+      },
+      "paymentTerms": {
+        "month": 1802
+      },
+      "cyclePaymentTerms": {
+        "month": 286
+      }
+    },
+    "purged": {
+      "rows": 260,
+      "cycles": 52,
+      "accounts": 23,
+      "labels": {
+        "0": 198,
+        "1": 62
+      },
+      "cycleLabels": {
+        "0": 40,
+        "1": 12
+      },
+      "paymentTerms": {
+        "month": 260
+      },
+      "cyclePaymentTerms": {
+        "month": 52
+      }
+    },
+    "pending": {
+      "rows": 75,
+      "cycles": 18,
+      "accounts": 14,
+      "labels": {
+        "None": 75
+      },
+      "cycleLabels": {
+        "None": 18
+      },
+      "paymentTerms": {
+        "month": 75
+      },
+      "cyclePaymentTerms": {
+        "month": 18
+      }
+    },
+    "excluded": {
+      "rows": 10,
+      "cycles": 2,
+      "accounts": 2,
+      "labels": {
+        "None": 10
+      },
+      "cycleLabels": {
+        "None": 2
+      },
+      "paymentTerms": {
+        "month": 10
+      },
+      "cyclePaymentTerms": {
+        "month": 2
+      }
+    }
+  },
+  "validationStart": "2027-07-01T00:00:00Z",
+  "testStart": "2028-04-01T00:00:00Z",
+  "legacyFeatureNames": [
+    "status",
+    "payment_term",
+    "tariff_code",
+    "days_to_expiry",
+    "service_age_days",
+    "account_age_days",
+    "observed_history_days",
+    "price_minor",
+    "monthly_revenue_minor",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "contract_changes_90d",
+    "has_renewal_history",
+    "history_30d_complete",
+    "history_90d_complete",
+    "live_vps_count",
+    "portfolio_monthly_revenue_minor",
+    "portfolio_change_30d_minor"
+  ],
+  "enhancedFeatureNames": [
+    "auto_prolong",
+    "wallet_balance_minor",
+    "current_service_funding_ratio",
+    "next_renewals_7d_required_minor",
+    "portfolio_funding_ratio_7d",
+    "topup_count_30d",
+    "topup_sum_30d_minor",
+    "days_since_topup",
+    "payment_sum_30d_minor",
+    "days_since_auto_change",
+    "service_projected_funding_ratio",
+    "nonfinancial_restrictions_90d"
+  ],
+  "featureNames": [
+    "status",
+    "payment_term",
+    "tariff_code",
+    "days_to_expiry",
+    "service_age_days",
+    "account_age_days",
+    "observed_history_days",
+    "price_minor",
+    "monthly_revenue_minor",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "contract_changes_90d",
+    "has_renewal_history",
+    "history_30d_complete",
+    "history_90d_complete",
+    "live_vps_count",
+    "portfolio_monthly_revenue_minor",
+    "portfolio_change_30d_minor",
+    "auto_prolong",
+    "wallet_balance_minor",
+    "current_service_funding_ratio",
+    "next_renewals_7d_required_minor",
+    "portfolio_funding_ratio_7d",
+    "topup_count_30d",
+    "topup_sum_30d_minor",
+    "days_since_topup",
+    "payment_sum_30d_minor",
+    "days_since_auto_change",
+    "service_projected_funding_ratio",
+    "nonfinancial_restrictions_90d"
+  ],
+  "categoricalFeatures": [
+    "status",
+    "payment_term",
+    "tariff_code"
+  ],
+  "sampling": {
+    "month": "daily 15:00 UTC, 0 < due - T <= 7d",
+    "hour": "30 minutes before observed due",
+    "day": "12 hours before observed due"
+  },
+  "target": "No successful renewal by due+5d inclusive; paid same-owner current-cycle confirmed replacement is not loss",
+  "restrictionPolicy": "Exclude nonfinancial restriction overlapping [predictionAt, due+5d]; restriction end exclusive",
+  "followupPolicy": "Require full due+5d observation even when early renewal is already seen",
+  "splitPolicy": "Chronological prediction cutoffs; purge labels whose availableAt reaches next cutoff; same clients may recur",
+  "cycleWeight": "1 / number of samples for this cycle in this partition; no revenue/class weighting",
+  "financialPolicy": "Cash ledger only. 7d required includes ONE next charge per live unreplaced service incl past due; no repeat hourly forecast. Projected service funding processes those charges by (due, serviceId), skips unaffordable without reserving, assumes no future topups/auto changes/manual actions, regardless auto flag. This is a static funding stress scenario, not actual future payment. Ratios uncapped; zero denominator or negative incomplete wallet = null.",
+  "legacyCompatibility": "Exact 24 names/types; v2 late-payment recoveries derived from events, immutable contracts imply contract_changes_90d=0. New ledger semantics cause domain shift, not a claim of numerical equivalence.",
+  "featureExclusions": [
+    "snapshot",
+    "diagnostics",
+    "report",
+    "archetype",
+    "future needs",
+    "external budget",
+    "IDs",
+    "reasons",
+    "label evidence"
+  ],
+  "limitations": [
+    "Synthetic data cannot establish predictive quality on real customers",
+    "Temporal test is exploratory: generator audit already inspected this dataset, not pristine untouched test",
+    "No unseen-client generalization claim; clients recur across temporal partitions",
+    "Monthly deletion policy absent: long-overdue unreplaced services remain in portfolio/funding stress; resolve observable termination policy before training",
+    "Do not pool hour/day/month evaluation silently; report metrics per payment term",
+    "asOf is assumed a complete event watermark; production requires authoritative completeness guarantees",
+    "Daily tariffs and restrictions billing pause are explicit simulation assumptions, not verified Aeza policy",
+    "Stable age/history features have no arbitrary bonus; magnitude must later be tested in model ablation",
+    "Legacy late-payment features include past nonfinancial pauses; enhanced restriction count records this context, not a causal financial interpretation",
+    "All current generator accounts are registered at the simulation start; account age is not representative of real customer cohorts",
+    "Names/source/reasons/catalog specifications are not joined as predictive inputs"
+  ],
+  "rowsSha256": "a2e3aae77868c82d4c44bd74d72cb84a058c57e2c98388b3b63a284fe5a0979f"
+}
