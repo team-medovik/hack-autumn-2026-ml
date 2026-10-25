@@ -32,6 +32,7 @@ services:
       GENERATOR_DAYS: ${GENERATOR_DAYS:-365}
       GENERATOR_ACCOUNTS: ${GENERATOR_ACCOUNTS:-50}
       GENERATOR_SEED: ${GENERATOR_SEED:-20261024}
+      GENERATOR_PAYMENT_TERMS: ${GENERATOR_PAYMENT_TERMS:-month}
     depends_on:
       generator-db:
         condition: service_healthy

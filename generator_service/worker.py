@@ -40,7 +40,7 @@ def run(settings, stop=None):
             LOG.info("Resuming run=%s revision=%s", saved.run_id, saved.revision)
         else:
             population = make_population(settings.seed, settings.accounts, start_at=settings.start,
-                                         days=settings.days, lifecycle=True)
+                                         days=settings.days, lifecycle=True, terms=settings.payment_terms)
             saved = create_checkpoint(BehaviorSimulation(population, settings.seed, settings.start,
                                                          settings.days), settings.checkpoint)
             LOG.info("Created run=%s", saved.run_id)

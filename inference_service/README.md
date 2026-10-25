@@ -6,6 +6,13 @@
 
 ## Запуск
 
+Совместный запуск с PostgreSQL-генератором: из корня выполнить
+`scripts/live-stack.sh up /absolute/path/.env.live`. Образец переменных —
+[.env.example](../.env.example), инструкция — [генератор](../generator_service/README.md).
+ML и генератор остаются разными контейнерами/процессами. Скрипт не создаёт токены,
+не запускает Kotlin API и не удаляет состояние генератора. `check` проверяет SHA/версию
+загруженной модели, readiness, работу worker и доступность ML по общей сети.
+
 Для сервера с существующей сетью API `backend` подготовлен самостоятельный
 [`compose.ml.production.yaml`](../compose.ml.production.yaml). Он собирает только
 ML-контейнер из Dockerfile ниже, подключает его как `ml-service:8000` и открывает

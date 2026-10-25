@@ -32,6 +32,7 @@ class Settings:
     start: str = "2026-01-01T00:00:00Z"
     database_url: str = ""
     run_key: str = "default"
+    payment_terms: tuple[str, ...] = ("month",)
 
     def __post_init__(self):
         object.__setattr__(self, "checkpoint", Path(self.checkpoint).absolute())
@@ -45,6 +46,9 @@ class Settings:
             raise ValueError("Invalid generator run key")
         if self.database_url and not self.database_url.startswith(("postgresql://", "postgres://")):
             raise ValueError("GENERATOR_DATABASE_URL must be a PostgreSQL URL")
+        if (not self.payment_terms or len(set(self.payment_terms)) != len(self.payment_terms)
+                or set(self.payment_terms) - {"hour", "day", "month"}):
+            raise ValueError("GENERATOR_PAYMENT_TERMS must contain distinct hour/day/month values")
 
     @property
     def heartbeat(self):
@@ -64,6 +68,7 @@ class Settings:
             start=os.environ.get("GENERATOR_START", "2026-01-01T00:00:00Z"),
             database_url=os.environ.get("GENERATOR_DATABASE_URL", ""),
             run_key=os.environ.get("GENERATOR_RUN_KEY", "default"),
+            payment_terms=tuple(value.strip() for value in os.environ.get("GENERATOR_PAYMENT_TERMS", "month").split(',')),
         )
 
 
