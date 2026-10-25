@@ -1,0 +1,5 @@
+fastapi==0.162.0
+uvicorn==0.54.0
+PyYAML==6.0.3
+jsonschema==4.26.0
+catboost==1.2.10

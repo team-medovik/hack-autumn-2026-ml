@@ -13,3 +13,12 @@
 !examples/risk/vps-business/catalog.json
 !contracts/
 !contracts/openapi.yaml
+!inference_service/
+!inference_service/*.py
+!inference_service/requirements.txt
+!inference_service/Dockerfile
+!inference_service/artifacts/
+!inference_service/artifacts/*
+!ml/
+!ml/prepare_dataset.py
+!ml/prepare_event_driven.py
