@@ -6,6 +6,34 @@
 Основная ветка — `main`, интеграционная — `develop`, новые работы — `feature/*`.
 Лёгкий CI проверяет генератор и подготовку признаков без обучения CatBoost.
 
+## Деплой ML в production
+
+После обновления `main` workflow `ML basic checks` проверяет коммит. Если CI
+успешен, `Deploy ML` собирает Docker-образ именно этого коммита на сервере и
+запускает `ml-service` через `compose.ml.production.yaml`. Скрипт ждёт readiness,
+проверяет версию и SHA модели по `manifest.json` и при ошибке пытается вернуть
+предыдущий релиз. При обычном процессе релиза это срабатывает после слияния
+`develop` в `main`. Деплой генератора и API ведётся отдельно.
+
+Для первого запуска нужен Linux self-hosted runner с метками `self-hosted`,
+`linux`, `deploy` в этом репозитории, установленными Docker Engine, Compose v2,
+Git, Bash, Python 3 и `flock`. Runner должен иметь доступ к Docker, каталогу
+`/home/kinoko/hack-autumn-2026/ml` и созданной на сервере сети `backend`.
+Зарегистрируйте в GitHub Actions secret `ML_SERVICE_TOKEN` (32–256 символов
+`A–Z`, `a–z`, `0–9`, `_` или `-`); его значение должно совпадать с
+`APP_ML_SERVICE_TOKEN` у Kotlin API. Каталог релизов и секретный `runtime.env`
+создаются на сервере и не попадают в Git.
+
+Текущий релиз: `/home/kinoko/hack-autumn-2026/ml/current`. Проверка на сервере:
+
+```sh
+curl --fail http://127.0.0.1:8012/health/ready
+```
+
+Для ручного повторного деплоя запустите `ML basic checks` через
+`workflow_dispatch` на актуальном `main`. Предыдущие релизы сохраняются в
+`/home/kinoko/hack-autumn-2026/ml/releases` для ручного отката.
+
 ML-часть проекта [hack-autumn-2026-api](https://github.com/team-medovik/hack-autumn-2026-api),
 выделенная в самостоятельный репозиторий с историей изменений.
 Модель пока **не подключена к API**. Синтетические результаты не подтверждают
