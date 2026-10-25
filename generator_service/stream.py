@@ -39,18 +39,33 @@ def new_service(world, config, aid, at):
     if sid in world.owner or sid in world.sim._planned_services:
         raise ValueError("Demo service id collision")
     tariff = CATALOG[int(unit(config["seed"] + 1, sequence) * len(CATALOG)) % len(CATALOG)]
-    price = tariff["monthPriceMinor"]
-    service = {"serviceId": sid, "term": "month", "priceMinor": price,
+    if config.get("riskMode"):
+        # Four hourly and two daily services per six-service cohort make fresh
+        # purchases visible immediately and produce expiry/payment signals after
+        # about one real minute at 60x, while still exercising the day contract.
+        term = "hour" if sequence % config["servicesPerClient"] < max(1, config["servicesPerClient"] * 2 // 3) else "day"
+        price = tariff["hourPriceMinor"] * (24 if term == "day" else 1)
+        need_days = 2 + int(unit(config["seed"] + 2, sequence) * 3)
+        auto_prolong = sequence % config["servicesPerClient"] not in (0, 3)
+        provenance = "synthetic_24_times_hour" if term == "day" else "saved_public_catalog"
+    else:
+        term, price = "month", tariff["monthPriceMinor"]
+        need_days = 35 + int(unit(config["seed"] + 2, sequence) * 331)
+        auto_prolong = world.random[aid].random() < world.profiles[aid]["habits"]["autoChance"]
+        provenance = "saved_public_catalog"
+    service = {"serviceId": sid, "term": term, "priceMinor": price,
         "tariffCode": tariff["code"], "createdAt": iso(at),
-        "needUntil": iso(at + timedelta(days=35 + int(unit(config["seed"] + 2, sequence) * 331))),
-        "priceProvenance": "saved_public_catalog"}
+        "needUntil": iso(at + timedelta(days=need_days)),
+        "priceProvenance": provenance}
     profile = world.profiles[aid]; profile["services"].append(service)
-    budget = profile["budget"]; budget["monthlyBaseMinor"] += price; budget["initialPurchaseMinor"] += price
+    budget = profile["budget"]
+    budget["monthlyBaseMinor"] += price * {"hour": 720, "day": 30, "month": 1}[term]
+    budget["initialPurchaseMinor"] += price
     key = month_key(at); budget["monthlyAllowances"][key] = budget["monthlyAllowances"].get(key, 0) + price
     world.owner[sid] = aid; world.metadata[sid] = copy.deepcopy(service); world.needs[sid] = instant(service["needUntil"])
     world.command(at, "top_up", account_id=aid, amount=price)
-    world.command(at, "purchase", account_id=aid, service_id=sid, price=price, term="month",
-                  tariff_code=tariff["code"], auto_prolong=world.random[aid].random() < profile["habits"]["autoChance"])
+    world.command(at, "purchase", account_id=aid, service_id=sid, price=price, term=term,
+                  tariff_code=tariff["code"], auto_prolong=auto_prolong)
     world.task(world.needs[sid], "need_ended", sid=sid)
     if len(profile["services"]) == 1:
         world.task(at + world.delay(aid, "checkIntervalHours"), "periodic_review", aid=aid)
@@ -63,12 +78,18 @@ def inject_due(world, until, clock):
     until = instant(until); count = 0
     while instant(config["nextServiceAt"]) <= until:
         at = max(instant(config["nextServiceAt"]), world.sim.now + timedelta(microseconds=1))
-        if config["serviceSequence"] % config["servicesPerClient"] == 0:
+        if config.get("bundleOnClient"):
             config["activeAccountId"] = new_account(world, config, at)
-        new_service(world, config, config["activeAccountId"], at)
+            for _ in range(config["servicesPerClient"]):
+                new_service(world, config, config["activeAccountId"], at)
+                count += 1
+        else:
+            if config["serviceSequence"] % config["servicesPerClient"] == 0:
+                config["activeAccountId"] = new_account(world, config, at)
+            new_service(world, config, config["activeAccountId"], at)
+            count += 1
         seconds = config["minRealSeconds"] + (config["maxRealSeconds"] - config["minRealSeconds"]) * unit(config["seed"] + 3, config["serviceSequence"])
         config["nextServiceAt"] = iso(at + timedelta(seconds=seconds * float(clock.get("timeScale", 60))))
-        count += 1
         if count > 1000: raise ValueError("Demo stream catch-up limit exceeded")
     return count
 
@@ -102,6 +123,8 @@ def enable(settings, marker, min_real_seconds=10, max_real_seconds=30, services_
         config.update({"enabled": True, "marker": marker,
             "minRealSeconds": min_real_seconds, "maxRealSeconds": max_real_seconds,
             "servicesPerClient": services_per_client,
+            "riskMode": marker == "demo-stream-risk-v4",
+            "bundleOnClient": marker == "demo-stream-risk-v4",
             "nextServiceAt": iso(row["virtual_time"] + timedelta(seconds=1))})
         clock[CONFIG_KEY] = config
         connection.execute("""UPDATE generator_sim.runs SET state=%s,end_at=%s,clock_config=%s,
