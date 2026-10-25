@@ -195,7 +195,7 @@ class PostgresStore:
                 self.bind_clock(conn, row, settings)
                 return row["run_id"]
             population = make_population(settings.seed, settings.accounts, start_at=settings.start,
-                                         days=settings.days, lifecycle=True)
+                                         days=settings.days, lifecycle=True, terms=settings.payment_terms)
             world = BehaviorSimulation(population, settings.seed, settings.start, settings.days)
             run_id = str(uuid.uuid4())
             self.insert_world(conn, world, run_id, 0)

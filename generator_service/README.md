@@ -7,6 +7,104 @@ HTTP-запросы не запускают генерацию.
 
 ## Запуск
 
+Для совместного запуска с готовой моделью используйте из корня репозитория:
+
+```sh
+# Заполнить .env.live существующими секретами оператора по образцу .env.example.
+scripts/live-stack.sh validate /absolute/path/.env.live
+scripts/live-stack.sh up /absolute/path/.env.live
+scripts/live-stack.sh check /absolute/path/.env.live
+```
+
+Скрипт использует `compose.generator.production.yaml` и `compose.ml.production.yaml`.
+Проекты по умолчанию — `aeza-generator` и `aeza-ml`; PostgreSQL сохраняется в volume
+`aeza-generator_generator-postgres`. Уже существующая сеть `backend` нужна для API.
+Только `generator-api` и `ml-service` входят в неё: БД и worker остаются во внутренней
+сети генератора. API скрипт не запускает и его конфигурацию не меняет.
+
+`validate` проверяет Compose и секреты без вывода их значений. `up` сначала собирает
+образы, затем запускает сервисы и проверяет модель/heartbeat/движение времени.
+`check` также проверяет доступность ML по Docker DNS из generator-api; это проверка
+сети, а не вызов модели генератором. `status`, `logs`, `stop` показывают состояние,
+последние логи или останавливают процессы. Команд удаления/reset/генерации токенов нет.
+
+Для отдельного проверочного окружения можно передать **в shell**, не в dotenv:
+`LIVE_STACK_NAMESPACE=aeza-check LIVE_STACK_NETWORK=aeza-check-network`.
+Сеть предварительно создаёт оператор; скрипт не создаёт её. Порты задаются в env-файле
+через `GENERATOR_HTTP_PORT`/`ML_HTTP_PORT` (по умолчанию 8011/8012, только loopback).
+Смена namespace означает другие проекты и другой volume, а не перенос старого запуска.
+Не подключайте два окружения с одинаковыми service alias к одной сети.
+Для изолированной проверки задайте также собственные `GENERATOR_IMAGE_TAG` и
+`ML_IMAGE_TAG`, чтобы не перезаписать тег образа рабочего окружения.
+
+### Переход с существующего PostgreSQL-запуска
+
+Старый `docker compose -f compose.generator.yaml up` обычно создавал проект
+`hack-autumn-2026-ml`, а не `aeza-generator`. Не запускайте новый `up` с defaults
+поверх такого стенда: он создаст другой volume и новый run. Сначала найдите
+контейнер **действующей** БД и проверьте его Compose label и подключённый volume:
+
+```bash
+set -euo pipefail
+# Используйте прежние -p/--env-file, если старый запуск выполнялся с ними.
+old_db=$(docker compose -f compose.generator.yaml ps -q generator-db)
+test -n "$old_db"
+LIVE_STACK_GENERATOR_PROJECT=$(docker inspect --format '{{ index .Config.Labels "com.docker.compose.project" }}' "$old_db")
+test -n "$LIVE_STACK_GENERATOR_PROJECT"
+export LIVE_STACK_GENERATOR_PROJECT
+old_volume=$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/var/lib/postgresql/data"}}{{.Name}}{{end}}{{end}}' "$old_db")
+test "$old_volume" = "${LIVE_STACK_GENERATOR_PROJECT}_generator-postgres"
+```
+
+Имя volume должно быть `${LIVE_STACK_GENERATOR_PROJECT}_generator-postgres`.
+Если это bind mount, внешний volume или другой DSN/пользователь/имя БД, этот путь
+не подходит: сначала нужен отдельный Compose-конфиг для фактического хранилища;
+не запускайте новый worker на пустой БД. Не подключайте один PG volume к двум
+контейнерам PostgreSQL одновременно.
+
+В `.env.live` перенесите прежние пароль PostgreSQL, service token, `RUN_KEY` и все
+три настройки часов. Если старый пароль — `generator-local` или содержит символы,
+не подходящие для URI, сначала отдельно смените пароль роли БД и настройку старого
+стека: новая переменная окружения сама пароль существующей БД не меняет.
+Для ручной смены оператор может открыть `docker exec -it "$old_db" psql -U generator -d generator`
+и выполнить `\password generator`: psql запросит пароль без включения его в текст
+команды/history. Это отдельная операция с согласованным обновлением старых клиентов;
+скрипт её не выполняет и секретов не создаёт.
+Проверьте, что старые и новые образы используют совместимые Python/движок.
+
+```bash
+bash scripts/live-stack.sh validate /absolute/path/.env.live
+# Останавливаем обе старые службы (включая все реплики worker), БД оставляем работать.
+docker compose -p "$LIVE_STACK_GENERATOR_PROJECT" --env-file /absolute/path/.env.live -f compose.generator.yaml stop generator-worker generator-api
+# Сохранить исходный runId/revision/event_count для проверки после перехода.
+docker exec "$old_db" psql -U generator -d generator -c 'SELECT run_key,run_id,revision,event_count FROM generator_sim.runs;'
+umask 077
+docker exec "$old_db" pg_dump -U generator -d generator -Fc > generator-before-live.dump
+bash scripts/live-stack.sh up /absolute/path/.env.live
+```
+
+Новое описание использует тот же project, имена служб и volume, поэтому Compose
+обновляет существующие контейнеры, а не поднимает параллельную БД. После `up`
+проверьте прежний runId и неуменьшившиеся revision/eventCount через status API;
+сохраните прежний sourceId и курсоры Kotlin. При несовместимости не удаляйте данные:
+вернитесь к прежним образам/настройкам после остановки новых worker/API.
+
+`LIVE_STACK_GENERATOR_PROJECT` и `LIVE_STACK_ML_PROJECT` задаются **в shell** и
+имеют приоритет над `LIVE_STACK_NAMESPACE`; передавайте их при каждом вызове.
+ML должен иметь отдельный project (по умолчанию `aeza-ml`). `check` читает интервал
+запущенного worker и ждёт продвижения времени до `max(10, 3 × tickSeconds + 5)` секунд;
+остановившийся, завершённый или откатившийся запуск не считается работающим.
+
+В `.env.example` включено `GENERATOR_PAYMENT_TERMS=hour,day,month`: новый запуск
+содержит все три периода. Маленькая случайная популяция не гарантирует каждую категорию.
+Без настройки периодов старое поведение сохранено: только `month`. Периоды, seed и
+размер популяции относятся только к созданию запуска и не переписывают существующий.
+Для сохранённого запуска надо сохранить также прежние настройки часов: новый production
+Compose по умолчанию использует скорость 60, а старый `compose.generator.yaml` — 3600.
+
+Ниже остаётся самостоятельный локальный запуск генератора (без ML и без подключения
+к `backend`); для production предпочтителен описанный выше строгий конфиг.
+
 Задайте `GENERATOR_SERVICE_TOKEN` (минимум 16 байт) и `GENERATOR_POSTGRES_PASSWORD`:
 
 ```sh
@@ -70,13 +168,14 @@ JSONB содержит аккаунты, услуги, бюджеты, потр�
 |---|---|---|
 | `GENERATOR_DATABASE_URL` | пусто | PostgreSQL URL; без него файловый backend |
 | `GENERATOR_RUN_KEY` | `default` | Стабильное имя запуска для всех его реплик/API |
-| `GENERATOR_TIME_SCALE` | 60 | Скорость; Compose: 3600 |
+| `GENERATOR_TIME_SCALE` | 60 | Скорость; локальный Compose: 3600, production: 60 |
 | `GENERATOR_TICK_SECONDS` | 1 | Интервал попыток шага |
 | `GENERATOR_MAX_STEP_SECONDS` | 3600 | Максимум виртуальных секунд за шаг |
 | `GENERATOR_START` | `2026-01-01T00:00:00Z` | Начало нового запуска |
 | `GENERATOR_DAYS` | 365 | Горизонт нового запуска |
 | `GENERATOR_ACCOUNTS` | 50 | Клиентов в новом запуске |
 | `GENERATOR_SEED` | 20261024 | Seed нового запуска |
+| `GENERATOR_PAYMENT_TERMS` | `month` | Периоды через запятую для нового запуска: hour/day/month; `.env.example` включает все три |
 | `GENERATOR_SERVICE_TOKEN` | нет | Секрет HTTP, минимум 16 байт |
 | `GENERATOR_CHECKPOINT` | `runtime/live.json` | Только файловый backend |
 
@@ -116,9 +215,12 @@ Status/events не загружают приватный JSONB или всю и�
 `hasMore=false` означает конец текущего журнала, а не завершение симуляции.
 Недоступность БД → 503, неизвестный runId → 404, неверный курсор/ревизия → 409.
 
-Kotlin consumer реализован в [PR API #34](https://github.com/team-medovik/hack-autumn-2026-api/pull/34).
-Его inbox/проекция/курсоры независимы от внутренних таблиц генератора. ML пока не
-подключён. Архетипы, RNG, бюджеты и скрытые планы не входят в публичные ответы.
+Kotlin consumer и вызов ML реализованы в API-ветке `feature/live-stack-integration`;
+наличие кода в ветке не означает его production-деплой. Историческая реализация
+consumer — [PR API #34](https://github.com/team-medovik/hack-autumn-2026-api/pull/34).
+Его inbox/проекция/курсоры независимы от внутренних таблиц генератора. Kotlin передаёт
+опубликованную историю отдельному ML-сервису; генератор этого не делает. Архетипы,
+RNG, бюджеты и скрытые планы не входят в публичные ответы.
 
 ## MinIO и ограничения
 
