@@ -33,6 +33,8 @@ curl --fail http://127.0.0.1:8012/health/ready
 Для ручного повторного деплоя запустите `ML basic checks` через
 `workflow_dispatch` на актуальном `main`. Предыдущие релизы сохраняются в
 `/home/kinoko/hack-autumn-2026/ml/releases` для ручного отката.
+Адреса, Nginx, подготовка runner и список секретов описаны в
+[инструкции по production](docs/PRODUCTION_SETUP.md).
 
 ML-часть проекта [hack-autumn-2026-api](https://github.com/team-medovik/hack-autumn-2026-api),
 выделенная в самостоятельный репозиторий с историей изменений.
