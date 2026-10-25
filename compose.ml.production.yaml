@@ -14,7 +14,7 @@ services:
     # API обращается к http://ml-service:8000 внутри сети backend.
     # Порт хоста доступен только локально для проверки готовности.
     ports:
-      - "127.0.0.1:8012:8000"
+      - "127.0.0.1:${ML_HTTP_PORT:-8012}:8000"
     networks:
       - backend
     read_only: true
@@ -39,4 +39,4 @@ services:
 networks:
   backend:
     external: true
-    name: backend
+    name: ${LIVE_STACK_NETWORK:-backend}

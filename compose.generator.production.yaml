@@ -1,0 +1,85 @@
+# Persistent generator stack. API reaches only generator-api through backend.
+name: aeza-generator
+
+x-generator-image: &generator-image
+  image: hack-autumn-2026-generator:${GENERATOR_IMAGE_TAG:-local}
+  build:
+    context: .
+    dockerfile: generator_service/Dockerfile
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-database: &database
+  GENERATOR_DATABASE_URL: postgresql://generator:${GENERATOR_POSTGRES_PASSWORD:?Set GENERATOR_POSTGRES_PASSWORD}@generator-db:5432/generator
+  GENERATOR_RUN_KEY: ${GENERATOR_RUN_KEY:-default}
+
+services:
+  generator-db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: generator
+      POSTGRES_USER: generator
+      POSTGRES_PASSWORD: ${GENERATOR_POSTGRES_PASSWORD:?Set GENERATOR_POSTGRES_PASSWORD}
+    volumes:
+      - generator-postgres:/var/lib/postgresql/data
+    networks: [generator-internal]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U generator -d generator"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    logging: *logging
+
+  generator-worker:
+    <<: *generator-image
+    command: ["python", "-m", "generator_service.worker"]
+    restart: unless-stopped
+    stop_grace_period: 30s
+    environment:
+      <<: *database
+      GENERATOR_TIME_SCALE: ${GENERATOR_TIME_SCALE:-60}
+      GENERATOR_TICK_SECONDS: ${GENERATOR_TICK_SECONDS:-1}
+      GENERATOR_MAX_STEP_SECONDS: ${GENERATOR_MAX_STEP_SECONDS:-3600}
+      GENERATOR_START: ${GENERATOR_START:-2026-01-01T00:00:00Z}
+      GENERATOR_DAYS: ${GENERATOR_DAYS:-365}
+      GENERATOR_ACCOUNTS: ${GENERATOR_ACCOUNTS:-50}
+      GENERATOR_SEED: ${GENERATOR_SEED:-20261024}
+      GENERATOR_PAYMENT_TERMS: ${GENERATOR_PAYMENT_TERMS:-month}
+    depends_on:
+      generator-db:
+        condition: service_healthy
+    networks: [generator-internal]
+    logging: *logging
+
+  generator-api:
+    <<: *generator-image
+    restart: unless-stopped
+    environment:
+      <<: *database
+      GENERATOR_SERVICE_TOKEN: ${GENERATOR_SERVICE_TOKEN:?Set GENERATOR_SERVICE_TOKEN}
+    depends_on:
+      generator-db:
+        condition: service_healthy
+    ports: ["127.0.0.1:${GENERATOR_HTTP_PORT:-8011}:8000"]
+    networks: [generator-internal, backend]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 3
+      start_period: 20s
+    logging: *logging
+
+volumes:
+  generator-postgres:
+
+networks:
+  generator-internal:
+  backend:
+    external: true
+    name: ${LIVE_STACK_NETWORK:-backend}
