@@ -1,0 +1,42 @@
+# Самостоятельный конфиг ML; не запускает генератор и не изменяет контейнер API.
+# Перед запуском передать ML_SERVICE_TOKEN через окружение или --env-file.
+name: aeza-ml
+
+services:
+  ml-service:
+    image: hack-autumn-2026-ml:${ML_IMAGE_TAG:-local}
+    build:
+      context: .
+      dockerfile: inference_service/Dockerfile
+    restart: unless-stopped
+    environment:
+      ML_SERVICE_TOKEN: ${ML_SERVICE_TOKEN:?Set ML_SERVICE_TOKEN before starting ML}
+    # API обращается к http://ml-service:8000 внутри сети backend.
+    # Порт хоста доступен только локально для проверки готовности.
+    ports:
+      - "127.0.0.1:8012:8000"
+    networks:
+      - backend
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  backend:
+    external: true
+    name: backend
