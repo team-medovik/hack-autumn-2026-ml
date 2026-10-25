@@ -65,7 +65,6 @@ services:
     depends_on:
       generator-db:
         condition: service_healthy
-    ports: ["127.0.0.1:${GENERATOR_HTTP_PORT:-8011}:8000"]
     networks: [generator-internal, backend]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
