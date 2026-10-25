@@ -29,8 +29,8 @@ class OpenAPIContractTests(unittest.TestCase):
     def test_valid_standalone_openapi_and_unique_operations(self):
         validate(self.spec)
         ids = [operation["operationId"] for path in self.spec["paths"].values()
-               for method, operation in path.items() if method in ("get", "post")]
-        self.assertEqual(7, len(ids))
+               for method, operation in path.items() if method in ("get", "post", "patch")]
+        self.assertEqual(8, len(ids))
         self.assertEqual(len(ids), len(set(ids)))
         self.assertIn("НЕ реализованы", self.spec["info"]["description"])
 
@@ -54,7 +54,8 @@ class OpenAPIContractTests(unittest.TestCase):
         self.assertEqual([{"ServiceToken": []}], self.spec["security"])
         for path, methods in self.spec["paths"].items():
             if "generator" in path:
-                self.assertEqual({"get"}, set(methods))
+                expected = {"patch"} if path == "/internal/v1/generator/speed" else {"get"}
+                self.assertEqual(expected, set(methods))
             if not path.startswith("/health"):
                 for operation in methods.values():
                     self.assertNotEqual([], operation.get("security"))
