@@ -1,0 +1,79 @@
+# Внутренний контракт ML и живой симуляции
+
+[openapi.yaml](openapi.yaml) — самостоятельный OpenAPI 3.1.1 файл с описанием каждого
+поля. Generator GET и health уже реализованы отдельным FastAPI `generator-api:8000`.
+ML inference на независимом `ml-service:8000` и MinIO пока остаются проектом контракта.
+Генератор не вызывает модель. Запуск: [generator_service](../generator_service/README.md).
+
+| Метод | Путь | Назначение |
+|---|---|---|
+| GET | `/health/live` | Процесс отвечает |
+| GET | `/health/ready` | Модель и обязательные зависимости готовы |
+| GET | `/internal/v1/model` | Версия и область применимости модели |
+| POST | `/internal/v1/renewal-risk/predict` | Вероятность потери VPS |
+| GET | `/internal/v1/generator/status` | Состояние независимого worker и симуляции |
+| GET | `/internal/v1/generator/events` | Зафиксированные события после курсора |
+| GET | `/internal/v1/generator/snapshot` | Снимок одной зафиксированной ревизии |
+
+Все внутренние ручки требуют service token; health не раскрывает секреты.
+Фронт обращается к основному API, не напрямую к модели или приватному checkpoint.
+Смешивание F1–F5 и вероятности, настройки и денежная приоритизация остаются в API.
+Вес модели пока не согласован и не захардкожен в этот контракт.
+
+## Вход inference
+
+`requestId`, `contractVersion`, `snapshotRevision`, `predictionAt`, `serviceIds`, `input`.
+`input` имеет один из вариантов:
+
+- `history`: полный наблюдаемый журнал источника, без скрытых профилей и будущих планов;
+- `snapshot`: обычный снимок кейса — поддержан явно, но текущей модели не хватает истории,
+  поэтому она возвращает `insufficient_data` / `SNAPSHOT_HAS_NO_HISTORY`;
+- `dataset`: зарегистрированный `datasetId` и неизменяемая ревизия для будущего MinIO.
+  Произвольные URL, ключи хранилища и credentials не принимаются.
+
+```json
+{
+  "requestId": "risk-run-001",
+  "contractVersion": "renewal-risk-v1",
+  "snapshotRevision": "revision-42",
+  "predictionAt": "2026-01-30T15:00:00Z",
+  "serviceIds": [3000180],
+  "input": {
+    "kind": "dataset",
+    "datasetId": "demo-monthly-v3",
+    "revision": "revision-42"
+  }
+}
+```
+
+Это пример структуры, не уже зарегистрированный объект MinIO.
+Ответ содержит одну запись на каждый serviceId; нет прогноза — `null`, не ноль.
+Вероятность относится к конкретному продлению до dueAt+5 суток; это не вероятность
+ухода клиента и не итоговый балл правил. Будущие события отсекаются по occurredAt и recordedAt.
+
+## Снапшоты и история
+
+`SnapshotEnvelope` оборачивает `RiskSnapshot`: `runId`, `revision`, `asOf`, валюта,
+маркер синтетики и `transactionCoverage`. Бек использует `asOf` как время расчёта
+демо, а не текущую дату сервера. Для сверки журнал/снимок/прогноз нужна одна ревизия.
+
+Пока биллинг экспортирует `transactions=[]` из-за ограничения Kotlin DTO amount<=1000.
+Это должно быть отмечено как `omitted`, а не изображаться полной историей без оплат.
+В целевом контракте платежи используют int64 без искусственного лимита 1000;
+доработка Kotlin DTO остаётся отдельным шагом, молча обрезать суммы нельзя.
+
+Checkpoint приватен, содержит будущее и не экспортируется через эти endpoints.
+GET не запускает задач и не двигает время. Реализованное ядро описано в
+[LIVE_STATE.md](../examples/risk/event-driven/LIVE_STATE.md).
+
+## Проверка
+
+```sh
+python3.13 -m pip install -r contracts/requirements-checks.txt
+python3.13 -B -m unittest discover -s contracts/tests
+```
+
+Проверяются OpenAPI, локальность ссылок, описания полей, все события сохранённой v3,
+снапшот, публичный статус настоящего checkpoint и негативные примеры.
+Сравнения дат/ревизий, полнота портфеля, cutoff и ограничения тела HTTP дополнительно
+должны проверяться обработчиками при реализации: JSON Schema не выражает их все.
