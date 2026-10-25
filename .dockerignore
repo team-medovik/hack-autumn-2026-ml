@@ -3,6 +3,8 @@
 !generator_service/*.py
 !generator_service/requirements.txt
 !generator_service/Dockerfile
+!generator_service/migrations/
+!generator_service/migrations/*.sql
 !examples/
 !examples/risk/
 !examples/risk/event-driven/

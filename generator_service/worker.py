@@ -31,6 +31,8 @@ def exclusive_worker(path):
 
 def run(settings, stop=None):
     stop = stop if stop is not None else threading.Event()
+    if settings.database_url:
+        return run_postgres(settings, stop)
     settings.checkpoint.parent.mkdir(parents=True, exist_ok=True)
     with exclusive_worker(settings.checkpoint):
         if settings.checkpoint.exists() or settings.checkpoint.is_symlink():
@@ -75,6 +77,45 @@ def run(settings, stop=None):
         except Exception:
             heartbeat("error")
             raise
+
+
+def run_postgres(settings, stop):
+    """The database owns both the run lock and tick pacing across worker replicas."""
+    from .postgres import PostgresStore
+    from psycopg import OperationalError, InterfaceError
+
+    store = PostgresStore(settings.database_url, settings.run_key)
+    latest, initialized, retry_seconds = None, False, 1.0
+    while not stop.is_set():
+        try:
+            if not initialized:
+                store.migrate()
+                run_id = store.ensure_run(settings)
+                LOG.info("PostgreSQL simulation ready run=%s", run_id)
+                initialized = True
+            # Every attempt reloads committed state. If the previous connection
+            # failed after COMMIT, the DB cursor and due gate prevent reapplying it.
+            result = store.tick(settings)
+        except (OperationalError, InterfaceError) as error:
+            # Never log exception text: a connection error can contain DSN data.
+            LOG.warning("PostgreSQL unavailable (%s); retry in %.0fs",
+                        type(error).__name__, retry_seconds)
+            if stop.wait(retry_seconds):
+                break
+            retry_seconds = min(retry_seconds * 2, 30.0)
+            continue
+        retry_seconds = 1.0
+        if result is not None:
+            core = result["generator"]
+            if latest is None or core["eventCount"] != latest["generator"]["eventCount"]:
+                LOG.info("Committed run=%s revision=%s events=%s virtualTime=%s",
+                         core["runId"], core["revision"], core["eventCount"], core["virtualTime"])
+            latest = result
+        if stop.wait(settings.tick_seconds):
+            break
+    # Another replica may still be serving this run. Do not mark shared state
+    # paused just because this particular process is shutting down.
+    return latest
 
 
 def main():

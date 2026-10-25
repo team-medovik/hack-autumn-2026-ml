@@ -6,6 +6,7 @@ RUN pip install --no-cache-dir -r generator_service/requirements.txt \
     && useradd --uid 10001 --create-home generator \
     && mkdir -p /app/runtime && chown generator:generator /app/runtime
 COPY generator_service/*.py /app/generator_service/
+COPY generator_service/migrations/ /app/generator_service/migrations/
 COPY examples/risk/event-driven/*.py /app/examples/risk/event-driven/
 COPY examples/risk/vps-business/catalog.json /app/examples/risk/vps-business/catalog.json
 COPY contracts/openapi.yaml /app/contracts/openapi.yaml

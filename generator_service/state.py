@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 import json
 import math
 import os
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -29,6 +30,8 @@ class Settings:
     accounts: int = 50
     days: int = 365
     start: str = "2026-01-01T00:00:00Z"
+    database_url: str = ""
+    run_key: str = "default"
 
     def __post_init__(self):
         object.__setattr__(self, "checkpoint", Path(self.checkpoint).absolute())
@@ -38,6 +41,10 @@ class Settings:
         if not 1 <= self.accounts <= 10000 or not 1 <= self.days <= 3650:
             raise ValueError("Invalid population or simulation horizon")
         instant(self.start)
+        if not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", self.run_key):
+            raise ValueError("Invalid generator run key")
+        if self.database_url and not self.database_url.startswith(("postgresql://", "postgres://")):
+            raise ValueError("GENERATOR_DATABASE_URL must be a PostgreSQL URL")
 
     @property
     def heartbeat(self):
@@ -55,6 +62,8 @@ class Settings:
             accounts=int(os.environ.get("GENERATOR_ACCOUNTS", "50")),
             days=int(os.environ.get("GENERATOR_DAYS", "365")),
             start=os.environ.get("GENERATOR_START", "2026-01-01T00:00:00Z"),
+            database_url=os.environ.get("GENERATOR_DATABASE_URL", ""),
+            run_key=os.environ.get("GENERATOR_RUN_KEY", "default"),
         )
 
 

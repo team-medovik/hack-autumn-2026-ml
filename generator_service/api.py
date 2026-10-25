@@ -12,6 +12,7 @@ from starlette.exceptions import HTTPException
 import yaml
 
 from .state import ROOT, Settings, CheckpointError, load_checkpoint, status, snapshot, event_page
+from checkpoint import RevisionConflict
 
 LOG = logging.getLogger("generator.api")
 GENERATOR_PATHS = ("/health/live", "/health/ready", "/internal/v1/generator/status",
@@ -33,6 +34,11 @@ def create_app(settings=None):
     settings = settings or Settings.from_env()
     if not settings.token or len(settings.token.encode()) < 16:
         raise ValueError("Set GENERATOR_SERVICE_TOKEN to a secret of at least 16 bytes")
+    store = None
+    if settings.database_url:
+        from .postgres import PostgresStore, StoreUnavailable, RunNotFound, CursorAhead
+        from psycopg import Error as DatabaseError
+        store = PostgresStore(settings.database_url, settings.run_key)
 
     @asynccontextmanager
     async def lifespan(app):
@@ -81,6 +87,20 @@ def create_app(settings=None):
             raise APIError(404, "RUN_NOT_FOUND", "Запуск не найден")
         return saved
 
+    def postgres_read(method, *args):
+        # Read methods never migrate, create a run, or advance virtual time.
+        try:
+            return getattr(store, method)(*args)
+        except RunNotFound:
+            raise APIError(404, "RUN_NOT_FOUND", "Запуск не найден") from None
+        except CursorAhead:
+            raise APIError(409, "CURSOR_AHEAD", "Курсор находится за концом журнала") from None
+        except RevisionConflict:
+            raise APIError(409, "REVISION_CONFLICT", "Ревизия состояния изменилась") from None
+        except (StoreUnavailable, DatabaseError, CheckpointError):
+            LOG.warning("Committed PostgreSQL generator state unavailable")
+            raise APIError(503, "STATE_UNAVAILABLE", "Сохранённое состояние генератора недоступно") from None
+
     @app.get("/health/live")
     def live():
         return {"status": "alive"}
@@ -88,7 +108,10 @@ def create_app(settings=None):
     @app.get("/health/ready")
     def ready():
         try:
-            read()
+            if store is not None:
+                postgres_read("status")
+            else:
+                read()
         except APIError:
             return JSONResponse(status_code=503, content={"status": "not_ready"})
         # Readiness means ability to serve committed data, including a paused run.
@@ -96,6 +119,8 @@ def create_app(settings=None):
 
     @app.get("/internal/v1/generator/status")
     def generator_status():
+        if store is not None:
+            return postgres_read("status")
         saved = read()
         try:
             return status(settings, saved)
@@ -106,6 +131,8 @@ def create_app(settings=None):
     def events(runId: Annotated[str, Query(min_length=1)],
                afterSequence: Annotated[int, Query(ge=0)],
                limit: Annotated[int, Query(ge=1, le=1000)] = 100):
+        if store is not None:
+            return postgres_read("event_page", runId, afterSequence, limit)
         saved = read(runId)
         if afterSequence > len(saved.world.sim.events):
             raise APIError(409, "CURSOR_AHEAD", "Курсор находится за концом журнала")
@@ -114,6 +141,8 @@ def create_app(settings=None):
     @app.get("/internal/v1/generator/snapshot")
     def current_snapshot(runId: Annotated[str, Query(min_length=1)],
                          expectedRevision: Annotated[int | None, Query(ge=0)] = None):
+        if store is not None:
+            return postgres_read("snapshot", runId, expectedRevision)
         saved = read(runId)
         if expectedRevision is not None and expectedRevision != saved.revision:
             raise APIError(409, "REVISION_CONFLICT", "Ревизия состояния изменилась")

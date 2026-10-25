@@ -1,7 +1,7 @@
 # Aeza VPS/VDS — ML риска непродления
 
 Текущая разработка: [OpenAPI-контракт](contracts/openapi.yaml),
-[постоянный генератор и FastAPI](generator_service/README.md) и
+[постоянный генератор с PostgreSQL и FastAPI](generator_service/README.md) и
 [пошаговая симуляция с восстановлением](examples/risk/event-driven/LIVE_STATE.md).
 Основная ветка — `main`, интеграционная — `develop`, новые работы — `feature/*`.
 Лёгкий CI проверяет генератор и подготовку признаков без обучения CatBoost.
