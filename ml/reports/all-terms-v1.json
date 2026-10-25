@@ -1,0 +1,620 @@
+{
+  "experimentVersion": "all-terms-independent-worlds-v1",
+  "planSha256": "62b98eea33c1facc20677d1a5d8994a05c9cfc0458eef5f3d642e3db5368e3b3",
+  "rowsSha256": "bee80027cf71e4486ba28ca423687111235db4c4e48779ddbe26a1778b70f28b",
+  "sources": [
+    {
+      "worldId": "world-2026102601",
+      "seed": 2026102601,
+      "partition": "train",
+      "historyPath": "histories/world-2026102601.json",
+      "historySha256": "26c8d113ceffc1ce70c100d0ac1a428b5a19aa6f77d93e9e625c4efee2f9edc8",
+      "eventCount": 11073,
+      "rows": 1990,
+      "archetypes": {
+        "controller": 8,
+        "reactive": 4,
+        "planner": 8,
+        "irregular": 15,
+        "project": 5
+      }
+    },
+    {
+      "worldId": "world-2026102602",
+      "seed": 2026102602,
+      "partition": "train",
+      "historyPath": "histories/world-2026102602.json",
+      "historySha256": "e1fbfd79614729e148f37bbfe3f10254bef3899b485ba3b30e6bd20ef2da4dde",
+      "eventCount": 13189,
+      "rows": 2105,
+      "archetypes": {
+        "planner": 6,
+        "irregular": 9,
+        "controller": 10,
+        "project": 8,
+        "reactive": 7
+      }
+    },
+    {
+      "worldId": "world-2026102603",
+      "seed": 2026102603,
+      "partition": "train",
+      "historyPath": "histories/world-2026102603.json",
+      "historySha256": "b0d6aa106c9f01a9196556e9233189b8a211e5f31d7e1f33fd1a55eb9b99587c",
+      "eventCount": 16897,
+      "rows": 1961,
+      "archetypes": {
+        "project": 11,
+        "irregular": 5,
+        "controller": 9,
+        "reactive": 8,
+        "planner": 7
+      }
+    },
+    {
+      "worldId": "world-2026102604",
+      "seed": 2026102604,
+      "partition": "train",
+      "historyPath": "histories/world-2026102604.json",
+      "historySha256": "d9367c4d07cc0182a2c7e179ca01875f9768e0836fcc09cfb04002463a9683fb",
+      "eventCount": 10487,
+      "rows": 1576,
+      "archetypes": {
+        "project": 14,
+        "irregular": 8,
+        "planner": 5,
+        "reactive": 5,
+        "controller": 8
+      }
+    },
+    {
+      "worldId": "world-2026102605",
+      "seed": 2026102605,
+      "partition": "train",
+      "historyPath": "histories/world-2026102605.json",
+      "historySha256": "151a0707240e987fe3356ffc638eabbf03476db24161b47d185d0fe784eded45",
+      "eventCount": 18493,
+      "rows": 2000,
+      "archetypes": {
+        "irregular": 4,
+        "planner": 12,
+        "controller": 10,
+        "reactive": 5,
+        "project": 9
+      }
+    },
+    {
+      "worldId": "world-2026102606",
+      "seed": 2026102606,
+      "partition": "train",
+      "historyPath": "histories/world-2026102606.json",
+      "historySha256": "0f5396cd5febe1a1132f3ee4d029545055e65de08abcb2924de553ece20532f2",
+      "eventCount": 12691,
+      "rows": 1728,
+      "archetypes": {
+        "project": 5,
+        "irregular": 9,
+        "reactive": 10,
+        "planner": 8,
+        "controller": 8
+      }
+    },
+    {
+      "worldId": "world-2026102607",
+      "seed": 2026102607,
+      "partition": "validation",
+      "historyPath": "histories/world-2026102607.json",
+      "historySha256": "569eec56e1ec02013c9dbd972e9de741fc7af8b81dd93cb795abf6e1b1b40fe1",
+      "eventCount": 15164,
+      "rows": 2162,
+      "archetypes": {
+        "controller": 8,
+        "project": 10,
+        "planner": 8,
+        "reactive": 6,
+        "irregular": 8
+      }
+    },
+    {
+      "worldId": "world-2026102608",
+      "seed": 2026102608,
+      "partition": "validation",
+      "historyPath": "histories/world-2026102608.json",
+      "historySha256": "9651ecaada0bec3b160887979b43e2fda700338e038dcb021e183d3992615067",
+      "eventCount": 11538,
+      "rows": 1931,
+      "archetypes": {
+        "controller": 7,
+        "irregular": 12,
+        "reactive": 8,
+        "project": 9,
+        "planner": 4
+      }
+    },
+    {
+      "worldId": "world-2026102609",
+      "seed": 2026102609,
+      "partition": "test",
+      "historyPath": "histories/world-2026102609.json",
+      "historySha256": "02852694eb222191ee4fd590a7f977c611ac3b36aa90ec6338ea1b372e16e295",
+      "eventCount": 12781,
+      "rows": 1599,
+      "archetypes": {
+        "project": 12,
+        "reactive": 10,
+        "planner": 6,
+        "controller": 4,
+        "irregular": 8
+      }
+    },
+    {
+      "worldId": "world-2026102610",
+      "seed": 2026102610,
+      "partition": "test",
+      "historyPath": "histories/world-2026102610.json",
+      "historySha256": "f01cfe1739bcfb33e71feb36e4268a768a2aa0812fcebf174b85334e8447daf3",
+      "eventCount": 11576,
+      "rows": 1519,
+      "archetypes": {
+        "irregular": 9,
+        "project": 10,
+        "reactive": 7,
+        "planner": 8,
+        "controller": 6
+      }
+    }
+  ],
+  "featureSchemaVersion": "event-driven-preexpiry-features-v1",
+  "targetVersion": "event-renewal-5d-paid-replacement-nonfinancial-excluded-v1",
+  "featureNames": [
+    "status",
+    "payment_term",
+    "tariff_code",
+    "days_to_expiry",
+    "service_age_days",
+    "account_age_days",
+    "observed_history_days",
+    "price_minor",
+    "monthly_revenue_minor",
+    "renewal_cycles_90d",
+    "successful_renewals_90d",
+    "failed_cycle_share_90d",
+    "late_cycle_share_90d",
+    "mean_paid_delay_hours_90d",
+    "max_paid_delay_hours_90d",
+    "days_since_successful_renewal",
+    "recoveries_90d",
+    "contract_changes_90d",
+    "has_renewal_history",
+    "history_30d_complete",
+    "history_90d_complete",
+    "live_vps_count",
+    "portfolio_monthly_revenue_minor",
+    "portfolio_change_30d_minor",
+    "auto_prolong",
+    "wallet_balance_minor",
+    "current_service_funding_ratio",
+    "next_renewals_7d_required_minor",
+    "portfolio_funding_ratio_7d",
+    "topup_count_30d",
+    "topup_sum_30d_minor",
+    "days_since_topup",
+    "payment_sum_30d_minor",
+    "days_since_auto_change",
+    "service_projected_funding_ratio",
+    "nonfinancial_restrictions_90d"
+  ],
+  "syntheticOnly": true,
+  "modelSha256": "234422ba1357cef8f7484d6011e79a58d467022a523ae15b044c070ebca18477",
+  "frozenMonthlySha256": "fbc794c44cf84e6c946cda7df907619114227d7fc033e4a22d147f2bff9c877a",
+  "trees": 101,
+  "parameters": {
+    "loss_function": "Logloss",
+    "eval_metric": "Logloss",
+    "iterations": 300,
+    "depth": 4,
+    "learning_rate": 0.05,
+    "random_seed": 20261024,
+    "thread_count": 2,
+    "early_stopping_rounds": 30,
+    "use_best_model": true,
+    "allow_writing_files": false
+  },
+  "trainConstants": {
+    "hour": 0.033419023136246784,
+    "day": 0.04640371229698376,
+    "month": 0.17010309278350516
+  },
+  "validationEnablement": {
+    "hour": {
+      "enabled": true,
+      "enoughValidationOutcomes": true,
+      "rule": ">=10 positive and >=10 negative validation cycles; Logloss and Brier below own train constant"
+    },
+    "day": {
+      "enabled": true,
+      "enoughValidationOutcomes": true,
+      "rule": ">=10 positive and >=10 negative validation cycles; Logloss and Brier below own train constant"
+    },
+    "month": {
+      "enabled": true,
+      "enoughValidationOutcomes": true,
+      "rule": ">=10 positive and >=10 negative validation cycles; Logloss and Brier below own train constant"
+    }
+  },
+  "splits": {
+    "train": {
+      "new": {
+        "hour": {
+          "logloss": 0.08788745050502841,
+          "brier": 0.0236091073139388,
+          "meanProbability": 0.03715679933490243,
+          "lossRate": 0.033419023136246784,
+          "rocAuc": 0.954608224222586,
+          "minimumProbability": 0.0027874287787559736,
+          "maximumProbability": 0.6465620251657173,
+          "rows": 782,
+          "cycles": 778,
+          "lossCycles": 26
+        },
+        "day": {
+          "logloss": 0.13309897735856407,
+          "brier": 0.03298237792372016,
+          "meanProbability": 0.04702583263504879,
+          "lossRate": 0.04640371229698376,
+          "rocAuc": 0.8549698567180319,
+          "minimumProbability": 0.004064883478488327,
+          "maximumProbability": 0.948980938894513,
+          "rows": 6653,
+          "cycles": 6465,
+          "lossCycles": 300
+        },
+        "month": {
+          "logloss": 0.2802903824031463,
+          "brier": 0.08233926093000006,
+          "meanProbability": 0.16385903092150508,
+          "lossRate": 0.17010309278350516,
+          "rocAuc": 0.9090109272895543,
+          "minimumProbability": 0.012680293814692663,
+          "maximumProbability": 0.9859919118747441,
+          "rows": 3755,
+          "cycles": 582,
+          "lossCycles": 99
+        }
+      },
+      "frozenMonthly36": {
+        "hour": {
+          "logloss": 0.1902222441719128,
+          "brier": 0.04373542984140487,
+          "meanProbability": 0.14080473608681476,
+          "lossRate": 0.033419023136246784,
+          "rocAuc": 0.8761252045826514,
+          "minimumProbability": 0.035491476703093466,
+          "maximumProbability": 0.7408799904051445,
+          "rows": 782,
+          "cycles": 778,
+          "lossCycles": 26
+        },
+        "day": {
+          "logloss": 0.24079683781630842,
+          "brier": 0.05990858652048195,
+          "meanProbability": 0.15067685601133093,
+          "lossRate": 0.04640371229698376,
+          "rocAuc": 0.6667914301162476,
+          "minimumProbability": 0.02067616375090138,
+          "maximumProbability": 0.8157630358080837,
+          "rows": 6653,
+          "cycles": 6465,
+          "lossCycles": 300
+        },
+        "month": {
+          "logloss": 0.41387167184792695,
+          "brier": 0.12800788452883474,
+          "meanProbability": 0.1867140505375186,
+          "lossRate": 0.17010309278350516,
+          "rocAuc": 0.7064970133441054,
+          "minimumProbability": 0.02798755933598083,
+          "maximumProbability": 0.9626969318161788,
+          "rows": 3755,
+          "cycles": 582,
+          "lossCycles": 99
+        }
+      },
+      "trainConstant": {
+        "hour": {
+          "logloss": 0.146433175079628,
+          "brier": 0.03230219202886579,
+          "meanProbability": 0.033419023136246784,
+          "lossRate": 0.033419023136246784,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.033419023136246784,
+          "maximumProbability": 0.033419023136246784,
+          "rows": 782,
+          "cycles": 778,
+          "lossCycles": 26
+        },
+        "day": {
+          "logloss": 0.18778684502478674,
+          "brier": 0.044250407782042506,
+          "meanProbability": 0.04640371229698376,
+          "lossRate": 0.04640371229698376,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.04640371229698376,
+          "maximumProbability": 0.04640371229698376,
+          "rows": 6653,
+          "cycles": 6465,
+          "lossCycles": 300
+        },
+        "month": {
+          "logloss": 0.4560496420999653,
+          "brier": 0.14116803060899138,
+          "meanProbability": 0.17010309278350516,
+          "lossRate": 0.17010309278350516,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.17010309278350516,
+          "maximumProbability": 0.17010309278350516,
+          "rows": 3755,
+          "cycles": 582,
+          "lossCycles": 99
+        }
+      }
+    },
+    "validation": {
+      "new": {
+        "hour": {
+          "logloss": 0.16582925375735177,
+          "brier": 0.05112198090453267,
+          "meanProbability": 0.04596057747812858,
+          "lossRate": 0.06779661016949153,
+          "rocAuc": 0.9120738636363637,
+          "minimumProbability": 0.002702922777651348,
+          "maximumProbability": 0.5260398151829188,
+          "rows": 236,
+          "cycles": 236,
+          "lossCycles": 16
+        },
+        "day": {
+          "logloss": 0.15829880311727423,
+          "brier": 0.04012883331774122,
+          "meanProbability": 0.04478915754460269,
+          "lossRate": 0.05130168453292496,
+          "rocAuc": 0.8182581342681267,
+          "minimumProbability": 0.004202637489982146,
+          "maximumProbability": 0.9717142991954835,
+          "rows": 2699,
+          "cycles": 2612,
+          "lossCycles": 134
+        },
+        "month": {
+          "logloss": 0.43992061650964115,
+          "brier": 0.14026032320688178,
+          "meanProbability": 0.17961683031985248,
+          "lossRate": 0.21428571428571427,
+          "rocAuc": 0.7547975503332642,
+          "minimumProbability": 0.012113855955913196,
+          "maximumProbability": 0.9714262542114945,
+          "rows": 1112,
+          "cycles": 168,
+          "lossCycles": 36
+        }
+      },
+      "frozenMonthly36": {
+        "hour": {
+          "logloss": 0.2552568792415673,
+          "brier": 0.06886159262473028,
+          "meanProbability": 0.16496463576055262,
+          "lossRate": 0.06779661016949153,
+          "rocAuc": 0.8375,
+          "minimumProbability": 0.04608021574539792,
+          "maximumProbability": 0.5830335515546805,
+          "rows": 236,
+          "cycles": 236,
+          "lossCycles": 16
+        },
+        "day": {
+          "logloss": 0.28642068059058207,
+          "brier": 0.07693182182363403,
+          "meanProbability": 0.17779882155116006,
+          "lossRate": 0.05130168453292496,
+          "rocAuc": 0.5964434787322468,
+          "minimumProbability": 0.02385486265777961,
+          "maximumProbability": 0.7949948394573364,
+          "rows": 2699,
+          "cycles": 2612,
+          "lossCycles": 134
+        },
+        "month": {
+          "logloss": 0.4445863155849788,
+          "brier": 0.1448829604715097,
+          "meanProbability": 0.20781878079310478,
+          "lossRate": 0.21428571428571427,
+          "rocAuc": 0.7538574520717375,
+          "minimumProbability": 0.031447678360382716,
+          "maximumProbability": 0.9650878750143441,
+          "rows": 1112,
+          "cycles": 168,
+          "lossCycles": 36
+        }
+      },
+      "trainConstant": {
+        "hour": {
+          "logloss": 0.26210137215589807,
+          "brier": 0.06438204830924585,
+          "meanProbability": 0.033419023136246784,
+          "lossRate": 0.06779661016949153,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.033419023136246784,
+          "maximumProbability": 0.033419023136246784,
+          "rows": 236,
+          "cycles": 236,
+          "lossCycles": 16
+        },
+        "day": {
+          "logloss": 0.20259273398663297,
+          "brier": 0.048693811829033255,
+          "meanProbability": 0.04640371229698376,
+          "lossRate": 0.05130168453292496,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.04640371229698376,
+          "maximumProbability": 0.04640371229698376,
+          "rows": 2699,
+          "cycles": 2612,
+          "lossCycles": 134
+        },
+        "month": {
+          "logloss": 0.5260745376898613,
+          "brier": 0.17031945098158296,
+          "meanProbability": 0.17010309278350516,
+          "lossRate": 0.21428571428571427,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.17010309278350516,
+          "maximumProbability": 0.17010309278350516,
+          "rows": 1112,
+          "cycles": 168,
+          "lossCycles": 36
+        }
+      }
+    },
+    "test": {
+      "new": {
+        "hour": {
+          "logloss": 0.15250681120321782,
+          "brier": 0.0407097128835382,
+          "meanProbability": 0.03972217748734975,
+          "lossRate": 0.04878048780487805,
+          "rocAuc": 0.8792735042735043,
+          "minimumProbability": 0.002746257862266166,
+          "maximumProbability": 0.5000096748647548,
+          "rows": 246,
+          "cycles": 246,
+          "lossCycles": 12
+        },
+        "day": {
+          "logloss": 0.18773888692081458,
+          "brier": 0.05162808140850079,
+          "meanProbability": 0.06402942694085664,
+          "lossRate": 0.06971428571428571,
+          "rocAuc": 0.8610069178716719,
+          "minimumProbability": 0.004452333854684358,
+          "maximumProbability": 0.9204129068328456,
+          "rows": 1814,
+          "cycles": 1750,
+          "lossCycles": 122
+        },
+        "month": {
+          "logloss": 0.4531324479485796,
+          "brier": 0.14848629013018155,
+          "meanProbability": 0.18023833423379693,
+          "lossRate": 0.20253164556962025,
+          "rocAuc": 0.731685546242307,
+          "minimumProbability": 0.012424342317942365,
+          "maximumProbability": 0.9821944340311155,
+          "rows": 1020,
+          "cycles": 158,
+          "lossCycles": 32
+        }
+      },
+      "frozenMonthly36": {
+        "hour": {
+          "logloss": 0.24508376757107578,
+          "brier": 0.06090138375644365,
+          "meanProbability": 0.16137413682848942,
+          "lossRate": 0.04878048780487805,
+          "rocAuc": 0.7140313390313391,
+          "minimumProbability": 0.032728905009732134,
+          "maximumProbability": 0.5830335515546805,
+          "rows": 246,
+          "cycles": 246,
+          "lossCycles": 12
+        },
+        "day": {
+          "logloss": 0.31799576459309764,
+          "brier": 0.08820091341875251,
+          "meanProbability": 0.18493528303089155,
+          "lossRate": 0.06971428571428571,
+          "rocAuc": 0.5966966407540178,
+          "minimumProbability": 0.031008645283325628,
+          "maximumProbability": 0.7622012666904555,
+          "rows": 1814,
+          "cycles": 1750,
+          "lossCycles": 122
+        },
+        "month": {
+          "logloss": 0.44087832209956807,
+          "brier": 0.13974945492249835,
+          "meanProbability": 0.20766582912519696,
+          "lossRate": 0.20253164556962025,
+          "rocAuc": 0.7245322285660298,
+          "minimumProbability": 0.032880639840914695,
+          "maximumProbability": 0.9502155632601522,
+          "rows": 1020,
+          "cycles": 158,
+          "lossCycles": 32
+        }
+      },
+      "trainConstant": {
+        "hour": {
+          "logloss": 0.1981189702738375,
+          "brier": 0.0466369264111618,
+          "meanProbability": 0.033419023136246784,
+          "lossRate": 0.04878048780487805,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.033419023136246784,
+          "maximumProbability": 0.033419023136246784,
+          "rows": 246,
+          "cycles": 246,
+          "lossCycles": 12
+        },
+        "day": {
+          "logloss": 0.2582514669189154,
+          "brier": 0.06539758691467606,
+          "meanProbability": 0.04640371229698376,
+          "lossRate": 0.06971428571428571,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.04640371229698376,
+          "maximumProbability": 0.04640371229698376,
+          "rows": 1814,
+          "cycles": 1750,
+          "lossCycles": 122
+        },
+        "month": {
+          "logloss": 0.5074455517533932,
+          "brier": 0.1625641891482838,
+          "meanProbability": 0.17010309278350516,
+          "lossRate": 0.20253164556962025,
+          "rocAuc": 0.5,
+          "minimumProbability": 0.17010309278350516,
+          "maximumProbability": 0.17010309278350516,
+          "rows": 1020,
+          "cycles": 158,
+          "lossCycles": 32
+        }
+      }
+    }
+  },
+  "rowsByPartition": {
+    "train": 11190,
+    "pending": 214,
+    "excluded": 40,
+    "validation": 4047,
+    "test": 3080
+  },
+  "totalEvents": 133889,
+  "limitations": [
+    "Synthetic hypotheses, not real Aeza behavior or real-world accuracy",
+    "Hour/day frozen monthly predictions are out-of-domain diagnostics, not a valid old deployed baseline",
+    "Daily snapshots plus first-cycle observations do not evaluate every hourly renewal",
+    "Unseen worlds/accounts, but same generator hypotheses across partitions",
+    "Days tariff remains synthetic; five-day label unchanged across terms",
+    "Per-term rollout selected on validation only; test is reported even when worse",
+    "No probability calibration or fit on test, no outcome-dependent sampling"
+  ],
+  "saveLoadVerified": true,
+  "pythonVersion": "3.13.1",
+  "catboostVersion": "1.2.10",
+  "generatorSourceSha256": {
+    "billing.py": "4d1ccce2fcf4b28cfc7360d34cc058331f0e00ac94db541c6c56dd89de4d828b",
+    "behavior.py": "064a595a7589a686fc17da356f1c27179d1249bfbc77be1624771a83e977875c"
+  },
+  "featurePreparationSha256": "b6e1c0a89b3088bb262b748ef1fe68cbfbf71ff30dff1468e57aa75f151a5fcb"
+}
