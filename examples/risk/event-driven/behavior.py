@@ -508,19 +508,45 @@ class BehaviorSimulation:
             self.manual_commands[sid] = self.sim.now + EPS
             self.command(self.sim.now + EPS, "manual_renew", account_id=aid, service_id=sid, expected_due=data["due"])
 
-    def run(self):
-        while True:
-            candidates = [t for t in (self.sim.next_event_at, self.queue[0][0] if self.queue else None) if t is not None]
-            if not candidates or min(candidates) > self.end:
-                break
-            at = min(candidates)
+    @property
+    def next_event_at(self):
+        """Next billing/client task within the configured (finite) horizon."""
+        candidates = [t for t in (self.sim.next_event_at, self.queue[0][0] if self.queue else None)
+                      if t is not None and t <= self.end]
+        return min(candidates) if candidates else None
+
+    @property
+    def finished(self):
+        return self.sim.now == self.end and self.next_event_at is None
+
+    def advance(self, until):
+        """Advance both queues together; return only newly observed events.
+
+        A timestamp batch is indivisible to callers. Equal-time billing actions
+        finish before behavioral reactions, exactly as in the original run().
+        No wall clock, sleeping, transport, or persistence is hidden here.
+        """
+        until = instant(until)
+        if not self.sim.now <= until <= self.end:
+            raise ValueError("Advance must be monotonic and within the configured horizon")
+        cursor = len(self.sim.events)
+        while self.next_event_at is not None and self.next_event_at <= until:
+            at = self.next_event_at
             self.sim.advance(at)
             self.observe()
             while self.queue and self.queue[0][0] <= at:
                 _, _, kind, data = heapq.heappop(self.queue)
                 self.dispatch(kind, data)
-        self.sim.advance(self.end)
+        self.sim.advance(until)
         self.observe()
+        return copy.deepcopy(self.sim.events[cursor:])
+
+    def step(self):
+        """Process the next complete timestamp, or finish an empty horizon."""
+        return self.advance(self.next_event_at if self.next_event_at is not None else self.end)
+
+    def run(self):
+        self.advance(self.end)
         return self.sim.export()
 
 
