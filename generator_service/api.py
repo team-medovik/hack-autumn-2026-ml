@@ -1,4 +1,4 @@
-"""Read-only FastAPI facade for the independently running generator worker."""
+"""FastAPI reads and clock control for the independently running generator worker."""
 from contextlib import asynccontextmanager
 import copy
 import hmac
@@ -9,6 +9,7 @@ from fastapi import FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 import yaml
 
 from .state import ROOT, Settings, CheckpointError, load_checkpoint, status, snapshot, event_page
@@ -16,7 +17,21 @@ from checkpoint import RevisionConflict
 
 LOG = logging.getLogger("generator.api")
 GENERATOR_PATHS = ("/health/live", "/health/ready", "/internal/v1/generator/status",
-                   "/internal/v1/generator/events", "/internal/v1/generator/snapshot")
+                   "/internal/v1/generator/events", "/internal/v1/generator/snapshot",
+                   "/internal/v1/generator/speed")
+
+
+class SpeedRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    runId: str = Field(min_length=1, max_length=255, pattern=r".*\S.*")
+    timeScale: int = Field(strict=True)
+
+    @field_validator("timeScale")
+    @classmethod
+    def supported_speed(cls, value):
+        if value not in (1, 10, 60):
+            raise ValueError("Supported speeds are 1, 10 and 60")
+        return value
 
 
 class APIError(Exception):
@@ -36,7 +51,7 @@ def create_app(settings=None):
         raise ValueError("Set GENERATOR_SERVICE_TOKEN to a secret of at least 16 bytes")
     store = None
     if settings.database_url:
-        from .postgres import PostgresStore, StoreUnavailable, RunNotFound, CursorAhead
+        from .postgres import PostgresStore, StoreUnavailable, RunNotFound, CursorAhead, SpeedRunConflict
         from psycopg import Error as DatabaseError
         store = PostgresStore(settings.database_url, settings.run_key)
 
@@ -49,7 +64,7 @@ def create_app(settings=None):
                   docs_url="/docs", redoc_url=None)
     spec = yaml.safe_load((ROOT / "contracts/openapi.yaml").read_text())
     spec["paths"] = {key: value for key, value in spec["paths"].items() if key in GENERATOR_PATHS}
-    spec["info"]["title"] = "Aeza live generator — internal read API"
+    spec["info"]["title"] = "Aeza live generator — internal API"
     spec["servers"] = [{"url": "http://generator-api:8000"}]
     app.openapi = lambda: copy.deepcopy(spec)
 
@@ -88,11 +103,13 @@ def create_app(settings=None):
         return saved
 
     def postgres_read(method, *args):
-        # Read methods never migrate, create a run, or advance virtual time.
+        # HTTP never migrates, creates a run, or advances virtual time.
         try:
             return getattr(store, method)(*args)
         except RunNotFound:
             raise APIError(404, "RUN_NOT_FOUND", "Запуск не найден") from None
+        except SpeedRunConflict:
+            raise APIError(409, "RUN_CONFLICT", "Запуск изменился; обновите состояние симуляции") from None
         except CursorAhead:
             raise APIError(409, "CURSOR_AHEAD", "Курсор находится за концом журнала") from None
         except RevisionConflict:
@@ -126,6 +143,12 @@ def create_app(settings=None):
             return status(settings, saved)
         except OSError:
             raise APIError(503, "STATE_UNAVAILABLE", "Состояние генератора недоступно") from None
+
+    @app.patch("/internal/v1/generator/speed")
+    def change_speed(request: SpeedRequest):
+        if store is None:
+            raise APIError(503, "SPEED_CONTROL_UNAVAILABLE", "Изменение скорости требует PostgreSQL")
+        return postgres_read("set_speed", request.runId, request.timeScale)
 
     @app.get("/internal/v1/generator/events")
     def events(runId: Annotated[str, Query(min_length=1)],
