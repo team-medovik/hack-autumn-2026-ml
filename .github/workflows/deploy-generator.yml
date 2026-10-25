@@ -4,13 +4,14 @@ on:
   workflow_dispatch:
     inputs:
       profile:
-        description: Schedule profile to deploy; demo-stream-v1 preserves runId and compresses only future dates
+        description: Explicit generator schedule profile; demo profiles preserve the current runId and event prefix
         required: true
         type: choice
         default: stored
         options:
           - stored
           - demo-stream-v1
+          - demo-stream-v2
 
 permissions:
   contents: read

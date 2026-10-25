@@ -340,6 +340,13 @@ class PostgresStore:
     def apply_step(self, conn, row, until):
         world = self.restore_world(conn, row)
         old_tasks = task_map(world)
+        clock = dict(row["clock_config"] or {})
+        from .stream import inject_due
+        stream_until = until
+        if stream_until is None and isinstance(clock.get("demoStreamV2"), dict):
+            stream_until = instant(clock["demoStreamV2"]["nextServiceAt"])
+        if stream_until is not None:
+            inject_due(world, stream_until, clock)
         before = world.sim.now
         world.step() if until is None else world.advance(until)
         if world.sim.now == before and not world.sim.events.pending:
@@ -357,8 +364,10 @@ class PostgresStore:
                 conn.execute("INSERT INTO generator_sim.cycle_marks VALUES (%s,%s,%s) ON CONFLICT DO NOTHING",
                              (row["run_id"], kind, mark))
         conn.execute("""UPDATE generator_sim.runs SET state=%s,virtual_time=%s,revision=revision+1,
-            event_count=%s,decision_count=decision_count+%s,updated_at=CURRENT_TIMESTAMP WHERE run_key=%s""",
-            (Jsonb(private_state(world)), world.sim.now, len(world.sim.events), len(world.decisions), self.run_key))
+            event_count=%s,decision_count=decision_count+%s,clock_config=%s,
+            updated_at=CURRENT_TIMESTAMP WHERE run_key=%s""",
+            (Jsonb(private_state(world)), world.sim.now, len(world.sim.events), len(world.decisions),
+             Jsonb(clock), self.run_key))
 
     def advance(self, until=None, expected_revision=None):
         with self.connect() as conn:

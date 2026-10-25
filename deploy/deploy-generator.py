@@ -13,7 +13,7 @@ import tempfile
 ROOT = Path('/home/kinoko/hack-autumn-2026/generator')
 PROJECT = 'aeza-generator'
 API = 'hack-autumn-2026-api'
-PROFILES = {'stored', 'demo-stream-v1'}
+PROFILES = {'stored', 'demo-stream-v1', 'demo-stream-v2'}
 
 
 class DeploymentError(Exception):
@@ -90,6 +90,7 @@ try:
         assert current['revision'] >= baseline['revision'] and current['eventCount'] >= baseline['eventCount']
         assert current['virtualTime'] >= baseline['virtualTime']
     minimum_events = request.get('minimumEvents', 0)
+    require_event_increase = request.get('requireEventIncrease', False)
     deadline = time.monotonic() + 45
     while True:
         time.sleep(2)
@@ -98,7 +99,8 @@ try:
         assert a['runId'] == b['runId']
         assert b['revision'] >= a['revision'] and b['eventCount'] >= a['eventCount']
         assert b['virtualTime'] >= a['virtualTime']
-        if b['eventCount'] >= minimum_events and (after['workerState'] == 'finished' or
+        event_increased = not require_event_increase or not baseline or b['eventCount'] > baseline['eventCount']
+        if b['eventCount'] >= minimum_events and event_increased and (after['workerState'] == 'finished' or
                 (after['workerState'] == 'running' and b['virtualTime'] > a['virtualTime'])):
             print(json.dumps({'statusHttp': 200, 'runStable': True, 'progressVerified': True}))
             break
@@ -179,36 +181,50 @@ def main():
         baseline = None
         if existing:
             baseline = json.loads(run(probe, data=json.dumps({'token': token, 'baselineOnly': True}), timeout=30))
-        if profile == 'demo-stream-v1':
-            if not all(service in existing_by_service for service in ('generator-api', 'generator-worker', 'generator-db')):
-                raise DeploymentError('Demo schedule migration requires the complete running generator stack')
-            stopped = [existing_by_service[name]['Id'] for name in ('generator-worker', 'generator-api')]
-            run(['docker', 'stop'] + stopped, timeout=45)
-            migration = compose + ['run', '--rm', '--no-deps', 'generator-worker',
-                'python', '-B', '-m', 'generator_service.repace', '--apply', '--marker', profile,
-                '--spread-days', '60', '--warmup-seconds', '1']
-            try:
+        stopped = []
+        try:
+            if profile == 'demo-stream-v1':
+                if not all(service in existing_by_service for service in ('generator-api', 'generator-worker', 'generator-db')):
+                    raise DeploymentError('Demo schedule migration requires the complete running generator stack')
+                stopped = [existing_by_service[name]['Id'] for name in ('generator-worker', 'generator-api')]
+                run(['docker', 'stop'] + stopped, timeout=45)
+                migration = compose + ['run', '--rm', '--no-deps', 'generator-worker',
+                    'python', '-B', '-m', 'generator_service.repace', '--apply', '--marker', profile,
+                    '--spread-days', '60', '--warmup-seconds', '1']
                 migration_result = json.loads(run(migration, timeout=90))
-            except Exception:
-                run(['docker', 'start'] + stopped, timeout=45)
-                raise
-            if migration_result.get('status') not in ('applied', 'already_applied'):
-                raise DeploymentError('Unexpected demo schedule migration result')
-        print('Starting generator profile ' + profile + ' with PostgreSQL state retained', flush=True)
-        run(compose + ['up', '-d', '--no-build', '--wait', '--wait-timeout', '180'], timeout=210)
-        # A temporary probe shares the actual API network namespace, not the generator's.
-        output = run(probe, data=json.dumps({'token': token, 'baseline': baseline,
-            'minimumEvents': 3 if profile == 'demo-stream-v1' else 0}), timeout=80)
-        result = json.loads(output)
-        if result != {'statusHttp': 200, 'runStable': True, 'progressVerified': True}:
-            raise DeploymentError('Unexpected probe result')
-        for container_id in run(compose + ['ps', '-q']).split():
-            if any(inspect(container_id)['NetworkSettings'].get('Ports', {}).values()):
-                raise DeploymentError('Generator container unexpectedly publishes a host port')
-        next_link = ROOT / '.current-next'
-        next_link.unlink(missing_ok=True)
-        next_link.symlink_to(release)
-        next_link.replace(ROOT / 'current')
+                if migration_result.get('status') not in ('applied', 'already_applied'):
+                    raise DeploymentError('Unexpected demo schedule migration result')
+            print('Starting generator profile ' + profile + ' with PostgreSQL state retained', flush=True)
+            run(compose + ['up', '-d', '--no-build', '--wait', '--wait-timeout', '180'], timeout=210)
+            if profile == 'demo-stream-v2':
+                enable = compose + ['exec', '-T', 'generator-worker', 'python', '-B', '-m',
+                    'generator_service.stream', '--apply', '--marker', 'demo-stream-72h-v2',
+                    '--min-real-seconds', '10', '--max-real-seconds', '30',
+                    '--services-per-client', '6', '--minimum-real-hours', '72']
+                enabled = json.loads(run(enable, timeout=90))
+                if enabled.get('status') not in ('enabled', 'already_enabled'):
+                    raise DeploymentError('Unexpected rolling demo stream result')
+            # A temporary probe shares the actual API network namespace, not the generator's.
+            output = run(probe, data=json.dumps({'token': token, 'baseline': baseline,
+                'minimumEvents': 3 if profile != 'stored' else 0,
+                'requireEventIncrease': profile == 'demo-stream-v2'}), timeout=80)
+            result = json.loads(output)
+            if result != {'statusHttp': 200, 'runStable': True, 'progressVerified': True}:
+                raise DeploymentError('Unexpected probe result')
+            for container_id in run(compose + ['ps', '-q']).split():
+                if any(inspect(container_id)['NetworkSettings'].get('Ports', {}).values()):
+                    raise DeploymentError('Generator container unexpectedly publishes a host port')
+            next_link = ROOT / '.current-next'
+            next_link.unlink(missing_ok=True)
+            next_link.symlink_to(release)
+            next_link.replace(ROOT / 'current')
+        except Exception:
+            if stopped:
+                try:
+                    subprocess.run(['docker', 'start'] + stopped, capture_output=True, text=True, timeout=45)
+                except Exception:
+                    pass
+            raise
         print('Generator deployment verified: HTTP 200 from API network, progress stable, no host ports', flush=True)
 
 
