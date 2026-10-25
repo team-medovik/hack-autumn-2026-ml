@@ -1,0 +1,15 @@
+*
+!generator_service/
+!generator_service/*.py
+!generator_service/requirements.txt
+!generator_service/Dockerfile
+!generator_service/migrations/
+!generator_service/migrations/*.sql
+!examples/
+!examples/risk/
+!examples/risk/event-driven/
+!examples/risk/event-driven/*.py
+!examples/risk/vps-business/
+!examples/risk/vps-business/catalog.json
+!contracts/
+!contracts/openapi.yaml

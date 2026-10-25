@@ -1,0 +1,1500 @@
+openapi: "3.1.1"
+info:
+  title: "Aeza risk ML and live simulation — internal contract"
+  version: "1.0.0-draft"
+  description: "Общий контракт независимых сервисов. Реализованы постоянный worker генератора, его FastAPI GET endpoints, пошаговое ядро и локальный checkpoint. ML HTTP inference и MinIO-интеграция пока НЕ реализованы. Генератор не вызывает ML и не зависит от модели; его API обслуживает только сохранённые результаты. ML вычисляет вероятность; веса F1–F5, смешивание оценок, денежная приоритизация и публичная авторизация остаются в Kotlin API. Коэффициент смешивания ещё не согласован. Все денежные суммы EUR в целых евроцентах; все даты UTC с Z. Контрольные точки содержат скрытое будущее и никогда не являются входом ML или публичным snapshot. При отсутствии ML существующий алгоритм и предупреждения сохраняются."
+servers:
+  -
+    url: "http://ml-service:8000"
+    description: "Планируемый отдельный ML HTTP-сервис во внутренней сети. Между хостами требуется TLS."
+  -
+    url: "http://generator-api:8000"
+    description: "Независимый FastAPI генератора; GET generator и health. ML endpoints на этом сервере отсутствуют."
+tags:
+  -
+    name: "Health"
+    description: "Проверки процесса."
+  -
+    name: "ML"
+    description: "Только inference."
+  -
+    name: "Generator"
+    description: "Только чтение зафиксированных результатов независимого worker."
+security:
+  -
+    ServiceToken: []
+paths:
+  "/health/live":
+    get:
+      operationId: "liveness"
+      tags:
+        - "Health"
+      summary: "Процесс отвечает"
+      description: "Не проверяет модель и MinIO. Не раскрывает конфигурацию."
+      security: []
+      responses:
+        "200":
+          description: "Процесс жив."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Health"
+                description: "Процесс жив."
+  "/health/ready":
+    get:
+      operationId: "readiness"
+      tags:
+        - "Health"
+      summary: "Готовность обслуживать запросы"
+      description: "Для generator-api проверяет возможность чтения сохранённого checkpoint, включая paused/finished; состояние worker смотреть отдельно в generator/status. Для будущего ml-service — загрузку модели и обязательных зависимостей. Не запускает генерацию."
+      security: []
+      responses:
+        "200":
+          description: "Готов."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Health"
+                description: "Готов."
+        "503":
+          description: "Пока не готов."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Health"
+                description: "Пока не готов."
+  "/internal/v1/model":
+    get:
+      operationId: "modelInfo"
+      servers:
+        - url: "http://ml-service:8000"
+      tags:
+        - "ML"
+      summary: "Версия и область применимости модели"
+      responses:
+        "200":
+          description: "Метаданные без весов и приватных путей."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/ModelInfo"
+                description: "Метаданные без весов и приватных путей."
+        "401":
+          description: "Нет действующего внутреннего service token."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Нет действующего внутреннего service token."
+        "422":
+          description: "Невалидный контракт, дубли ID или некорректные временные границы."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Невалидный контракт, дубли ID или некорректные временные границы."
+        "503":
+          description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+  "/internal/v1/renewal-risk/predict":
+    post:
+      operationId: "predictRenewalRisk"
+      servers:
+        - url: "http://ml-service:8000"
+      tags:
+        - "ML"
+      summary: "Вероятность потери VPS до срока оплаты"
+      description: "Чистый inference: не обучает модель, не меняет баланс и не продвигает генератор. Текущая модель: month, 0 < dueAt−predictionAt <= 7 суток; prolong_wait, просрочка, удаление, подтверждённая замена и действующее нефинансовое ограничение исключаются. Все признаки формирует Python тем же кодом, что при обучении. Отбор serviceIds не должен изменять контекст портфеля или начало наблюдения. Ограничение размера HTTP body и числа событий проверяется до replay."
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              "$ref": "#/components/schemas/PredictRequest"
+              description: "Вход для inference."
+      responses:
+        "200":
+          description: "Включает индивидуальные отказы без потери остальных результатов."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/PredictResponse"
+                description: "Включает индивидуальные отказы без потери остальных результатов."
+        "401":
+          description: "Нет действующего внутреннего service token."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Нет действующего внутреннего service token."
+        "404":
+          description: "Неизвестная зарегистрированная выгрузка."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Неизвестная зарегистрированная выгрузка."
+        "409":
+          description: "Несовпадение ревизии или доступной границы истории."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Несовпадение ревизии или доступной границы истории."
+        "413":
+          description: "Слишком большой журнал; используйте зарегистрированную выгрузку."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Слишком большой журнал; используйте зарегистрированную выгрузку."
+        "422":
+          description: "Невалидный контракт, дубли ID или некорректные временные границы."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Невалидный контракт, дубли ID или некорректные временные границы."
+        "503":
+          description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+  "/internal/v1/generator/status":
+    get:
+      operationId: "generatorStatus"
+      servers:
+        - url: "http://generator-api:8000"
+      tags:
+        - "Generator"
+      summary: "Состояние живой симуляции"
+      description: "Только чтение последней сохранённой ревизии. GET никогда не создаёт событие и не двигает время."
+      responses:
+        "200":
+          description: "Состояние worker и ядра."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/GeneratorStatus"
+                description: "Состояние worker и ядра."
+        "401":
+          description: "Нет действующего внутреннего service token."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Нет действующего внутреннего service token."
+        "422":
+          description: "Невалидный контракт, дубли ID или некорректные временные границы."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Невалидный контракт, дубли ID или некорректные временные границы."
+        "503":
+          description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+  "/internal/v1/generator/events":
+    get:
+      operationId: "generatorEvents"
+      servers:
+        - url: "http://generator-api:8000"
+      tags:
+        - "Generator"
+      summary: "Дочитать зафиксированные события"
+      description: "Реализованный polling для будущего consumer Kotlin API. Чтение не удаляет события. Доставка допускает повторы; consumer дедуплицирует по (runId,event.id), сохраняет курсор после обработки. Смена runId требует явного нового курсора. Приватные будущие задачи не выдаются."
+      parameters:
+        -
+          name: "runId"
+          in: "query"
+          required: true
+          description: "Курсор привязан к конкретному запуску."
+          schema:
+            type: "string"
+            description: "ID запуска."
+        -
+          name: "afterSequence"
+          in: "query"
+          required: true
+          description: "0 — с начала; номер больше eventCount даёт 409."
+          schema:
+            type: "integer"
+            minimum: 0
+            description: "Исключительная нижняя граница."
+        -
+          name: "limit"
+          in: "query"
+          required: false
+          description: "Максимум событий."
+          schema:
+            type: "integer"
+            minimum: 1
+            maximum: 1000
+            default: 100
+      responses:
+        "200":
+          description: "Страница событий."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/EventPage"
+                description: "Страница событий."
+        "401":
+          description: "Нет действующего внутреннего service token."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Нет действующего внутреннего service token."
+        "404":
+          description: "Запуск не найден."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Запуск не найден."
+        "409":
+          description: "Курсор не соответствует журналу."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Курсор не соответствует журналу."
+        "422":
+          description: "Невалидный контракт, дубли ID или некорректные временные границы."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Невалидный контракт, дубли ID или некорректные временные границы."
+        "503":
+          description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+  "/internal/v1/generator/snapshot":
+    get:
+      operationId: "generatorSnapshot"
+      servers:
+        - url: "http://generator-api:8000"
+      tags:
+        - "Generator"
+      summary: "Согласованный текущий снапшот"
+      description: "Проекция зафиксированного журнала, а не отдельная случайная генерация. Один ответ целиком из одной ревизии. Исторические снимки сохраняются отдельными неизменяемыми объектами MinIO на следующем этапе."
+      parameters:
+        -
+          name: "runId"
+          in: "query"
+          required: true
+          description: "Запуск симуляции."
+          schema:
+            type: "string"
+            description: "ID запуска."
+        -
+          name: "expectedRevision"
+          in: "query"
+          required: false
+          description: "Если задана и текущая ревизия другая — 409; не выдавать незаметно новый снимок."
+          schema:
+            type: "integer"
+            minimum: 0
+            description: "Ожидаемая ревизия."
+      responses:
+        "200":
+          description: "RiskSnapshot и обязательные метаданные полноты."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/SnapshotEnvelope"
+                description: "RiskSnapshot и обязательные метаданные полноты."
+        "401":
+          description: "Нет действующего внутреннего service token."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Нет действующего внутреннего service token."
+        "404":
+          description: "Запуск не найден."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Запуск не найден."
+        "409":
+          description: "Изменилась ревизия."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Изменилась ревизия."
+        "422":
+          description: "Невалидный контракт, дубли ID или некорректные временные границы."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Невалидный контракт, дубли ID или некорректные временные границы."
+        "503":
+          description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+          content:
+            "application/json":
+              schema:
+                "$ref": "#/components/schemas/Error"
+                description: "Модель, хранилище или требуемое состояние недоступны. API использует правила; не подставляет нулевую вероятность."
+components:
+  securitySchemes:
+    ServiceToken:
+      type: "http"
+      scheme: "bearer"
+      description: "Внутренний service-to-service секрет. Не пользовательский JWT; хранится в окружении/secret storage, не в JSON и логах."
+  schemas:
+    Warning:
+      type: "object"
+      additionalProperties: false
+      properties:
+        code:
+          type: "string"
+          description: "Стабильный машинный код предупреждения."
+        message:
+          type: "string"
+          description: "Понятное человеку описание; не содержит секретов или скрытых планов генератора."
+      required:
+        - "code"
+        - "message"
+    Error:
+      type: "object"
+      additionalProperties: false
+      properties:
+        code:
+          type: "string"
+          description: "Машинный код ошибки."
+        message:
+          type: "string"
+          description: "Описание ошибки без токенов, путей checkpoint и содержимого личных данных."
+        requestId:
+          type:
+            - "string"
+            - "null"
+          description: "Идентификатор запроса, если удалось прочитать."
+      required:
+        - "code"
+        - "message"
+        - "requestId"
+    Health:
+      type: "object"
+      additionalProperties: false
+      properties:
+        status:
+          type: "string"
+          description: "Состояние процесса."
+          enum:
+            - "alive"
+            - "ready"
+            - "not_ready"
+      required:
+        - "status"
+    ModelInfo:
+      type: "object"
+      additionalProperties: false
+      properties:
+        modelVersion:
+          type: "string"
+          description: "Неизменяемая версия загруженного артефакта модели."
+        modelSha256:
+          type: "string"
+          description: "SHA-256 файла CatBoost."
+          pattern: "^[a-f0-9]{64}$"
+        featureSchemaVersion:
+          type: "string"
+          description: "Версия алгоритма расчёта и порядка 36 признаков."
+          const: "event-driven-preexpiry-features-v1"
+        targetVersion:
+          type: "string"
+          description: "Версия метки потери услуги."
+          const: "event-renewal-5d-paid-replacement-nonfinancial-excluded-v1"
+        syntheticOnly:
+          type: "boolean"
+          description: "true: качество проверено только на синтетике; это не калибровка на реальных клиентах."
+        supportedPaymentTerms:
+          type: "array"
+          items:
+            type: "string"
+            description: "Поддерживаемый период."
+            enum:
+              - "month"
+          description: "Текущая модель поддерживает только месячные VPS."
+          minItems: 1
+          uniqueItems: true
+        preExpiryHorizonDays:
+          type: "integer"
+          minimum: 1
+          description: "Максимум суток до ближайшей оплаты для текущей модели."
+        outcomeGraceDays:
+          type: "integer"
+          minimum: 1
+          description: "Окно определения исхода после dueAt; сейчас 5 суток."
+        featureNames:
+          type: "array"
+          items:
+            type: "string"
+            description: "Имя входного признака CatBoost."
+          description: "Упорядоченный список; ID, метки, seed и архетип не входят."
+          minItems: 36
+          maxItems: 36
+          uniqueItems: true
+      required:
+        - "modelVersion"
+        - "modelSha256"
+        - "featureSchemaVersion"
+        - "targetVersion"
+        - "syntheticOnly"
+        - "supportedPaymentTerms"
+        - "preExpiryHorizonDays"
+        - "outcomeGraceDays"
+        - "featureNames"
+    Event:
+      type: "object"
+      additionalProperties: false
+      properties:
+        id:
+          type: "string"
+          description: "Неизменяемый ID события, уникальный внутри runId. Дедупликация по (runId, id)."
+        type:
+          type: "string"
+          description: "Тип уже произошедшего события; это не будущая команда."
+          enum:
+            - "account_created"
+            - "wallet_topped_up"
+            - "service_created"
+            - "payment_succeeded"
+            - "payment_failed"
+            - "auto_prolong_changed"
+            - "status_changed"
+            - "replacement_confirmed"
+            - "service_restricted"
+            - "service_released"
+            - "renewal_paused"
+            - "renewal_due"
+            - "action_rejected"
+        occurredAt:
+          type: "string"
+          description: "Виртуальное UTC-время, когда событие произошло."
+          format: "date-time"
+          pattern: "Z$"
+        recordedAt:
+          type: "string"
+          description: "UTC-время доступности события в журнале; не раньше occurredAt. Для признаков обе даты <= predictionAt."
+          format: "date-time"
+          pattern: "Z$"
+        accountId:
+          type: "integer"
+          minimum: 1
+          description: "ID владельца общего кошелька."
+        serviceId:
+          type:
+            - "integer"
+            - "null"
+          minimum: 1
+          description: "ID VPS; null для регистрации и пополнения общего кошелька."
+        currency:
+          type: "string"
+          description: "Валюта всех денежных полей события."
+          const: "EUR"
+        source:
+          type: "string"
+          description: "Происхождение; не скрытый архетип."
+          enum:
+            - "synthetic"
+            - "observed"
+        causationId:
+          type:
+            - "string"
+            - "null"
+          description: "ID команды или таймера, породившего событие; null допустим."
+        email:
+          type: "string"
+          description: "Совместимость исходного журнала регистрации. ML не использует; API должен удалять реальный email перед inference."
+        name:
+          type: "string"
+          description: "Название VPS для снапшота; не признак модели."
+        amountMinor:
+          type: "integer"
+          minimum: 0
+          description: "Сумма пополнения или попытки оплаты, евроценты; при отказе не означает списание."
+          format: "int64"
+          maximum: 9223372036854775807
+        balanceBeforeMinor:
+          type: "integer"
+          minimum: 0
+          description: "Баланс кошелька до события, евроценты."
+          format: "int64"
+          maximum: 9223372036854775807
+        balanceAfterMinor:
+          type: "integer"
+          minimum: 0
+          description: "Баланс кошелька после события; при неуспешной оплате равен прежнему."
+          format: "int64"
+          maximum: 9223372036854775807
+        paymentTerm:
+          type: "string"
+          description: "Период договора; day — явно синтетический."
+          enum:
+            - "hour"
+            - "day"
+            - "month"
+        priceMinor:
+          type: "integer"
+          minimum: 0
+          description: "Цена одного периода, евроценты."
+          format: "int64"
+          maximum: 9223372036854775807
+        tariffCode:
+          type: "string"
+          description: "Код тарифа; не подменять названием услуги."
+        autoProlong:
+          type: "boolean"
+          description: "Состояние автопродления при создании услуги или наступлении срока."
+        enabled:
+          type: "boolean"
+          description: "Новое значение настройки автопродления."
+        mode:
+          type: "string"
+          description: "Режим оплаты; purchase не считается продлением."
+          enum:
+            - "purchase"
+            - "auto"
+            - "manual"
+        dueAt:
+          type: "string"
+          description: "Срок оплаты соответствующего цикла, известный при событии."
+          format: "date-time"
+          pattern: "Z$"
+        paidThrough:
+          type: ["string", "null"]
+          description: "Новый оплаченный срок при успешной оплате; null при неудачной попытке (срок не продлевается). Для ограничений — сохранённый оплаченный срок."
+          format: "date-time"
+          pattern: "Z$"
+        toStatus:
+          type: "string"
+          description: "Статус после изменения."
+          enum:
+            - "active"
+            - "suspended"
+            - "prolong_wait"
+            - "blocked"
+            - "deleted"
+        reason:
+          type: "string"
+          description: "Наблюдаемая причина операции/отказа/ограничения; не скрытое намерение клиента."
+        category:
+          type: "string"
+          description: "Категория ограничения, позволяющая отличить его от неоплаты."
+          enum:
+            - "nonfinancial"
+        replacementServiceId:
+          type: "integer"
+          minimum: 1
+          description: "ID подтверждённой оплаченной VPS-преемника того же клиента."
+        action:
+          type: "string"
+          description: "Название отклонённой команды; не готовая целевая метка."
+      required:
+        - "id"
+        - "type"
+        - "occurredAt"
+        - "recordedAt"
+        - "accountId"
+        - "serviceId"
+        - "currency"
+        - "source"
+        - "causationId"
+      description: "Наблюдаемый журнал v2. Сохранять исходный порядок при равных timestamps; перестановка может изменить баланс."
+      allOf:
+        -
+          if:
+            properties:
+              type:
+                const: "account_created"
+            required:
+              - "type"
+          then:
+            properties:
+              serviceId:
+                type: "null"
+        -
+          if:
+            properties:
+              type:
+                const: "wallet_topped_up"
+            required:
+              - "type"
+          then:
+            required:
+              - "amountMinor"
+              - "balanceBeforeMinor"
+              - "balanceAfterMinor"
+            properties:
+              serviceId:
+                type: "null"
+        -
+          if:
+            properties:
+              type:
+                const: "service_created"
+            required:
+              - "type"
+          then:
+            required:
+              - "name"
+              - "paymentTerm"
+              - "priceMinor"
+              - "tariffCode"
+              - "autoProlong"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "payment_succeeded"
+            required:
+              - "type"
+          then:
+            required:
+              - "amountMinor"
+              - "balanceBeforeMinor"
+              - "balanceAfterMinor"
+              - "mode"
+              - "dueAt"
+              - "paidThrough"
+              - "paymentTerm"
+            properties:
+              paidThrough:
+                type: "string"
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "payment_failed"
+            required:
+              - "type"
+          then:
+            required:
+              - "amountMinor"
+              - "balanceBeforeMinor"
+              - "balanceAfterMinor"
+              - "mode"
+              - "dueAt"
+              - "paidThrough"
+              - "paymentTerm"
+              - "reason"
+            properties:
+              paidThrough:
+                type: "null"
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "auto_prolong_changed"
+            required:
+              - "type"
+          then:
+            required:
+              - "enabled"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "status_changed"
+            required:
+              - "type"
+          then:
+            required:
+              - "toStatus"
+              - "reason"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "replacement_confirmed"
+            required:
+              - "type"
+          then:
+            required:
+              - "replacementServiceId"
+              - "dueAt"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "service_restricted"
+            required:
+              - "type"
+          then:
+            required:
+              - "toStatus"
+              - "reason"
+              - "category"
+              - "paidThrough"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "service_released"
+            required:
+              - "type"
+          then:
+            required:
+              - "toStatus"
+              - "reason"
+              - "category"
+              - "paidThrough"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "renewal_paused"
+            required:
+              - "type"
+          then:
+            required:
+              - "dueAt"
+              - "category"
+              - "reason"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "renewal_due"
+            required:
+              - "type"
+          then:
+            required:
+              - "dueAt"
+              - "autoProlong"
+            properties:
+              serviceId:
+                type: "integer"
+                minimum: 1
+        -
+          if:
+            properties:
+              type:
+                const: "action_rejected"
+            required:
+              - "type"
+          then:
+            required:
+              - "action"
+              - "reason"
+            properties:
+              serviceId:
+                type:
+                  - "integer"
+                  - "null"
+                minimum: 1
+    History:
+      type: "object"
+      additionalProperties: false
+      properties:
+        schemaVersion:
+          type: "string"
+          description: "Версия формата журнала."
+          const: "vps-billing-events-v2"
+        runId:
+          type: "string"
+          description: "ID независимой симуляции/источника; не смешивать ID событий разных запусков."
+        asOf:
+          type: "string"
+          description: "Граница полноты именно переданного журнала. В live-режиме не позже зафиксированного виртуального времени."
+          format: "date-time"
+          pattern: "Z$"
+        events:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Event"
+            description: "Наблюдаемое событие."
+          description: "Полный упорядоченный журнал от регистраций всех аккаунтов выбранного источника. serviceIds фильтрует результаты, не портфель и не историю."
+          maxItems: 100000
+        syntheticOnly:
+          type: "boolean"
+          description: "Признак синтетического происхождения источника."
+      required:
+        - "schemaVersion"
+        - "runId"
+        - "asOf"
+        - "events"
+        - "syntheticOnly"
+    Account:
+      type: "object"
+      additionalProperties: false
+      properties:
+        id:
+          type: "integer"
+          minimum: 1
+          description: "ID клиента."
+        email:
+          type: "string"
+          description: "Адрес для совместимости RiskSnapshot; не вход модели."
+        balance:
+          type: "integer"
+          minimum: 0
+          description: "Основной баланс, евроценты."
+          format: "int64"
+          maximum: 9223372036854775807
+        withdrawBalance:
+          type: "integer"
+          minimum: 0
+          description: "Баланс вывода, евроценты; генератор оставляет нулём."
+          format: "int64"
+          maximum: 9223372036854775807
+        totalReplenished:
+          type: "integer"
+          minimum: 0
+          description: "Накопленная сумма пополнений, евроценты."
+          format: "int64"
+          maximum: 9223372036854775807
+        bonusBalance:
+          type: "integer"
+          minimum: 0
+          description: "Бонусный баланс, евроценты; генератор оставляет нулём."
+          format: "int64"
+          maximum: 9223372036854775807
+        bonusState:
+          type: "string"
+          description: "Состояние бонусов в схеме кейса; генератор использует locked."
+      required:
+        - "id"
+        - "email"
+        - "balance"
+        - "withdrawBalance"
+        - "totalReplenished"
+        - "bonusBalance"
+        - "bonusState"
+    Service:
+      type: "object"
+      additionalProperties: false
+      properties:
+        id:
+          type: "integer"
+          minimum: 1
+          description: "ID VPS."
+        ownerId:
+          type: "integer"
+          minimum: 1
+          description: "ID клиента-владельца."
+        name:
+          type: "string"
+          description: "Название услуги для интерфейса."
+        paymentTerm:
+          type: "string"
+          description: "Период оплаты; day — синтетическое расширение."
+          enum:
+            - "hour"
+            - "day"
+            - "week"
+            - "month"
+            - "quarter_year"
+            - "half_year"
+            - "year"
+        autoProlong:
+          type: "boolean"
+          description: "Текущая настройка auto."
+        createdAt:
+          type: "string"
+          description: "Дата создания VPS."
+          format: "date-time"
+          pattern: "Z$"
+        expiresAt:
+          type: "string"
+          description: "Текущий оплаченный срок."
+          format: "date-time"
+          pattern: "Z$"
+        status:
+          type: "string"
+          description: "Статус услуги."
+          enum:
+            - "active"
+            - "suspended"
+            - "prolong_wait"
+            - "blocked"
+            - "deleted"
+        price:
+          type: "integer"
+          minimum: 0
+          description: "Стоимость одного периода в евроцентах."
+          format: "int64"
+          maximum: 9223372036854775807
+      required:
+        - "id"
+        - "ownerId"
+        - "name"
+        - "paymentTerm"
+        - "autoProlong"
+        - "createdAt"
+        - "expiresAt"
+        - "status"
+        - "price"
+    Transaction:
+      type: "object"
+      additionalProperties: false
+      properties:
+        id:
+          type: "integer"
+          minimum: 1
+          description: "ID платежной записи."
+        amount:
+          type: "integer"
+          minimum: 0
+          description: "Сумма в евроцентах. Планируемый контракт без старого лимита API 1000; Kotlin DTO нужно обновить отдельно."
+          format: "int64"
+          maximum: 9223372036854775807
+        status:
+          type: "string"
+          description: "Результат операции."
+          enum:
+            - "performed"
+            - "not_performed"
+        performedAt:
+          type:
+            - "string"
+            - "null"
+          description: "Время успешной оплаты; null для отказа."
+          format: "date-time"
+          pattern: "Z$"
+        createdAt:
+          type: "string"
+          description: "Время создания платежной операции."
+          format: "date-time"
+          pattern: "Z$"
+        type:
+          type: "string"
+          description: "Покупка или продление; пополнение общего кошелька не маскируется под платёж VPS."
+          enum:
+            - "order"
+            - "prolong"
+        serviceId:
+          type: "integer"
+          minimum: 1
+          description: "ID оплачиваемой услуги."
+      required:
+        - "id"
+        - "amount"
+        - "status"
+        - "performedAt"
+        - "createdAt"
+        - "type"
+        - "serviceId"
+    RiskSnapshot:
+      type: "object"
+      additionalProperties: false
+      properties:
+        accounts:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Account"
+            description: "Клиент."
+          description: "Текущее состояние клиентов."
+        services:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Service"
+            description: "VPS."
+          description: "Текущее состояние услуг, включая удалённые записи для аудита."
+        transactions:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Transaction"
+            description: "Попытка оплаты."
+          description: "Платежные записи. Пустой список при transactionCoverage=omitted не означает отсутствие оплат."
+      required:
+        - "accounts"
+        - "services"
+        - "transactions"
+    SnapshotEnvelope:
+      type: "object"
+      additionalProperties: false
+      properties:
+        schemaVersion:
+          type: "string"
+          description: "Версия обёртки; snapshot сохраняет форму RiskSnapshot."
+          const: "risk-snapshot-envelope-v1"
+        runId:
+          type: "string"
+          description: "Источник снимка."
+        revision:
+          type: "integer"
+          minimum: 0
+          description: "Зафиксированная ревизия состояния, из которой построен снимок."
+        asOf:
+          type: "string"
+          description: "Время снимка; API обязан использовать его как evaluationTime вместо часов сервера для демо."
+          format: "date-time"
+          pattern: "Z$"
+        syntheticOnly:
+          type: "boolean"
+          description: "Маркер синтетических данных."
+        currency:
+          type: "string"
+          description: "Валюта денежных полей."
+          const: "EUR"
+        transactionCoverage:
+          type: "string"
+          description: "complete — платежи включены полностью; omitted — намеренно не экспортированы, см. журнал."
+          enum:
+            - "complete"
+            - "omitted"
+        snapshot:
+          "$ref": "#/components/schemas/RiskSnapshot"
+          description: "Состояние на asOf. Здесь нет архетипов, будущих задач и состояния RNG."
+      required:
+        - "schemaVersion"
+        - "runId"
+        - "revision"
+        - "asOf"
+        - "syntheticOnly"
+        - "currency"
+        - "transactionCoverage"
+        - "snapshot"
+    HistoryInput:
+      type: "object"
+      additionalProperties: false
+      properties:
+        kind:
+          type: "string"
+          description: "Способ передачи входа."
+          const: "history"
+        history:
+          "$ref": "#/components/schemas/History"
+          description: "Полный наблюдаемый журнал. Будущие события отсекаются по обеим датам до расчёта признаков."
+      required:
+        - "kind"
+        - "history"
+    SnapshotInput:
+      type: "object"
+      additionalProperties: false
+      properties:
+        kind:
+          type: "string"
+          description: "Способ передачи входа."
+          const: "snapshot"
+        snapshot:
+          "$ref": "#/components/schemas/SnapshotEnvelope"
+          description: "Снимок кейса без выдуманной истории. В v1 ML возвращает insufficient_data/SNAPSHOT_HAS_NO_HISTORY; правила API продолжают работать."
+      required:
+        - "kind"
+        - "snapshot"
+    DatasetInput:
+      type: "object"
+      additionalProperties: false
+      properties:
+        kind:
+          type: "string"
+          description: "Способ передачи входа."
+          const: "dataset"
+        datasetId:
+          type: "string"
+          description: "ID зарегистрированной сервером выгрузки MinIO. Не URL, не путь, не credentials."
+        revision:
+          type: "string"
+          description: "Неизменяемая ревизия manifest, связывающая журнал и снапшоты; не mutable latest."
+      required:
+        - "kind"
+        - "datasetId"
+        - "revision"
+    PredictRequest:
+      type: "object"
+      additionalProperties: false
+      properties:
+        requestId:
+          type: "string"
+          description: "ID для трассировки; сам по себе не заменяет ключ кеша."
+        contractVersion:
+          type: "string"
+          description: "Версия HTTP-контракта."
+          const: "renewal-risk-v1"
+        snapshotRevision:
+          type: "string"
+          description: "Версия исходных данных. Для history привязана к runId и хешу журнала; для dataset совпадает с input.revision."
+        predictionAt:
+          type: "string"
+          description: "Момент прогноза. Не позже границы доступности данных; никакого системного now внутри расчёта."
+          format: "date-time"
+          pattern: "Z$"
+        serviceIds:
+          type: "array"
+          items:
+            type: "integer"
+            minimum: 1
+            description: "ID запрошенной VPS."
+          description: "Уникальные услуги; один результат на каждую, в том же порядке."
+          minItems: 1
+          maxItems: 1000
+          uniqueItems: true
+        input:
+          description: "Один из трёх входов. Snapshot-only поддержан явно, но не даёт истории для текущей модели."
+          oneOf:
+            -
+              "$ref": "#/components/schemas/HistoryInput"
+              description: "Журнал в запросе."
+            -
+              "$ref": "#/components/schemas/SnapshotInput"
+              description: "Снимок кейса."
+            -
+              "$ref": "#/components/schemas/DatasetInput"
+              description: "Зарегистрированная выгрузка в MinIO."
+          discriminator:
+            propertyName: "kind"
+            mapping:
+              history: "#/components/schemas/HistoryInput"
+              snapshot: "#/components/schemas/SnapshotInput"
+              dataset: "#/components/schemas/DatasetInput"
+      required:
+        - "requestId"
+        - "contractVersion"
+        - "snapshotRevision"
+        - "predictionAt"
+        - "serviceIds"
+        - "input"
+    Prediction:
+      type: "object"
+      additionalProperties: false
+      properties:
+        serviceId:
+          type: "integer"
+          minimum: 1
+          description: "ID запрошенной VPS."
+        accountId:
+          type:
+            - "integer"
+            - "null"
+          minimum: 1
+          description: "Владелец; null, если услуга не найдена."
+        dueAt:
+          type:
+            - "string"
+            - "null"
+          description: "Ближайший оплаченный срок соответствующего цикла."
+          format: "date-time"
+          pattern: "Z$"
+        outcomeDeadline:
+          type:
+            - "string"
+            - "null"
+          description: "dueAt + 5 суток; граница метки, а не срок годности прогноза."
+          format: "date-time"
+          pattern: "Z$"
+        status:
+          type: "string"
+          description: "Результат обработки конкретной VPS."
+          enum:
+            - "predicted"
+            - "not_applicable"
+            - "insufficient_data"
+            - "invalid_data"
+        reasonCode:
+          type:
+            - "string"
+            - "null"
+          description: "Причина отсутствия прогноза; null при predicted."
+          enum:
+            - "SERVICE_NOT_FOUND"
+            - "UNSUPPORTED_PAYMENT_TERM"
+            - "OUTSIDE_PREDICTION_WINDOW"
+            - "OVERDUE_SERVICE"
+            - "NONFINANCIAL_RESTRICTION"
+            - "DELETED_OR_REPLACED"
+            - "SNAPSHOT_HAS_NO_HISTORY"
+            - "INCOMPLETE_HISTORY"
+            - "INCONSISTENT_DATA"
+            - null
+        lossProbability:
+          type:
+            - "number"
+            - "null"
+          minimum: 0
+          maximum: 1
+          description: "P(нет продления/оплаченной подтверждённой замены к dueAt+5 суток). Не балл F1–F5, не вероятность ухода клиента и не confidence. При отказе null, никогда фиктивный 0."
+        warnings:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Warning"
+            description: "Предупреждение."
+          description: "Ошибки качества не скрываются. Аномалия может отключить ML, но не расчёт правил в API."
+      required:
+        - "serviceId"
+        - "accountId"
+        - "dueAt"
+        - "outcomeDeadline"
+        - "status"
+        - "reasonCode"
+        - "lossProbability"
+        - "warnings"
+      allOf:
+        -
+          if:
+            properties:
+              status:
+                const: "predicted"
+            required:
+              - "status"
+          then:
+            properties:
+              lossProbability:
+                type: "number"
+              reasonCode:
+                type: "null"
+              accountId:
+                type: "integer"
+              dueAt:
+                type: "string"
+              outcomeDeadline:
+                type: "string"
+          else:
+            properties:
+              lossProbability:
+                type: "null"
+              reasonCode:
+                type: "string"
+    PredictResponse:
+      type: "object"
+      additionalProperties: false
+      properties:
+        requestId:
+          type: "string"
+          description: "Возвращённый requestId."
+        contractVersion:
+          type: "string"
+          description: "Версия контракта."
+          const: "renewal-risk-v1"
+        snapshotRevision:
+          type: "string"
+          description: "Точная ревизия использованного входа; API не принимает ответ для другой ревизии."
+        predictionAt:
+          type: "string"
+          description: "Момент, на который рассчитаны все результаты."
+          format: "date-time"
+          pattern: "Z$"
+        modelVersion:
+          type: "string"
+          description: "Версия фактически использованного артефакта."
+        featureSchemaVersion:
+          type: "string"
+          description: "Версия признаков."
+          const: "event-driven-preexpiry-features-v1"
+        targetVersion:
+          type: "string"
+          description: "Версия определения потери."
+          const: "event-renewal-5d-paid-replacement-nonfinancial-excluded-v1"
+        syntheticOnly:
+          type: "boolean"
+          description: "true: модель проверена только на синтетике."
+        predictions:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/Prediction"
+            description: "Результат по VPS."
+          description: "Один элемент для каждого serviceId, включая пропуски."
+          minItems: 1
+          maxItems: 1000
+      required:
+        - "requestId"
+        - "contractVersion"
+        - "snapshotRevision"
+        - "predictionAt"
+        - "modelVersion"
+        - "featureSchemaVersion"
+        - "targetVersion"
+        - "syntheticOnly"
+        - "predictions"
+    GeneratorCoreStatus:
+      type: "object"
+      additionalProperties: false
+      properties:
+        runId:
+          type: "string"
+          description: "Неизменяемый ID запуска; сохраняется при рестарте."
+        revision:
+          type: "integer"
+          minimum: 0
+          description: "Ревизия успешно сохранённой контрольной точки."
+        virtualTime:
+          type: "string"
+          description: "Зафиксированное виртуальное время."
+          format: "date-time"
+          pattern: "Z$"
+        endAt:
+          type: "string"
+          description: "Конец текущего конечного горизонта. Бесконечное пополнение популяции пока не реализовано."
+          format: "date-time"
+          pattern: "Z$"
+        nextEventAt:
+          type:
+            - "string"
+            - "null"
+          description: "Время ближайшей задачи в горизонте; null, когда их нет."
+          format: "date-time"
+          pattern: "Z$"
+        eventCount:
+          type: "integer"
+          minimum: 0
+          description: "Число зафиксированных событий в журнале."
+        finished:
+          type: "boolean"
+          description: "Горизонт обработан полностью. Не равнозначно падению worker."
+      required:
+        - "runId"
+        - "revision"
+        - "virtualTime"
+        - "endAt"
+        - "nextEventAt"
+        - "eventCount"
+        - "finished"
+    GeneratorStatus:
+      type: "object"
+      additionalProperties: false
+      properties:
+        generator:
+          "$ref": "#/components/schemas/GeneratorCoreStatus"
+          description: "Публичная часть сохранённого состояния; не checkpoint."
+        workerState:
+          type: "string"
+          description: "Состояние постоянного worker; устаревший heartbeat работающего процесса отображается как error. По завершении конечного горизонта worker остаётся в finished и не начинает новый запуск."
+          enum:
+            - "starting"
+            - "running"
+            - "paused"
+            - "finished"
+            - "error"
+        mode:
+          type: "string"
+          description: "Новые события вычисляются движком, не проигрываются из файла."
+          const: "live_simulation"
+        timeScale:
+          type: "number"
+          exclusiveMinimum: 0
+          description: "Число виртуальных секунд за реальную секунду, задаётся конфигурацией worker. Время простоя не догоняется автоматически."
+        lastHeartbeatAt:
+          type:
+            - "string"
+            - "null"
+          description: "Реальное UTC-время последнего сигнала worker; помогает обнаружить остановку."
+          format: "date-time"
+          pattern: "Z$"
+        lastCheckpointAt:
+          type:
+            - "string"
+            - "null"
+          description: "Реальное UTC-время последнего успешного сохранения."
+          format: "date-time"
+          pattern: "Z$"
+        syntheticOnly:
+          type: "boolean"
+          description: "Явная маркировка демонстрационной симуляции."
+      required:
+        - "generator"
+        - "workerState"
+        - "mode"
+        - "timeScale"
+        - "lastHeartbeatAt"
+        - "lastCheckpointAt"
+        - "syntheticOnly"
+    SequencedEvent:
+      type: "object"
+      additionalProperties: false
+      properties:
+        sequence:
+          type: "integer"
+          minimum: 1
+          description: "Последовательный номер события внутри runId, начиная с 1."
+        event:
+          "$ref": "#/components/schemas/Event"
+          description: "Зафиксированное наблюдаемое событие."
+      required:
+        - "sequence"
+        - "event"
+    EventPage:
+      type: "object"
+      additionalProperties: false
+      properties:
+        runId:
+          type: "string"
+          description: "Запуск, которому принадлежит курсор."
+        revision:
+          type: "integer"
+          minimum: 0
+          description: "Ревизия, видимая при чтении страницы."
+        asOf:
+          type: "string"
+          description: "Виртуальное время этой ревизии."
+          format: "date-time"
+          pattern: "Z$"
+        events:
+          type: "array"
+          items:
+            "$ref": "#/components/schemas/SequencedEvent"
+            description: "Событие с курсором доставки."
+          description: "События строго после afterSequence, в исходном порядке."
+          maxItems: 1000
+        nextSequence:
+          type: "integer"
+          minimum: 0
+          description: "Номер последнего выданного события; при пустой странице равен afterSequence."
+        hasMore:
+          type: "boolean"
+          description: "Есть ещё события в зафиксированной при чтении ревизии. false не означает завершение живой симуляции."
+      required:
+        - "runId"
+        - "revision"
+        - "asOf"
+        - "events"
+        - "nextSequence"
+        - "hasMore"
+x-storage-policy:
+  description: "План следующего этапа: MinIO хранит неизменяемые historical/<datasetId>/<revision>/{events,snapshots,manifest}. Manifest связывает версии, cutoff и SHA-256. Вход dataset разрешает только заранее зарегистрированные ID, не произвольные URL/bucket. Live checkpoint приватен на persistent volume; публикуются только committed события и их проекции. На остановке виртуальное время стоит. Автоматическая бесконечная популяция и delivery outbox остаются отдельным этапом."
+  checkpointSchema: "generator-checkpoint-v1"
