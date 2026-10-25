@@ -1,15 +1,15 @@
 openapi: "3.1.1"
 info:
   title: "Aeza risk ML and live simulation — internal contract"
-  version: "1.0.0-draft"
-  description: "Общий контракт независимых сервисов. Реализованы PostgreSQL worker генератора, его FastAPI GET endpoints и отдельный CatBoost HTTP inference. MinIO-интеграция и архивирование пока НЕ реализованы. Генератор не вызывает ML и не зависит от модели; его API обслуживает только сохранённые результаты. ML вычисляет вероятность; веса F1–F6, смешивание оценок, денежная приоритизация и публичная авторизация остаются в Kotlin API. Согласованная поправка API: 30% расхождения с вероятностью, максимум ±20 баллов. Все денежные суммы EUR в целых евроцентах; все даты UTC с Z. Контрольные точки содержат скрытое будущее и никогда не являются входом ML или публичным snapshot. При отсутствии ML существующий алгоритм и предупреждения сохраняются."
+  version: "1.1.0-simulation-speed"
+  description: "Общий контракт независимых сервисов. Реализованы PostgreSQL worker генератора, его FastAPI GET endpoints и изменение скорости в PostgreSQL и отдельный CatBoost HTTP inference. MinIO-интеграция и архивирование пока НЕ реализованы. Генератор не вызывает ML и не зависит от модели; его API читает сохранённые результаты и позволяет менять скорость следующего шага. ML вычисляет вероятность; веса F1–F6, смешивание оценок, денежная приоритизация и публичная авторизация остаются в Kotlin API. Согласованная поправка API: 30% расхождения с вероятностью, максимум ±20 баллов. Все денежные суммы EUR в целых евроцентах; все даты UTC с Z. Контрольные точки содержат скрытое будущее и никогда не являются входом ML или публичным snapshot. При отсутствии ML существующий алгоритм и предупреждения сохраняются."
 servers:
   -
     url: "http://ml-service:8000"
     description: "Отдельный ML HTTP-сервис во внутренней сети. Между хостами требуется TLS."
   -
     url: "http://generator-api:8000"
-    description: "Независимый FastAPI генератора; GET generator и health. ML endpoints на этом сервере отсутствуют."
+    description: "Независимый FastAPI генератора; GET generator, PATCH скорости и health. ML endpoints на этом сервере отсутствуют."
 tags:
   -
     name: "Health"
@@ -19,11 +19,67 @@ tags:
     description: "Только inference."
   -
     name: "Generator"
-    description: "Только чтение зафиксированных результатов независимого worker."
+    description: "Чтение результатов worker и управление скоростью через Kotlin ADMIN."
 security:
   -
     ServiceToken: []
 paths:
+  /internal/v1/generator/speed:
+    patch:
+      tags:
+      - Generator
+      operationId: setGeneratorSpeed
+      servers:
+      - url: http://generator-api:8000
+      summary: Сохранить скорость для следующего шага worker
+      description: Вызывается Kotlin после проверки ADMIN. Service token не является пользовательским JWT. Транзакция
+        блокирует тот же run, что worker; меняет только persisted timeScale. Не продвигает время/ревизию, не создаёт
+        событий и не сбрасывает next_tick_at. Повторная абсолютная установка безопасна. Последняя успешная запись
+        выигрывает; рестарт читает скорость из БД, env задаёт её только при первичной привязке часов. GET endpoints
+        остаются без побочных эффектов.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratorSpeedRequest'
+      responses:
+        '200':
+          description: Сохранённое состояние с новой timeScale; применяется со следующего шага.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneratorStatus'
+        '401':
+          description: Нет внутреннего service token.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Запуск ещё не создан.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: runId не совпадает с привязанным запуском.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Некорректные параметры; только integer 1, 10, 60, непустой runId и известные поля.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: PostgreSQL недоступен или используется файловый backend, который не поддерживает эту операцию.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   "/health/live":
     get:
       operationId: "liveness"
@@ -361,6 +417,28 @@ components:
       scheme: "bearer"
       description: "Внутренний service-to-service секрет. Не пользовательский JWT; хранится в окружении/secret storage, не в JSON и логах."
   schemas:
+    GeneratorSpeedRequest:
+      type: object
+      additionalProperties: false
+      required:
+      - runId
+      - timeScale
+      properties:
+        runId:
+          type: string
+          minLength: 1
+          maxLength: 255
+          pattern: ".*\\S.*"
+          description: Запуск из последнего GET состояния. Защищает от изменения другого run после переключения источника.
+        timeScale:
+          type: integer
+          enum:
+          - 1
+          - 10
+          - 60
+          description: 'Пресет скорости: виртуальных секунд за реальную секунду. ×60 означает целевую 1 минуту симуляции
+            за 1 секунду; под нагрузкой темп может быть ниже.'
+          example: 60
     Warning:
       type: "object"
       additionalProperties: false
@@ -1420,7 +1498,7 @@ components:
         timeScale:
           type: "number"
           exclusiveMinimum: 0
-          description: "Число виртуальных секунд за реальную секунду, задаётся конфигурацией worker. Время простоя не догоняется автоматически."
+          description: "Сохранённое число виртуальных секунд за реальную секунду. В PostgreSQL изменяется через PATCH speed и применяется со следующего шага; первоначальное значение задаёт env. Под нагрузкой темп может быть ниже; простой не догоняется."
         lastHeartbeatAt:
           type:
             - "string"

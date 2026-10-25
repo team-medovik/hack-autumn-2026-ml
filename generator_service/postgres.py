@@ -43,6 +43,10 @@ class CursorAhead(CheckpointError):
     pass
 
 
+class SpeedRunConflict(CheckpointError):
+    pass
+
+
 class RecentJournal:
     """Absolute indexes, backed only by events emitted in this transaction."""
     def __init__(self, offset):
@@ -208,8 +212,34 @@ class PostgresStore:
         if row["clock_config"] is None:
             conn.execute("UPDATE generator_sim.runs SET clock_config=%s WHERE run_key=%s",
                          (Jsonb(config), self.run_key))
-        elif row["clock_config"] != config:
-            raise CheckpointError("Worker clock settings differ from persisted run settings")
+            return config
+        saved = row["clock_config"]
+        if any(saved[key] != config[key] for key in ("tickSeconds", "maxStepSeconds")):
+            raise CheckpointError("Worker tick settings differ from persisted run settings")
+        # timeScale is operator-managed state. A restarting worker's environment
+        # supplies only the initial value and must never reset the saved speed.
+        return saved
+
+    def set_speed(self, run_id, time_scale):
+        """Change only the speed; serialize with ticks without advancing the run."""
+        if type(time_scale) is not int or time_scale not in (1, 10, 60):
+            raise ValueError("Supported speeds are 1, 10 and 60")
+        with self.connect() as conn:
+            # Unlike background workers, a control request waits for the current
+            # step to finish (bounded by lock_timeout), never skips the run lock.
+            locked = conn.execute("SELECT run_key FROM generator_sim.runs WHERE run_key=%s FOR UPDATE",
+                                  (self.run_key,)).fetchone()
+            if locked is None:
+                raise StoreUnavailable("Simulation has not been initialized")
+            row = self.row(conn)
+            if row["run_id"] != run_id:
+                raise SpeedRunConflict("The requested simulation is no longer current")
+            if row["clock_config"] is None:
+                raise StoreUnavailable("Worker clock has not been initialized")
+            clock = dict(row["clock_config"], timeScale=time_scale)
+            conn.execute("UPDATE generator_sim.runs SET clock_config=%s WHERE run_key=%s",
+                         (Jsonb(clock), self.run_key))
+            return self.status_in(conn, self.row(conn))
 
     def import_checkpoint(self, path):
         saved = load_checkpoint(path)
@@ -351,12 +381,12 @@ class PostgresStore:
             row = self.row(conn, lock=True)
             if row is None:
                 return None
-            self.bind_clock(conn, row, settings)
+            clock = self.bind_clock(conn, row, settings)
             now = conn.execute("SELECT CURRENT_TIMESTAMP AS now").fetchone()["now"]
             if row["next_tick_at"] > now:
                 return None
             until = min(row["end_at"], row["virtual_time"] + timedelta(
-                seconds=min(settings.tick_seconds * settings.time_scale, settings.max_step_seconds)))
+                seconds=min(clock["tickSeconds"] * clock["timeScale"], clock["maxStepSeconds"])))
             if not self.generator_status(conn, row)["finished"]:
                 self.apply_step(conn, row, until)
             fresh = self.row(conn)
@@ -368,8 +398,11 @@ class PostgresStore:
 
     def write_heartbeat(self, conn, state, settings):
         now = conn.execute("SELECT CURRENT_TIMESTAMP AS now").fetchone()["now"]
+        clock = self.row(conn)["clock_config"]
+        if clock is None:
+            raise StoreUnavailable("Worker clock has not been initialized")
         heartbeat = {"workerState": state, "lastHeartbeatAt": iso(now),
-                     "timeScale": settings.time_scale, "tickSeconds": settings.tick_seconds}
+                     "timeScale": clock["timeScale"], "tickSeconds": clock["tickSeconds"]}
         conn.execute("UPDATE generator_sim.runs SET heartbeat=%s WHERE run_key=%s",
                      (Jsonb(heartbeat), self.run_key))
 
@@ -398,7 +431,7 @@ class PostgresStore:
         if core["finished"]:
             state = "finished"
         return {"generator": core, "workerState": state, "mode": "live_simulation",
-                "timeScale": heartbeat.get("timeScale", (row["clock_config"] or {}).get("timeScale", 60)),
+                "timeScale": (row["clock_config"] or {}).get("timeScale", heartbeat.get("timeScale", 60)),
                 "lastHeartbeatAt": heartbeat.get("lastHeartbeatAt"),
                 "lastCheckpointAt": iso(row["updated_at"]), "syntheticOnly": True}
 
