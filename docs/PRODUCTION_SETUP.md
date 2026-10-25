@@ -98,7 +98,7 @@ Git, PR, Nginx-конфиг, командную строку `curl` или ло�
 обновите обе стороны согласованно.
 
 API-репозиторий уже собирает `.env` из своего Actions secret `ENV_PRODUCTION`.
-После отдельного релиза [интеграции API](https://github.com/team-medovik/hack-autumn-2026-api/pull/36)
+После выпуска [API PR #42 — интеграции генератора и ML](https://github.com/team-medovik/hack-autumn-2026-api/pull/42)
 дополните **существующее** значение этого секрета; не заменяйте файл целиком и
 не правьте только `.env` на сервере: следующий деплой API его перезапишет.
 
@@ -238,7 +238,7 @@ docker compose -p aeza-generator \
 curl --fail http://127.0.0.1:8011/health/ready
 ```
 
-В `ENV_PRODUCTION` API после отдельного релиза генераторного consumer нужны
+В `ENV_PRODUCTION` API после выпуска того же PR #42, если включаете генератор, нужны
 `APP_GENERATOR_BASE_URL=http://generator-api:8000`,
 `APP_GENERATOR_SERVICE_TOKEN` с тем же значением, что серверный
 `GENERATOR_SERVICE_TOKEN`, и включённые флаги `APP_GENERATOR_ENABLED` /
