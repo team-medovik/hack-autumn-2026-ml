@@ -13,7 +13,7 @@ import tempfile
 ROOT = Path('/home/kinoko/hack-autumn-2026/generator')
 PROJECT = 'aeza-generator'
 API = 'hack-autumn-2026-api'
-PROFILES = {'stored', 'demo-stream-v1', 'demo-stream-v2'}
+PROFILES = {'stored', 'demo-stream-v1', 'demo-stream-v2', 'demo-stream-fast-v3'}
 
 
 class DeploymentError(Exception):
@@ -196,18 +196,23 @@ def main():
                     raise DeploymentError('Unexpected demo schedule migration result')
             print('Starting generator profile ' + profile + ' with PostgreSQL state retained', flush=True)
             run(compose + ['up', '-d', '--no-build', '--wait', '--wait-timeout', '180'], timeout=210)
-            if profile == 'demo-stream-v2':
+            if profile in ('demo-stream-v2', 'demo-stream-fast-v3'):
+                stream_options = {
+                    'demo-stream-v2': ('demo-stream-72h-v2', '10', '30'),
+                    'demo-stream-fast-v3': ('demo-stream-fast-v3', '1', '3'),
+                }
+                marker, minimum_seconds, maximum_seconds = stream_options[profile]
                 enable = compose + ['exec', '-T', 'generator-worker', 'python', '-B', '-m',
-                    'generator_service.stream', '--apply', '--marker', 'demo-stream-72h-v2',
-                    '--min-real-seconds', '10', '--max-real-seconds', '30',
+                    'generator_service.stream', '--apply', '--marker', marker,
+                    '--min-real-seconds', minimum_seconds, '--max-real-seconds', maximum_seconds,
                     '--services-per-client', '6', '--minimum-real-hours', '72']
                 enabled = json.loads(run(enable, timeout=90))
-                if enabled.get('status') not in ('enabled', 'already_enabled'):
+                if enabled.get('status') not in ('enabled', 'already_enabled', 'updated'):
                     raise DeploymentError('Unexpected rolling demo stream result')
             # A temporary probe shares the actual API network namespace, not the generator's.
             output = run(probe, data=json.dumps({'token': token, 'baseline': baseline,
                 'minimumEvents': 3 if profile != 'stored' else 0,
-                'requireEventIncrease': profile == 'demo-stream-v2'}), timeout=80)
+                'requireEventIncrease': profile in ('demo-stream-v2', 'demo-stream-fast-v3')}), timeout=80)
             result = json.loads(output)
             if result != {'statusHttp': 200, 'runStable': True, 'progressVerified': True}:
                 raise DeploymentError('Unexpected probe result')

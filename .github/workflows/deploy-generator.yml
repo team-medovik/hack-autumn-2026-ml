@@ -12,6 +12,7 @@ on:
           - stored
           - demo-stream-v1
           - demo-stream-v2
+          - demo-stream-fast-v3
 
 permissions:
   contents: read

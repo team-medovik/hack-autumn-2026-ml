@@ -83,19 +83,31 @@ def enable(settings, marker, min_real_seconds=10, max_real_seconds=30, services_
         row = connection.execute("SELECT * FROM generator_sim.runs WHERE run_key=%s FOR UPDATE", (settings.run_key,)).fetchone()
         if row is None: raise ValueError("Run is not initialized")
         store.compatible(row); clock = dict(row["clock_config"] or {}); existing = clock.get(CONFIG_KEY)
-        if isinstance(existing, dict) and existing.get("marker") == marker: return {"status": "already_enabled"}
-        if existing: raise ValueError("Another stream is active")
+        if existing is not None and not isinstance(existing, dict):
+            raise ValueError("Invalid persisted stream configuration")
         scale = float(clock.get("timeScale", 60)); end_at = max(row["end_at"], row["virtual_time"] + timedelta(hours=minimum_real_hours * scale))
         world = store.restore_world(connection, row); world.end = end_at
-        clock[CONFIG_KEY] = {"enabled": True, "marker": marker, "seed": 20261025,
+        if existing:
+            required = {"seed", "accountBase", "serviceBase", "clientSequence",
+                        "serviceSequence", "activeAccountId"}
+            if not required <= existing.keys():
+                raise ValueError("Persisted stream cannot be updated safely")
+            config = dict(existing)
+            status = "updated"
+        else:
+            config = {"seed": 20261025, "accountBase": 900000000,
+                      "serviceBase": 900000000000, "clientSequence": 0,
+                      "serviceSequence": 0, "activeAccountId": None}
+            status = "enabled"
+        config.update({"enabled": True, "marker": marker,
             "minRealSeconds": min_real_seconds, "maxRealSeconds": max_real_seconds,
-            "servicesPerClient": services_per_client, "accountBase": 900000000,
-            "serviceBase": 900000000000, "clientSequence": 0, "serviceSequence": 0,
-            "activeAccountId": None, "nextServiceAt": iso(row["virtual_time"] + timedelta(seconds=1))}
+            "servicesPerClient": services_per_client,
+            "nextServiceAt": iso(row["virtual_time"] + timedelta(seconds=1))})
+        clock[CONFIG_KEY] = config
         connection.execute("""UPDATE generator_sim.runs SET state=%s,end_at=%s,clock_config=%s,
             revision=revision+1,next_tick_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP
             WHERE run_key=%s AND run_id=%s""", (Jsonb(private_state(world)), end_at, Jsonb(clock), settings.run_key, row["run_id"]))
-        return {"status": "enabled", "minRealSeconds": min_real_seconds, "maxRealSeconds": max_real_seconds,
+        return {"status": status, "minRealSeconds": min_real_seconds, "maxRealSeconds": max_real_seconds,
                 "servicesPerClient": services_per_client, "minimumRealHours": minimum_real_hours}
 
 
