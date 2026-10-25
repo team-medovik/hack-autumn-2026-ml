@@ -2,11 +2,14 @@ openapi: "3.1.1"
 info:
   title: "Aeza risk ML and live simulation — internal contract"
   version: "1.0.0-draft"
-  description: "Контракт согласован для последующей реализации FastAPI. HTTP endpoints, worker и MinIO-интеграция пока НЕ реализованы. Уже реализуется пошаговое ядро и локальный checkpoint. ML вычисляет вероятность; веса F1–F5, смешивание оценок, денежная приоритизация и публичная авторизация остаются в Kotlin API. Коэффициент смешивания ещё не согласован. Все денежные суммы EUR в целых евроцентах; все даты UTC с Z. Контрольные точки содержат скрытое будущее и никогда не являются входом ML или публичным snapshot. При отсутствии ML существующий алгоритм и предупреждения сохраняются."
+  description: "Общий контракт независимых сервисов. Реализованы постоянный worker генератора, его FastAPI GET endpoints, пошаговое ядро и локальный checkpoint. ML HTTP inference и MinIO-интеграция пока НЕ реализованы. Генератор не вызывает ML и не зависит от модели; его API обслуживает только сохранённые результаты. ML вычисляет вероятность; веса F1–F5, смешивание оценок, денежная приоритизация и публичная авторизация остаются в Kotlin API. Коэффициент смешивания ещё не согласован. Все денежные суммы EUR в целых евроцентах; все даты UTC с Z. Контрольные точки содержат скрытое будущее и никогда не являются входом ML или публичным snapshot. При отсутствии ML существующий алгоритм и предупреждения сохраняются."
 servers:
   -
     url: "http://ml-service:8000"
-    description: "Планируемая внутренняя Docker-сеть; порт не публиковать наружу. Между хостами требуется TLS."
+    description: "Планируемый отдельный ML HTTP-сервис во внутренней сети. Между хостами требуется TLS."
+  -
+    url: "http://generator-api:8000"
+    description: "Независимый FastAPI генератора; GET generator и health. ML endpoints на этом сервере отсутствуют."
 tags:
   -
     name: "Health"
@@ -43,7 +46,7 @@ paths:
       tags:
         - "Health"
       summary: "Готовность обслуживать запросы"
-      description: "Проверка загрузки артефакта и настроенных обязательных зависимостей. Не запускает генерацию."
+      description: "Для generator-api проверяет возможность чтения сохранённого checkpoint, включая paused/finished; состояние worker смотреть отдельно в generator/status. Для будущего ml-service — загрузку модели и обязательных зависимостей. Не запускает генерацию."
       security: []
       responses:
         "200":
@@ -63,6 +66,8 @@ paths:
   "/internal/v1/model":
     get:
       operationId: "modelInfo"
+      servers:
+        - url: "http://ml-service:8000"
       tags:
         - "ML"
       summary: "Версия и область применимости модели"
@@ -98,6 +103,8 @@ paths:
   "/internal/v1/renewal-risk/predict":
     post:
       operationId: "predictRenewalRisk"
+      servers:
+        - url: "http://ml-service:8000"
       tags:
         - "ML"
       summary: "Вероятность потери VPS до срока оплаты"
@@ -162,6 +169,8 @@ paths:
   "/internal/v1/generator/status":
     get:
       operationId: "generatorStatus"
+      servers:
+        - url: "http://generator-api:8000"
       tags:
         - "Generator"
       summary: "Состояние живой симуляции"
@@ -198,10 +207,12 @@ paths:
   "/internal/v1/generator/events":
     get:
       operationId: "generatorEvents"
+      servers:
+        - url: "http://generator-api:8000"
       tags:
         - "Generator"
       summary: "Дочитать зафиксированные события"
-      description: "Polling для будущего consumer API. Доставка допускает повторы; consumer дедуплицирует по (runId,event.id), сохраняет курсор после обработки. Смена runId требует явного нового курсора. Приватные будущие задачи не выдаются."
+      description: "Реализованный polling для будущего consumer Kotlin API. Чтение не удаляет события. Доставка допускает повторы; consumer дедуплицирует по (runId,event.id), сохраняет курсор после обработки. Смена runId требует явного нового курсора. Приватные будущие задачи не выдаются."
       parameters:
         -
           name: "runId"
@@ -276,6 +287,8 @@ paths:
   "/internal/v1/generator/snapshot":
     get:
       operationId: "generatorSnapshot"
+      servers:
+        - url: "http://generator-api:8000"
       tags:
         - "Generator"
       summary: "Согласованный текущий снапшот"
@@ -1391,7 +1404,7 @@ components:
           description: "Публичная часть сохранённого состояния; не checkpoint."
         workerState:
           type: "string"
-          description: "Состояние будущего постоянного worker."
+          description: "Состояние постоянного worker; устаревший heartbeat работающего процесса отображается как error. По завершении конечного горизонта worker остаётся в finished и не начинает новый запуск."
           enum:
             - "starting"
             - "running"

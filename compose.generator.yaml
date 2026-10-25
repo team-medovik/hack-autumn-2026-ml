@@ -1,0 +1,47 @@
+services:
+  generator-worker:
+    build:
+      context: .
+      dockerfile: generator_service/Dockerfile
+    command: ["python", "-m", "generator_service.worker"]
+    restart: unless-stopped
+    stop_grace_period: 30s
+    environment:
+      GENERATOR_CHECKPOINT: /app/runtime/live.json
+      GENERATOR_TIME_SCALE: ${GENERATOR_TIME_SCALE:-3600}
+      GENERATOR_TICK_SECONDS: ${GENERATOR_TICK_SECONDS:-1}
+      GENERATOR_MAX_STEP_SECONDS: ${GENERATOR_MAX_STEP_SECONDS:-3600}
+      GENERATOR_START: ${GENERATOR_START:-2026-01-01T00:00:00Z}
+      GENERATOR_DAYS: ${GENERATOR_DAYS:-365}
+      GENERATOR_ACCOUNTS: ${GENERATOR_ACCOUNTS:-50}
+      GENERATOR_SEED: ${GENERATOR_SEED:-20261024}
+    volumes:
+      - generator-state:/app/runtime
+    networks: [generator-internal]
+
+  generator-api:
+    build:
+      context: .
+      dockerfile: generator_service/Dockerfile
+    restart: unless-stopped
+    environment:
+      GENERATOR_CHECKPOINT: /app/runtime/live.json
+      GENERATOR_SERVICE_TOKEN: ${GENERATOR_SERVICE_TOKEN:?Set GENERATOR_SERVICE_TOKEN}
+      GENERATOR_TIME_SCALE: ${GENERATOR_TIME_SCALE:-3600}
+    volumes:
+      - generator-state:/app/runtime:ro
+    # Optional local debugging port, never bind this internal API on 0.0.0.0.
+    ports: ["127.0.0.1:8011:8000"]
+    networks: [generator-internal]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=5)"]
+      interval: 10s
+      timeout: 6s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  generator-state:
+
+networks:
+  generator-internal:

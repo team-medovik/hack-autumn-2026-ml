@@ -1,6 +1,7 @@
 # Aeza VPS/VDS — ML риска непродления
 
-Текущая разработка: [OpenAPI-контракт](contracts/openapi.yaml) и
+Текущая разработка: [OpenAPI-контракт](contracts/openapi.yaml),
+[постоянный генератор и FastAPI](generator_service/README.md) и
 [пошаговая симуляция с восстановлением](examples/risk/event-driven/LIVE_STATE.md).
 Основная ветка — `main`, интеграционная — `develop`, новые работы — `feature/*`.
 Лёгкий CI проверяет генератор и подготовку признаков без обучения CatBoost.
@@ -13,6 +14,7 @@ ML-часть проекта [hack-autumn-2026-api](https://github.com/team-medo
 ## Структура
 
 - `ml/` — признаки, метки, обучение CatBoost, проверки и отчёты.
+- `generator_service/` — независимые worker и HTTP API генератора; без вызовов ML.
 - `examples/risk/` — генераторы, каталог тарифов и сохранённые синтетические события.
 - `src/test/resources/risk/data.json` — исходный JSON кейса для генераторов и проверок;
   это fixture, а не исходники API.

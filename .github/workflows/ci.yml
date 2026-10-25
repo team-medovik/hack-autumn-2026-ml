@@ -33,3 +33,7 @@ jobs:
         run: python -m pip install -r contracts/requirements-checks.txt
       - name: Validate OpenAPI and example payloads
         run: python -B -m unittest discover -s contracts/tests
+      - name: Install generator HTTP dependencies (no ML)
+        run: python -m pip install -r generator_service/requirements-test.txt
+      - name: Live worker and HTTP restart checks
+        run: python -B -m unittest discover -s generator_service/tests -v
