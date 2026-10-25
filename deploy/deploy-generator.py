@@ -13,6 +13,7 @@ import tempfile
 ROOT = Path('/home/kinoko/hack-autumn-2026/generator')
 PROJECT = 'aeza-generator'
 API = 'hack-autumn-2026-api'
+PROFILES = {'stored', 'demo-stream-v1'}
 
 
 class DeploymentError(Exception):
@@ -43,6 +44,24 @@ def private_write(path, value):
         file.write(value)
 
 
+def dotenv(text):
+    result = {}
+    for line in text.splitlines():
+        if not line or line.startswith('#'):
+            continue
+        if '=' not in line:
+            raise DeploymentError('Managed runtime.env contains an invalid line')
+        key, value = line.split('=', 1)
+        if not re.fullmatch(r'[A-Z][A-Z0-9_]*', key) or '\n' in value or '\r' in value:
+            raise DeploymentError('Managed runtime.env contains an invalid entry')
+        result[key] = value
+    return result
+
+
+def render_dotenv(values):
+    return ''.join(key + '=' + values[key] + '\n' for key in sorted(values))
+
+
 PROBE = r'''
 import json, sys, time, urllib.request
 request = json.load(sys.stdin)
@@ -70,6 +89,7 @@ try:
         assert current['runId'] == baseline['runId']
         assert current['revision'] >= baseline['revision'] and current['eventCount'] >= baseline['eventCount']
         assert current['virtualTime'] >= baseline['virtualTime']
+    minimum_events = request.get('minimumEvents', 0)
     deadline = time.monotonic() + 45
     while True:
         time.sleep(2)
@@ -78,7 +98,7 @@ try:
         assert a['runId'] == b['runId']
         assert b['revision'] >= a['revision'] and b['eventCount'] >= a['eventCount']
         assert b['virtualTime'] >= a['virtualTime']
-        if (after['workerState'] == 'finished' or
+        if b['eventCount'] >= minimum_events and (after['workerState'] == 'finished' or
                 (after['workerState'] == 'running' and b['virtualTime'] > a['virtualTime'])):
             print(json.dumps({'statusHttp': 200, 'runStable': True, 'progressVerified': True}))
             break
@@ -88,10 +108,12 @@ except Exception:
     sys.exit(1)
 '''
 
-
 def main():
     os.umask(0o077)
     sha = os.environ.get('GITHUB_SHA', '')
+    profile = os.environ.get('GENERATOR_DEPLOY_PROFILE', 'stored')
+    if profile not in PROFILES:
+        raise DeploymentError('Unknown generator deployment profile')
     if not re.fullmatch('[0-9a-f]{40}', sha) or run(['git', 'rev-parse', 'HEAD']).strip() != sha:
         raise DeploymentError('Checked-out revision must match GITHUB_SHA')
     ROOT.mkdir(parents=True, exist_ok=True)
@@ -106,6 +128,7 @@ def main():
         run(['docker', 'network', 'inspect', 'backend'])
         # Never silently introduce a second generator project beside an existing run.
         existing = []
+        existing_by_service = {}
         for service in ('generator-api', 'generator-worker', 'generator-db'):
             ids = run(['docker', 'ps', '-aq', '--filter', 'label=com.docker.compose.service=' + service]).split()
             existing.extend(ids)
@@ -113,6 +136,8 @@ def main():
                 labels = inspect(container_id)['Config'].get('Labels') or {}
                 if labels.get('com.docker.compose.project') != PROJECT:
                     raise DeploymentError('Existing generator uses another Compose project; preserve it explicitly')
+                if inspect(container_id)['State']['Status'] == 'running':
+                    existing_by_service[service] = inspect(container_id)
         runtime = ROOT / 'runtime.env'
         if not runtime.exists():
             volumes = run(['docker', 'volume', 'ls', '--format', '{{.Name}}']).split()
@@ -125,6 +150,10 @@ def main():
                 'GENERATOR_PAYMENT_TERMS=month\n')
         if runtime.is_symlink() or runtime.stat().st_mode & 0o077:
             raise DeploymentError('runtime.env must be a private regular file (mode 0600)')
+        target_environment = dotenv(runtime.read_text())
+        target_run_key = target_environment.get('GENERATOR_RUN_KEY', 'default')
+        if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}', target_run_key):
+            raise DeploymentError('Target generator run key is invalid')
         image = 'hack-autumn-2026-generator:' + sha
         print('Building generator image for revision ' + sha, flush=True)
         run(['docker', 'build', '-f', 'generator_service/Dockerfile', '-t', image, '.'], timeout=900)
@@ -132,8 +161,9 @@ def main():
         releases.mkdir(exist_ok=True)
         release = Path(tempfile.mkdtemp(prefix=sha + '.', dir=releases))
         shutil.copyfile('compose.generator.production.yaml', release / 'compose.yaml')
-        private_write(release / 'runtime.env', runtime.read_text() + '\nGENERATOR_IMAGE_TAG=' + sha
-            + '\nGENERATOR_SERVICE_TOKEN=' + token + '\nLIVE_STACK_NETWORK=backend\n')
+        target_environment.update({'GENERATOR_IMAGE_TAG': sha,
+            'GENERATOR_SERVICE_TOKEN': token, 'LIVE_STACK_NETWORK': 'backend'})
+        private_write(release / 'runtime.env', render_dotenv(target_environment))
         compose = ['docker', 'compose', '-p', PROJECT, '--env-file', str(release / 'runtime.env'),
                    '-f', str(release / 'compose.yaml')]
         config = json.loads(run(compose + ['config', '--format', 'json']))
@@ -149,10 +179,26 @@ def main():
         baseline = None
         if existing:
             baseline = json.loads(run(probe, data=json.dumps({'token': token, 'baselineOnly': True}), timeout=30))
-        print('Starting generator with existing persistent state retained', flush=True)
+        if profile == 'demo-stream-v1':
+            if not all(service in existing_by_service for service in ('generator-api', 'generator-worker', 'generator-db')):
+                raise DeploymentError('Demo schedule migration requires the complete running generator stack')
+            stopped = [existing_by_service[name]['Id'] for name in ('generator-worker', 'generator-api')]
+            run(['docker', 'stop'] + stopped, timeout=45)
+            migration = compose + ['run', '--rm', '--no-deps', 'generator-worker',
+                'python', '-B', '-m', 'generator_service.repace', '--apply', '--marker', profile,
+                '--spread-days', '60', '--warmup-seconds', '1']
+            try:
+                migration_result = json.loads(run(migration, timeout=90))
+            except Exception:
+                run(['docker', 'start'] + stopped, timeout=45)
+                raise
+            if migration_result.get('status') not in ('applied', 'already_applied'):
+                raise DeploymentError('Unexpected demo schedule migration result')
+        print('Starting generator profile ' + profile + ' with PostgreSQL state retained', flush=True)
         run(compose + ['up', '-d', '--no-build', '--wait', '--wait-timeout', '180'], timeout=210)
         # A temporary probe shares the actual API network namespace, not the generator's.
-        output = run(probe, data=json.dumps({'token': token, 'baseline': baseline}), timeout=80)
+        output = run(probe, data=json.dumps({'token': token, 'baseline': baseline,
+            'minimumEvents': 3 if profile == 'demo-stream-v1' else 0}), timeout=80)
         result = json.loads(output)
         if result != {'statusHttp': 200, 'runStable': True, 'progressVerified': True}:
             raise DeploymentError('Unexpected probe result')

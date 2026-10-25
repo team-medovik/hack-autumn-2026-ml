@@ -2,6 +2,15 @@ name: Deploy generator
 
 on:
   workflow_dispatch:
+    inputs:
+      profile:
+        description: Schedule profile to deploy; demo-stream-v1 preserves runId and compresses only future dates
+        required: true
+        type: choice
+        default: stored
+        options:
+          - stored
+          - demo-stream-v1
 
 permissions:
   contents: read
@@ -20,4 +29,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Deploy generator and verify from API network
-        run: sudo env GITHUB_SHA="$GITHUB_SHA" python3 deploy/deploy-generator.py
+        env:
+          GENERATOR_DEPLOY_PROFILE: ${{ inputs.profile }}
+        run: sudo env GITHUB_SHA="$GITHUB_SHA" GENERATOR_DEPLOY_PROFILE="$GENERATOR_DEPLOY_PROFILE" python3 deploy/deploy-generator.py
